@@ -1,11 +1,11 @@
-package model;
+package practicumopdracht.model;
 
 /**
  * Functionality:
  *
  * @author Chi Yu Yeung
  */
-public class Detail {
+public class Specificaties {
     // detail
     private double inch;
     private double lengte;
