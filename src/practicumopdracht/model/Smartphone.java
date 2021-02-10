@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Smartphone {
     private String merk;
     private String model;
-//    private ArrayList<Serie> series;
+    private ArrayList<Specification> specificaties;
     private LocalDate datumUitgave;
 
     // als het niet erg is als er geen gegevens zijn
@@ -23,7 +23,7 @@ public class Smartphone {
     public Smartphone(String merk, String model, LocalDate datumUitgave) {
         this.merk = merk;
         this.model = model;
-//        this.series = series;
+        specificaties = new ArrayList<>();
         this.datumUitgave = datumUitgave;
     }
 

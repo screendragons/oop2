@@ -3,6 +3,7 @@ package practicumopdracht;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import practicumopdracht.controller.SmartphoneController;
 import practicumopdracht.view.SmartphoneView;
 
 public class MainApplication extends Application {
@@ -20,9 +21,9 @@ public class MainApplication extends Application {
         stage.setWidth(640);
         stage.setHeight(480);
 
-        SmartphoneView smartphoneView = new SmartphoneView();
+        SmartphoneController smartphoneController = new SmartphoneController();
 
-        stage.setScene(new Scene(smartphoneView.getGridPane()));
+        stage.setScene(new Scene(smartphoneController.getSmartphoneView().getRoot()));
 
         stage.show();
     }

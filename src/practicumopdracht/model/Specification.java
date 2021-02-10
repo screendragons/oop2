@@ -5,7 +5,7 @@ package practicumopdracht.model;
  *
  * @author Chi Yu Yeung
  */
-public class Specificaties {
+public class Specification {
     // detail
     private double inch;
     private double lengte;

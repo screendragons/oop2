@@ -1,11 +1,10 @@
 package practicumopdracht.view;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import practicumopdracht.model.Smartphone;
 
 /**
  * Functionality:
@@ -30,7 +29,11 @@ public class SmartphoneView {
     private Button buttonDelete;
     private Button buttonSwitch;
 
+    // TODO vragen
+    private ListView<Smartphone> listView;
+
     private GridPane gridPane;
+    private BorderPane borderPane;
 
     public SmartphoneView() {
         initializeRoot();
@@ -49,8 +52,9 @@ public class SmartphoneView {
         buttonSave = new Button("Opslaan");
         buttonNew = new Button("Nieuw");
         buttonDelete = new Button("Verwijderen");
-        buttonSwitch = new Button("Schakelen");
+        buttonSwitch = new Button("Switchen naar details");
 
+        listView = new ListView<>();
         gridPane = new GridPane();
 
         // sets a gap vertically
@@ -75,7 +79,39 @@ public class SmartphoneView {
         gridPane.add(buttonSwitch, 3, 7);
     }
 
-    public GridPane getGridPane() {
-        return gridPane;
+    public BorderPane getRoot() {
+        return borderPane;
+    }
+
+    public TextField getTextFieldBrandName() {
+        return textFieldBrandName;
+    }
+
+    public TextField getTextFieldSerie() {
+        return textFieldSerie;
+    }
+
+    public DatePicker getReleaseDate() {
+        return releaseDate;
+    }
+
+    public Button getButtonSave() {
+        return buttonSave;
+    }
+
+    public Button getButtonNew() {
+        return buttonNew;
+    }
+
+    public Button getButtonDelete() {
+        return buttonDelete;
+    }
+
+    public Button getButtonSwitch() {
+        return buttonSwitch;
+    }
+
+    public ListView<Smartphone> getListView() {
+        return listView;
     }
 }
