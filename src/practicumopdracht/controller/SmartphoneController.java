@@ -1,5 +1,7 @@
 package practicumopdracht.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import practicumopdracht.model.Smartphone;
 import practicumopdracht.view.SmartphoneView;
 
@@ -13,11 +15,10 @@ import java.util.ArrayList;
  */
 public class SmartphoneController {
 
-    public static SmartphoneView getSmartphoneView;
     // geen controller in de view. Maar de view in de controller
     // koppel de view aan de controller
     private SmartphoneView smartphoneView;
-    private ArrayList<Smartphone> smartphoneArrayList = new ArrayList<>();
+    private ArrayList<Smartphone> smartphones = new ArrayList<>();
 
 
     public SmartphoneController() {
@@ -30,8 +31,12 @@ public class SmartphoneController {
         String brandName = smartphoneView.getTextFieldBrandName().getText();
         String brandSerie = smartphoneView.getTextFieldSerie().getText();
         LocalDate dateRelease = smartphoneView.getReleaseDate().getValue();
+        smartphones.add(new Smartphone(brandName, brandSerie, dateRelease));
     }
 
+    private void showSmartphone() {
+        ObservableList<Smartphone> ol = FXCollections.observableArrayList(smartphones);
+    }
     public SmartphoneView getSmartphoneView() {
         return smartphoneView;
     }
