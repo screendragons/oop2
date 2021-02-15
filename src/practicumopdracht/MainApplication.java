@@ -5,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import practicumopdracht.controller.SmartphoneController;
 import practicumopdracht.controller.SpecificationController;
-import practicumopdracht.view.SmartphoneView;
 
 public class MainApplication extends Application {
 

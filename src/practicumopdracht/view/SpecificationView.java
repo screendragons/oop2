@@ -27,7 +27,7 @@ public class SpecificationView {
     private TextField textFieldWidth;
     private TextField textFieldThickness;
     private CheckBox checkBoxFingerprintSensor;
-    private TextArea textAreaOperatingSystem;
+    private ComboBox<String> comboBoxOperatingSystem;
 
     private Button buttonSave;
     private Button buttonNew;
@@ -40,7 +40,7 @@ public class SpecificationView {
     private GridPane gridPane;
     private VBox vBox;
 
-    public Specification() {
+    public SpecificationView() {
         initializeRoot();
     }
 
@@ -58,7 +58,7 @@ public class SpecificationView {
         textFieldThickness = new TextField();
 
         checkBoxFingerprintSensor = new CheckBox();
-        textAreaOperatingSystem = new TextArea();
+        comboBoxOperatingSystem = new ComboBox<>();
 
         buttonSave = new Button("Opslaan");
         buttonNew = new Button("Nieuw");
@@ -67,6 +67,13 @@ public class SpecificationView {
 
         listView = new ListView<>();
         gridPane = new GridPane();
+
+        comboBoxOperatingSystem = new ComboBox<>();
+        comboBoxOperatingSystem.getItems().addAll(
+                "Android",
+                "iOS"
+        );
+        comboBoxOperatingSystem.setPromptText("Wat is het besturingssysteem?");
 
         // sets a gap vertically
         gridPane.setVgap(10);
@@ -91,7 +98,7 @@ public class SpecificationView {
         gridPane.add(checkBoxFingerprintSensor, 1, 4);
 
         gridPane.add(labelOperatingSystem, 0, 5);
-        gridPane.add(textAreaOperatingSystem, 1, 5);
+        gridPane.add(comboBoxOperatingSystem, 1, 5);
 
         // buttons
         gridPane.add(buttonSave, 1, 7);
@@ -158,8 +165,8 @@ public class SpecificationView {
         return checkBoxFingerprintSensor;
     }
 
-    public TextArea getTextAreaOperatingSystem() {
-        return textAreaOperatingSystem;
+    public ComboBox<String> getComboBoxOperatingSystem() {
+        return comboBoxOperatingSystem;
     }
 
     public Button getButtonSave() {

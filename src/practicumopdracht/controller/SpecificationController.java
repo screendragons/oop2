@@ -25,17 +25,20 @@ public class SpecificationController {
     }
 
     private void saveSpecification() {
-        double inch = specificationView.getTextFieldInch().getValue();
-        double height = specificationView.getTextFieldHeight().getValue();
-        double width = specificationView.getTextFieldWidth().getValue();
-        double thickness= specificationView.getTextFieldThickness().getValue();
-        boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().getValue();
-        String operatingSystem = specificationView.getTextAreaOperatingSystem().getText();
-        specifications.add(new Specification(inch, height, width, thickness, fingerprintSensor, operatingSystem));
+        // TODO vragen
+//        double inch = specificationView.getTextFieldInch().getTextformatter();
+//        double height = specificationView.getTextFieldHeight().getValue();
+//        double width = specificationView.getTextFieldWidth().getValue();
+//        double thickness= specificationView.getTextFieldThickness().getValue();
+//        boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().getValue();
+//        String operatingSystem = specificationView.getTextAreaOperatingSystem().getText();
+//        specifications.add(new Specification(inch, height, width, thickness, fingerprintSensor, operatingSystem));
+//        showSpecification();
     }
 
     private void showSpecification() {
         ObservableList<Specification> ol = FXCollections.observableArrayList(specifications);
+        specificationView.getListView().setItems(ol);
     }
     public SpecificationView getSpecificationView() {
         return specificationView;

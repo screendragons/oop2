@@ -32,10 +32,12 @@ public class SmartphoneController {
         String brandSerie = smartphoneView.getTextFieldSerie().getText();
         LocalDate dateRelease = smartphoneView.getReleaseDate().getValue();
         smartphones.add(new Smartphone(brandName, brandSerie, dateRelease));
+        showSmartphone();
     }
 
     private void showSmartphone() {
         ObservableList<Smartphone> ol = FXCollections.observableArrayList(smartphones);
+        smartphoneView.getListView().setItems(ol);
     }
     public SmartphoneView getSmartphoneView() {
         return smartphoneView;

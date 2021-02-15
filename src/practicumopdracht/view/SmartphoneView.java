@@ -32,6 +32,8 @@ public class SmartphoneView {
     private Button buttonDelete;
     private Button buttonSwitch;
 
+    private ComboBox<String> comboBoxSerie;
+
     // TODO vragen
     private ListView<Smartphone> listView;
 
@@ -49,7 +51,7 @@ public class SmartphoneView {
         labelSerie = new Label("Serie naam");
         labelReleaseDate = new Label("Datum uitgave");
 
-        textFieldSerie = new TextField();
+        comboBoxSerie = new ComboBox<>();
         textFieldBrandName = new TextArea();
 
         releaseDate = new DatePicker();
@@ -67,6 +69,16 @@ public class SmartphoneView {
         gridPane.setVgap(10);
         gridPane.setHgap(10);
 
+        comboBoxSerie = new ComboBox<>();
+        comboBoxSerie.getItems().addAll(
+                "OnePlus Nord series",
+                "Samsung S series",
+                "Samsung A series",
+                "Samsung J series",
+                "Samsung M series"
+                );
+        comboBoxSerie.setPromptText("series");
+
         // Constructs a new Insets instance with four different offsets
         gridPane.setPadding(new Insets(10, 10, 10, 10));
 //        gridPane.setGridLinesVisible(false);
@@ -74,7 +86,7 @@ public class SmartphoneView {
         gridPane.add(textFieldBrandName, 1, 0);
 
         gridPane.add(labelSerie, 0, 1);
-        gridPane.add(textFieldSerie, 1, 1);
+        gridPane.add(comboBoxSerie, 1, 1);
 
         gridPane.add(labelReleaseDate, 0, 2);
         gridPane.add(releaseDate, 1, 2);
