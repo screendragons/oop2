@@ -1,6 +1,4 @@
-package practicumopdracht.model;
-
-import javafx.scene.control.Label;
+package practicumopdracht.models;
 
 /**
  * Functionality:

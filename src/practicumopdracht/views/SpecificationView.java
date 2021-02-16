@@ -1,20 +1,20 @@
-package practicumopdracht.view;
+package practicumopdracht.views;
 
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import practicumopdracht.model.Smartphone;
-import practicumopdracht.model.Specification;
+import practicumopdracht.models.Specification;
 
 /**
  * Functionality:
  *
  * @author Chi Yu Yeung
  */
-public class SpecificationView {
+public class SpecificationView extends View {
     private Label labelInch;
     private Label labelHeight;
     private Label labelWidth;
@@ -40,6 +40,8 @@ public class SpecificationView {
     private GridPane gridPane;
     private VBox vBox;
 
+    private Parent root;
+
     public SpecificationView() {
         initializeRoot();
     }
@@ -63,7 +65,7 @@ public class SpecificationView {
         buttonSave = new Button("Opslaan");
         buttonNew = new Button("Nieuw");
         buttonDelete = new Button("Verwijderen");
-        buttonSwitch = new Button("Switchen naar details");
+        buttonSwitch = new Button("Switchen naar master");
 
         listView = new ListView<>();
         gridPane = new GridPane();
@@ -116,9 +118,13 @@ public class SpecificationView {
         vBox.getChildren().addAll(gridPane, hBoxButtons, listView);
         borderPane = new BorderPane();
         borderPane.setCenter(vBox);
+
+        root = vBox;
     }
-    public BorderPane getRoot() {
-        return borderPane;
+
+    @Override
+    public Parent getRoot() {
+        return root;
     }
 
     public Label getLabelInch() {

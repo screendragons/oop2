@@ -1,37 +1,39 @@
-package practicumopdracht.view;
+package practicumopdracht.views;
 
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import practicumopdracht.model.Smartphone;
+import practicumopdracht.models.Smartphone;
 
 /**
  * Functionality:
- * s
+ *
  *
  * @author Chi Yu Yeung
  */
-public class SmartphoneView {
+public class SmartphoneView extends View{
     // labels
-    private Label labelBrandName;
+    private Label labelSmartphoneName;
     private Label labelSerie;
     private Label labelReleaseDate;
 
     // textfields
-    private TextArea textFieldBrandName;
-    private TextField textFieldSerie;
+    private TextField textFieldBrandName;
 
     // datepicker
     private DatePicker releaseDate;
 
+    // buttons
     private Button buttonSave;
     private Button buttonNew;
     private Button buttonDelete;
     private Button buttonSwitch;
 
+    // combobox
     private ComboBox<String> comboBoxSerie;
 
     // TODO vragen
@@ -40,6 +42,9 @@ public class SmartphoneView {
     private GridPane gridPane;
     private BorderPane borderPane;
     private VBox vBox;
+    private HBox hBoxButtons;
+
+    private Parent root;
 
     public SmartphoneView() {
         initializeRoot();
@@ -47,12 +52,12 @@ public class SmartphoneView {
 
     private void initializeRoot() {
         // labels
-        labelBrandName = new Label("Merk naam");
+        labelSmartphoneName = new Label("Smartphone naam");
         labelSerie = new Label("Serie naam");
         labelReleaseDate = new Label("Datum uitgave");
 
         comboBoxSerie = new ComboBox<>();
-        textFieldBrandName = new TextArea();
+        textFieldBrandName = new TextField();
 
         releaseDate = new DatePicker();
 
@@ -82,7 +87,7 @@ public class SmartphoneView {
         // Constructs a new Insets instance with four different offsets
         gridPane.setPadding(new Insets(10, 10, 10, 10));
 //        gridPane.setGridLinesVisible(false);
-        gridPane.add(labelBrandName, 0, 0);
+        gridPane.add(labelSmartphoneName, 0, 0);
         gridPane.add(textFieldBrandName, 1, 0);
 
         gridPane.add(labelSerie, 0, 1);
@@ -97,28 +102,30 @@ public class SmartphoneView {
         gridPane.add(buttonDelete, 2, 7);
         gridPane.add(buttonSwitch, 3, 7);
 
-        HBox hBoxButtons = new HBox();
+        hBoxButtons = new HBox();
         hBoxButtons.setPadding(new Insets(10, 10, 10, 100));
         hBoxButtons.setSpacing(20); // distance between buttons
         hBoxButtons.getChildren().addAll(buttonSave, buttonNew, buttonDelete, buttonSwitch);
 
         vBox = new VBox();
+
+        root = vBox;
+
         vBox.setPadding(new Insets(10, 10, 10, 10));
         vBox.getChildren().addAll(gridPane, hBoxButtons, listView);
-        borderPane = new BorderPane();
-        borderPane.setCenter(vBox);
     }
 
-    public BorderPane getRoot() {
-        return borderPane;
+    @Override
+    public Parent getRoot() {
+        return root;
     }
 
-    public TextArea getTextFieldBrandName() {
+    public TextField getTextFieldBrandName() {
         return textFieldBrandName;
     }
 
-    public TextField getTextFieldSerie() {
-        return textFieldSerie;
+    public ComboBox<String> getComboBoxSerie() {
+        return comboBoxSerie;
     }
 
     public DatePicker getReleaseDate() {
@@ -137,6 +144,7 @@ public class SmartphoneView {
         return buttonDelete;
     }
 
+    // TODO make this button working
     public Button getButtonSwitch() {
         return buttonSwitch;
     }

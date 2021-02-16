@@ -1,9 +1,10 @@
-package practicumopdracht.controller;
+package practicumopdracht.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import practicumopdracht.model.Smartphone;
-import practicumopdracht.view.SmartphoneView;
+import practicumopdracht.models.Smartphone;
+import practicumopdracht.views.SmartphoneView;
+import practicumopdracht.views.View;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author Chi Yu Yeung
  */
-public class SmartphoneController {
+public class SmartphoneController extends Controller{
 
     // geen controller in de view. Maar de view in de controller
     // koppel de view aan de controller
@@ -29,7 +30,7 @@ public class SmartphoneController {
 
     private void saveSmartphone() {
         String brandName = smartphoneView.getTextFieldBrandName().getText();
-        String brandSerie = smartphoneView.getTextFieldSerie().getText();
+        String brandSerie = smartphoneView.getComboBoxSerie().getValue();
         LocalDate dateRelease = smartphoneView.getReleaseDate().getValue();
         smartphones.add(new Smartphone(brandName, brandSerie, dateRelease));
         showSmartphone();
@@ -39,7 +40,13 @@ public class SmartphoneController {
         ObservableList<Smartphone> ol = FXCollections.observableArrayList(smartphones);
         smartphoneView.getListView().setItems(ol);
     }
+
     public SmartphoneView getSmartphoneView() {
+        return smartphoneView;
+    }
+
+    @Override
+    public View getView() {
         return smartphoneView;
     }
 }
