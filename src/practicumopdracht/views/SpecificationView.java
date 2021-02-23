@@ -21,6 +21,7 @@ public class SpecificationView extends View {
     private Label labelThickness;
     private Label labelFingerprintSensor;
     private Label labelOperatingSystem;
+    private Label labelNotes;
 
     private TextField textFieldInch;
     private TextField textFieldHeight;
@@ -28,6 +29,7 @@ public class SpecificationView extends View {
     private TextField textFieldThickness;
     private CheckBox checkBoxFingerprintSensor;
     private ComboBox<String> comboBoxOperatingSystem;
+    private TextArea textAreaNotes;
 
     private Button buttonSave;
     private Button buttonNew;
@@ -37,8 +39,8 @@ public class SpecificationView extends View {
     private ListView<Specification> listView;
 
     private BorderPane borderPane;
-    private GridPane gridPane;
-    private VBox vBox;
+    private GridPane gridPaneSpec;
+    private VBox vBoxSpec;
 
     private Parent root;
 
@@ -47,12 +49,13 @@ public class SpecificationView extends View {
     }
 
     private void initializeRoot() {
-        labelInch = new Label("Aantal inch");
-        labelHeight = new Label("Lengte smartphone");
-        labelWidth = new Label("Lengte smartphone");
-        labelThickness = new Label("Dikte smartphone");
-        labelFingerprintSensor = new Label("Vingerprint");
-        labelOperatingSystem = new Label("Besturingssysteem");
+        labelInch = new Label("Number of inches");
+        labelHeight = new Label("Length smartphone");
+        labelWidth = new Label("Width smartphone");
+        labelThickness = new Label("Thickness smartphone");
+        labelFingerprintSensor = new Label("Fingerprint");
+        labelOperatingSystem = new Label("Operatingsystem");
+        labelNotes = new Label("Notes");
 
         textFieldInch = new TextField();
         textFieldHeight = new TextField();
@@ -60,66 +63,74 @@ public class SpecificationView extends View {
         textFieldThickness = new TextField();
 
         checkBoxFingerprintSensor = new CheckBox();
-        comboBoxOperatingSystem = new ComboBox<>();
 
-        buttonSave = new Button("Opslaan");
-        buttonNew = new Button("Nieuw");
-        buttonDelete = new Button("Verwijderen");
-        buttonSwitch = new Button("Switchen naar master");
-
-        listView = new ListView<>();
-        gridPane = new GridPane();
-
+        // combobox operating system
         comboBoxOperatingSystem = new ComboBox<>();
         comboBoxOperatingSystem.getItems().addAll(
                 "Android",
                 "iOS"
         );
-        comboBoxOperatingSystem.setPromptText("Wat is het besturingssysteem?");
+        // default text for when there is no option selected
+        comboBoxOperatingSystem.setPromptText("What is the operatingsystem?");
 
-        // sets a gap vertically
-        gridPane.setVgap(10);
-        gridPane.setHgap(10);
-
-        // Constructs a new Insets instance with four different offsets
-        gridPane.setPadding(new Insets(10, 10, 10, 10));
-//        gridPane.setGridLinesVisible(false);
-        gridPane.add(labelInch, 0, 0);
-        gridPane.add(textFieldInch, 1, 0);
-
-        gridPane.add(labelHeight, 0, 1);
-        gridPane.add(textFieldHeight, 1, 1);
-
-        gridPane.add(labelWidth, 0, 2);
-        gridPane.add(textFieldWidth, 1, 2);
-
-        gridPane.add(labelThickness, 0, 3);
-        gridPane.add(textFieldThickness, 1, 3);
-
-        gridPane.add(labelFingerprintSensor, 0, 4);
-        gridPane.add(checkBoxFingerprintSensor, 1, 4);
-
-        gridPane.add(labelOperatingSystem, 0, 5);
-        gridPane.add(comboBoxOperatingSystem, 1, 5);
+        textAreaNotes = new TextArea();
 
         // buttons
-        gridPane.add(buttonSave, 1, 7);
-        gridPane.add(buttonNew, 2, 7);
-        gridPane.add(buttonDelete, 3, 7);
-        gridPane.add(buttonSwitch, 4, 7);
+        buttonSave = new Button("Save");
+        buttonNew = new Button("New");
+        buttonDelete = new Button("Delete");
+        buttonSwitch = new Button("Switch to master");
 
-        HBox hBoxButtons = new HBox();
-        hBoxButtons.setPadding(new Insets(10, 10, 10, 100));
-        hBoxButtons.setSpacing(20); // distance between buttons
-        hBoxButtons.getChildren().addAll(buttonSave, buttonNew, buttonDelete, buttonSwitch);
+        listView = new ListView<>();
+        gridPaneSpec = new GridPane();
 
-        vBox = new VBox();
-        vBox.setPadding(new Insets(10, 10, 10, 10));
-        vBox.getChildren().addAll(gridPane, hBoxButtons, listView);
+        // sets a gap vertically
+        gridPaneSpec.setVgap(10);
+        gridPaneSpec.setHgap(10);
+
+        // Constructs a new Insets instance with four different offsets
+        gridPaneSpec.setPadding(new Insets(5, 10, 10, 10));
+//        gridPaneSpec.setGridLinesVisible(false);
+        gridPaneSpec.add(labelInch, 0, 0);
+        gridPaneSpec.add(textFieldInch, 1, 0);
+
+        gridPaneSpec.add(labelHeight, 0, 1);
+        gridPaneSpec.add(textFieldHeight, 1, 1);
+
+        gridPaneSpec.add(labelWidth, 0, 2);
+        gridPaneSpec.add(textFieldWidth, 1, 2);
+
+        gridPaneSpec.add(labelThickness, 0, 3);
+        gridPaneSpec.add(textFieldThickness, 1, 3);
+
+        gridPaneSpec.add(labelFingerprintSensor, 0, 4);
+        gridPaneSpec.add(checkBoxFingerprintSensor, 1, 4);
+
+        gridPaneSpec.add(labelOperatingSystem, 0, 5);
+        gridPaneSpec.add(comboBoxOperatingSystem, 1, 5);
+
+        gridPaneSpec.add(labelNotes, 0, 6);
+        gridPaneSpec.add(textAreaNotes, 1,6);
+
+        // buttons
+        gridPaneSpec.add(buttonSave, 1, 8);
+        gridPaneSpec.add(buttonNew, 2, 8);
+        gridPaneSpec.add(buttonDelete, 3, 8);
+        gridPaneSpec.add(buttonSwitch, 4, 8);
+
+//        HBox hBoxButtons = new HBox();
+//        hBoxButtons.setPadding(new Insets(10, 10, 10, 100));
+//        hBoxButtons.setSpacing(20); // distance between buttons
+//        hBoxButtons.getChildren().addAll(buttonSave, buttonNew, buttonDelete, buttonSwitch);
+
+        vBoxSpec = new VBox();
+        vBoxSpec.setPadding(new Insets(10, 10, 10, 10));
+//        vBoxSpec.getChildren().addAll(gridPaneSpec, hBoxButtons, listView);
+        vBoxSpec.getChildren().addAll(gridPaneSpec , listView);
         borderPane = new BorderPane();
-        borderPane.setCenter(vBox);
+        borderPane.setCenter(vBoxSpec);
 
-        root = vBox;
+        root = borderPane;
     }
 
     @Override
@@ -173,6 +184,10 @@ public class SpecificationView extends View {
 
     public ComboBox<String> getComboBoxOperatingSystem() {
         return comboBoxOperatingSystem;
+    }
+
+    public TextArea getTextAreaNotes() {
+        return textAreaNotes;
     }
 
     public Button getButtonSave() {

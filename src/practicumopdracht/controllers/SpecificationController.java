@@ -45,17 +45,16 @@ public class SpecificationController extends Controller{
 
         boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
         String operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
-        specifications.add(new Specification(inch, height, width, thickness, fingerprintSensor, operatingSystem));
+
+        String notes = specificationView.getTextAreaNotes().getText();
+
+        specifications.add(new Specification(inch, height, width, thickness, fingerprintSensor, operatingSystem, notes));
         showSpecification();
     }
 
     private void showSpecification() {
-        ObservableList<Specification> ol = FXCollections.observableArrayList(specifications);
-        specificationView.getListView().setItems(ol);
-    }
-
-    public SpecificationView getSpecificationView() {
-        return specificationView;
+        ObservableList<Specification> specList = FXCollections.observableArrayList(specifications);
+        specificationView.getListView().setItems(specList);
     }
 
     @Override

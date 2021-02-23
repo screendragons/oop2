@@ -12,15 +12,17 @@ public class Specification {
     private double thickness;
     private boolean fingerprintSensor;
     private String operatingSystem;
+    private String note;
 
-    public Specification(double inch, double height, double width, double thickness, boolean fingerprintSensor,
-                         String operatingSystem) {
+    public Specification(double inch, double height, double width, double thickness,
+                         boolean fingerprintSensor, String operatingSystem, String note) {
         this.inch = inch;
         this.height = height;
         this.width = width;
         this.thickness = thickness;
         this.fingerprintSensor = fingerprintSensor;
         this.operatingSystem = operatingSystem;
+        this.note = note;
     }
 
     public double getHeight() {
@@ -63,15 +65,21 @@ public class Specification {
         this.operatingSystem = operatingSystem;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     @Override
     public String toString() {
-        return "Specification{" +
-                "inch=" + inch +
-                ", height=" + height +
-                ", width=" + width +
-                ", thickness=" + thickness +
-                ", fingerprintSensor=" + fingerprintSensor +
-                ", operatingSystem='" + operatingSystem + '\'' +
+        return "The smartphone is " + inch + " big " + "The height of the smartphone is " + height +
+                ", and the width " + width +
+                ". The thickness is " + thickness +
+                ". There is " + fingerprintSensor + " included " +
+                ", and the operating system is " + operatingSystem + '\'' +
                 '}';
     }
 }

@@ -42,7 +42,7 @@ public class SmartphoneView extends View{
     private GridPane gridPane;
     private BorderPane borderPane;
     private VBox vBox;
-    private HBox hBoxButtons;
+    private HBox menuButtons;
 
     private Parent root;
 
@@ -52,9 +52,9 @@ public class SmartphoneView extends View{
 
     private void initializeRoot() {
         // labels
-        labelSmartphoneName = new Label("Smartphone naam");
-        labelSerie = new Label("Serie naam");
-        labelReleaseDate = new Label("Datum uitgave");
+        labelSmartphoneName = new Label("Smartphone name");
+        labelSerie = new Label("Serie name");
+        labelReleaseDate = new Label("Release date");
 
         comboBoxSerie = new ComboBox<>();
         textFieldBrandName = new TextField();
@@ -62,10 +62,10 @@ public class SmartphoneView extends View{
         releaseDate = new DatePicker();
 
         // buttons
-        buttonSave = new Button("Opslaan");
-        buttonNew = new Button("Nieuw");
-        buttonDelete = new Button("Verwijderen");
-        buttonSwitch = new Button("Switchen naar details");
+        buttonSave = new Button("Save");
+        buttonNew = new Button("New");
+        buttonDelete = new Button("Delete");
+        buttonSwitch = new Button("Switch to details");
 
         listView = new ListView<>();
         gridPane = new GridPane();
@@ -102,17 +102,17 @@ public class SmartphoneView extends View{
         gridPane.add(buttonDelete, 2, 7);
         gridPane.add(buttonSwitch, 3, 7);
 
-        hBoxButtons = new HBox();
-        hBoxButtons.setPadding(new Insets(10, 10, 10, 100));
-        hBoxButtons.setSpacing(20); // distance between buttons
-        hBoxButtons.getChildren().addAll(buttonSave, buttonNew, buttonDelete, buttonSwitch);
+        menuButtons = new HBox();
+        menuButtons.setPadding(new Insets(10, 10, 10, 100));
+        menuButtons.setSpacing(20); // distance between buttons
+        menuButtons.getChildren().addAll(buttonSave, buttonNew, buttonDelete, buttonSwitch);
 
         vBox = new VBox();
 
-        root = vBox;
-
         vBox.setPadding(new Insets(10, 10, 10, 10));
-        vBox.getChildren().addAll(gridPane, hBoxButtons, listView);
+        vBox.getChildren().addAll(gridPane, menuButtons, listView);
+
+        root = vBox;
     }
 
     @Override
@@ -144,7 +144,6 @@ public class SmartphoneView extends View{
         return buttonDelete;
     }
 
-    // TODO make this button working
     public Button getButtonSwitch() {
         return buttonSwitch;
     }

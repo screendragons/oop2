@@ -21,11 +21,12 @@ public class MainApplication extends Application {
 
             return;
         }
+        this.stage = stage;
 
         SmartphoneController smartphoneController = new SmartphoneController();
         Scene smartphone = new Scene(smartphoneController.getView().getRoot());
 
-        // TODO switchen naar specification view
+        // TODO switchen naar specification view error
 //        SpecificationController specificationController = new SpecificationController();
 //        Scene specification = new Scene(specificationController.getView().getRoot());
 
@@ -39,7 +40,8 @@ public class MainApplication extends Application {
         stage.show();
     }
 
-    public void switchController(Controller controller){
-
+    public static void switchController(Controller controller){
+        stage.setScene(new Scene(controller.getView().getRoot()));
+//        stage.show();
     }
 }
