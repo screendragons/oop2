@@ -5,8 +5,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import practicumopdracht.models.Smartphone;
 
 /**
@@ -21,8 +21,8 @@ public class SmartphoneView extends View{
     private Label labelSerie;
     private Label labelReleaseDate;
 
-    // textfields
-    private TextField textFieldBrandName;
+    // textfield
+    private TextField textFieldSmartphoneName;
 
     // datepicker
     private DatePicker releaseDate;
@@ -30,6 +30,7 @@ public class SmartphoneView extends View{
     // buttons
     private Button buttonSave;
     private Button buttonNew;
+    private Button buttonEdit;
     private Button buttonDelete;
     private Button buttonSwitch;
 
@@ -39,10 +40,10 @@ public class SmartphoneView extends View{
     // TODO vragen
     private ListView<Smartphone> listView;
 
-    private GridPane gridPane;
+    private GridPane gridPaneSmart;
+    private VBox vBoxSmart;
+    private HBox menuButtonsSmart;
     private BorderPane borderPane;
-    private VBox vBox;
-    private HBox menuButtons;
 
     private Parent root;
 
@@ -56,24 +57,30 @@ public class SmartphoneView extends View{
         labelSerie = new Label("Serie name");
         labelReleaseDate = new Label("Release date");
 
-        comboBoxSerie = new ComboBox<>();
-        textFieldBrandName = new TextField();
+        // textfield
+        textFieldSmartphoneName = new TextField();
 
+        // combobox
+        comboBoxSerie = new ComboBox<>();
+
+        // datepicker
         releaseDate = new DatePicker();
 
         // buttons
         buttonSave = new Button("Save");
         buttonNew = new Button("New");
+        buttonEdit = new Button("Edit");
         buttonDelete = new Button("Delete");
         buttonSwitch = new Button("Switch to details");
 
         listView = new ListView<>();
-        gridPane = new GridPane();
+        gridPaneSmart = new GridPane();
 
         // sets a gap vertically
-        gridPane.setVgap(10);
-        gridPane.setHgap(10);
+        gridPaneSmart.setVgap(10);
+        gridPaneSmart.setHgap(10);
 
+        // combobox
         comboBoxSerie = new ComboBox<>();
         comboBoxSerie.getItems().addAll(
                 "OnePlus Nord series",
@@ -82,37 +89,41 @@ public class SmartphoneView extends View{
                 "Samsung J series",
                 "Samsung M series"
                 );
+        // default text for when there is no option selected
         comboBoxSerie.setPromptText("series");
 
         // Constructs a new Insets instance with four different offsets
-        gridPane.setPadding(new Insets(10, 10, 10, 10));
-//        gridPane.setGridLinesVisible(false);
-        gridPane.add(labelSmartphoneName, 0, 0);
-        gridPane.add(textFieldBrandName, 1, 0);
+        gridPaneSmart.setPadding(new Insets(10, 10, 10, 10));
+        gridPaneSmart.add(labelSmartphoneName, 0, 0);
+        gridPaneSmart.add(textFieldSmartphoneName, 1, 0);
 
-        gridPane.add(labelSerie, 0, 1);
-        gridPane.add(comboBoxSerie, 1, 1);
+        gridPaneSmart.add(labelSerie, 0, 1);
+        gridPaneSmart.add(comboBoxSerie, 1, 1);
 
-        gridPane.add(labelReleaseDate, 0, 2);
-        gridPane.add(releaseDate, 1, 2);
+        gridPaneSmart.add(labelReleaseDate, 0, 2);
+        gridPaneSmart.add(releaseDate, 1, 2);
 
         // buttons
-        gridPane.add(buttonSave, 1, 5);
-        gridPane.add(buttonNew, 1, 7);
-        gridPane.add(buttonDelete, 2, 7);
-        gridPane.add(buttonSwitch, 3, 7);
+        gridPaneSmart.add(buttonSave, 2, 8);
+        gridPaneSmart.add(buttonNew, 3, 8);
+        gridPaneSmart.add(buttonEdit, 4, 8);
+        gridPaneSmart.add(buttonDelete, 5, 8);
+        gridPaneSmart.add(buttonSwitch, 6, 8);
 
-        menuButtons = new HBox();
-        menuButtons.setPadding(new Insets(10, 10, 10, 100));
-        menuButtons.setSpacing(20); // distance between buttons
-        menuButtons.getChildren().addAll(buttonSave, buttonNew, buttonDelete, buttonSwitch);
+        // buttons added to hbox
+        menuButtonsSmart = new HBox();
+        menuButtonsSmart.setPadding(new Insets(10, 10, 10, 100));
+        menuButtonsSmart.setSpacing(20); // distance between buttons
+        menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch);
 
-        vBox = new VBox();
+        vBoxSmart = new VBox();
 
-        vBox.setPadding(new Insets(10, 10, 10, 10));
-        vBox.getChildren().addAll(gridPane, menuButtons, listView);
+        vBoxSmart.setPadding(new Insets(10, 10, 10, 10));
+        vBoxSmart.getChildren().addAll(gridPaneSmart, menuButtonsSmart, listView);
 
-        root = vBox;
+        borderPane = new BorderPane();
+        borderPane.setCenter(vBoxSmart);
+        root = borderPane;
     }
 
     @Override
@@ -120,8 +131,8 @@ public class SmartphoneView extends View{
         return root;
     }
 
-    public TextField getTextFieldBrandName() {
-        return textFieldBrandName;
+    public TextField getTextFieldSmartphoneName() {
+        return textFieldSmartphoneName;
     }
 
     public ComboBox<String> getComboBoxSerie() {
@@ -138,6 +149,10 @@ public class SmartphoneView extends View{
 
     public Button getButtonNew() {
         return buttonNew;
+    }
+
+    public Button getButtonEdit() {
+        return buttonEdit;
     }
 
     public Button getButtonDelete() {

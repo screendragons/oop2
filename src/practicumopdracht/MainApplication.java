@@ -5,12 +5,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import practicumopdracht.controllers.Controller;
 import practicumopdracht.controllers.SmartphoneController;
-import practicumopdracht.controllers.SpecificationController;
 
 public class MainApplication extends Application {
     private final String TITLE = "Smartphone - specificatie";
-    private final int WIDTH = 640;
-    private final int HEIGHT = 480;
+    private final int WIDTH = 800;
+    private final int HEIGHT = 550;
     private static Stage stage;
 
     @Override
@@ -21,27 +20,17 @@ public class MainApplication extends Application {
 
             return;
         }
-        this.stage = stage;
-
-        SmartphoneController smartphoneController = new SmartphoneController();
-        Scene smartphone = new Scene(smartphoneController.getView().getRoot());
-
-        // TODO switchen naar specification view error
-//        SpecificationController specificationController = new SpecificationController();
-//        Scene specification = new Scene(specificationController.getView().getRoot());
-
-        stage.setScene(smartphone);
-
-//        stage.setScene(specification);
+        MainApplication.stage = stage;
 
         stage.setTitle(String.format("Practicumopdracht OOP2 - %s", Main.studentNaam, TITLE));
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
-        stage.show();
+
+        switchController(new SmartphoneController());
     }
 
     public static void switchController(Controller controller){
         stage.setScene(new Scene(controller.getView().getRoot()));
-//        stage.show();
+        stage.show();
     }
 }

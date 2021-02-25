@@ -1,7 +1,6 @@
 package practicumopdracht.models;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 /**
  * Functionality:
@@ -10,20 +9,12 @@ import java.util.ArrayList;
  */
 public class Smartphone {
     private String smartphoneName;
-    private String model;
-    private ArrayList<Specification> specificaties;
+    private String serie;
     private LocalDate releaseDate;
 
-    // als het niet erg is als er geen gegevens zijn
-    // lege constructor gebruiken
-    public Smartphone() {
-
-    }
-
-    public Smartphone(String smartphoneName, String model, LocalDate releaseDate) {
+    public Smartphone(String smartphoneName, String serie, LocalDate releaseDate) {
         this.smartphoneName = smartphoneName;
-        this.model = model;
-        specificaties = new ArrayList<>();
+        this.serie = serie;
         this.releaseDate = releaseDate;
     }
 
@@ -31,23 +22,16 @@ public class Smartphone {
         return smartphoneName;
     }
 
-    public String getModel() {
-        return model;
+    public String getSerie() {
+        return serie;
     }
 
     public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    // met een setter kan je dingen wijzigen
-    // met een getter niet
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public void setSpecificaties(ArrayList<Specification> specificaties) {
-        this.specificaties = specificaties;
+    public void setSerie(String serie) {
+        this.serie = serie;
     }
 
     public void setReleaseDate(LocalDate releaseDate) {
@@ -57,10 +41,9 @@ public class Smartphone {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("Smartphone merk: ").append(smartphoneName).append("\n");
-        result.append("Smartphone model: ").append(model).append("\n");
-        result.append("Specificaties: ").append(specificaties).append("\n");
-        result.append("Datum uitgave: ").append(releaseDate).append("\n");
+        result.append("Smartphone name: ").append(smartphoneName).append("\n");
+        result.append("Smartphone serie: ").append(serie).append("\n");
+        result.append("Date release: ").append(releaseDate).append("\n");
 
         return result.toString();
     }

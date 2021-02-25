@@ -75,11 +75,16 @@ public class Specification {
 
     @Override
     public String toString() {
-        return "The smartphone is " + inch + " big " + "The height of the smartphone is " + height +
-                ", and the width " + width +
-                ". The thickness is " + thickness +
-                ". There is " + fingerprintSensor + " included " +
-                ", and the operating system is " + operatingSystem + '\'' +
-                '}';
+        return String.format(
+                "Inch: %.2f\nHeight: %.2f\nWidth: %.2f\nThickness: %.2f\nFingerprint identity sensor: %s\n" +
+                        "Operatingsystem: %s\nNotes: %s",
+                inch,
+                height,
+                width,
+                thickness,
+                fingerprintSensor ? "Yes" : "No",
+                operatingSystem,
+                note
+        );
     }
 }
