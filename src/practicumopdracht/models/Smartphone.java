@@ -9,7 +9,7 @@ import java.time.LocalDate;
  */
 public class Smartphone {
     private String smartphoneName;
-    private String serie;
+    private Object serie;
     private LocalDate releaseDate;
 
     public Smartphone(String smartphoneName, String serie, LocalDate releaseDate) {
@@ -22,7 +22,7 @@ public class Smartphone {
         return smartphoneName;
     }
 
-    public String getSerie() {
+    public Object getSerie() {
         return serie;
     }
 

@@ -11,7 +11,7 @@ public class Specification {
     private double width;
     private double thickness;
     private boolean fingerprintSensor;
-    private String operatingSystem;
+    private Object operatingSystem;
     private String note;
 
     public Specification(double inch, double height, double width, double thickness,
@@ -23,6 +23,15 @@ public class Specification {
         this.fingerprintSensor = fingerprintSensor;
         this.operatingSystem = operatingSystem;
         this.note = note;
+    }
+
+    public Specification(double inchField, double heightField, double widthField, double thicknessField,
+                         Object operatingSystem) {
+        this.inch = inchField;
+        this.height = heightField;
+        this.width = widthField;
+        this.thickness = thicknessField;
+        this.operatingSystem = operatingSystem;
     }
 
     public double getHeight() {
@@ -57,7 +66,7 @@ public class Specification {
         this.fingerprintSensor = fingerprintSensor;
     }
 
-    public String getOperatingSystem() {
+    public Object getOperatingSystem() {
         return operatingSystem;
     }
 
