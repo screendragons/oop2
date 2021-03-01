@@ -8,8 +8,6 @@ import practicumopdracht.models.Specification;
 import practicumopdracht.views.SpecificationView;
 import practicumopdracht.views.View;
 
-import java.util.ArrayList;
-
 /**
  * Functionality:
  *
@@ -17,7 +15,6 @@ import java.util.ArrayList;
  */
 public class SpecificationController extends Controller{
     private SpecificationView specificationView;
-//    private ArrayList<Specification> specifications = new ArrayList<>();
     private ObservableList<Specification> specificationObservableList;
 
     public SpecificationController() {
@@ -26,10 +23,10 @@ public class SpecificationController extends Controller{
         // link multiple actions to the save button
         specificationView.getButtonSave().setOnAction(event ->
         {
-                if(validationSpec(specificationView)) {
-                    // save specification
-                    saveSpecification(specificationView, specificationObservableList);
-                }
+            if(validationSpec(specificationView)) {
+                // save specification
+                saveSpecification(specificationView, specificationObservableList);
+            }
         });
         // switch to master view
         specificationView.getButtonSwitch().setOnAction(event -> switchToSmartphone());
@@ -47,16 +44,26 @@ public class SpecificationController extends Controller{
 
     private void saveSpecification(SpecificationView detailView, ObservableList<Specification> observableList) {
         // inch
-        double inchField = Double.parseDouble(detailView.getTextFieldInch().getText().trim());
-
+        double inchField = 0;
         // height
-        double heightField = Double.parseDouble(detailView.getTextFieldHeight().getText().trim());
-
+        double heightField = 0;
         // width
-        double widthField = Double.parseDouble(detailView.getTextFieldWidth().getText().trim());
-
+        double widthField = 0;
         // thickness
-        double thicknessField = Double.parseDouble(detailView.getTextFieldThickness().getText().trim());
+        double thicknessField = 0;
+
+        try {
+            // inch
+            inchField = Double.parseDouble(detailView.getTextFieldInch().getText().trim());
+            // height
+            heightField = Double.parseDouble(detailView.getTextFieldHeight().getText().trim());
+            // width
+            widthField = Double.parseDouble(detailView.getTextFieldWidth().getText().trim());
+            // thickness
+            thicknessField = Double.parseDouble(detailView.getTextFieldThickness().getText().trim());
+        } catch (Exception ex) {
+
+        }
 
         // finger print sensor
         boolean fingerprintSensor = detailView.getCheckBoxFingerprintSensor().isSelected();
@@ -69,11 +76,12 @@ public class SpecificationController extends Controller{
                 inchField, heightField, widthField, thicknessField, fingerprintSensor,
                 (String) operatingSystem, noteField
         ));
+
+        showSpecification();
+        resetFields();
     }
 
     private boolean validationSpec(SpecificationView specificationView) {
-        boolean isTrue = true;
-
         StringBuilder errorStringBuilder = new StringBuilder();
 
         String inchString = specificationView.getTextFieldInch().getText().trim();
@@ -83,7 +91,6 @@ public class SpecificationController extends Controller{
         if(inchString.isEmpty()) {
             errorStringBuilder.append("- Amount inch is required\n");
             specificationView.getTextFieldInch().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
         } else {
             try {
                 inch = Double.parseDouble(inchString);
@@ -104,7 +111,6 @@ public class SpecificationController extends Controller{
         if(heightString.isEmpty()) {
             errorStringBuilder.append("- Amount height is required\n");
             specificationView.getTextFieldHeight().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
         } else {
             try {
                 height = Double.parseDouble(heightString);
@@ -124,8 +130,6 @@ public class SpecificationController extends Controller{
         if(widthString.isEmpty()) {
             errorStringBuilder.append("- Amount width is required\n");
             specificationView.getTextFieldWidth().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
-
         } else {
             try {
                 width = Double.parseDouble(widthString);
@@ -144,8 +148,6 @@ public class SpecificationController extends Controller{
         if(thicknessString.isEmpty()) {
             errorStringBuilder.append("- Amount thickness is required\n");
             specificationView.getTextFieldThickness().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
-
         } else {
             try {
                 thickness = Double.parseDouble(thicknessString);
@@ -157,12 +159,12 @@ public class SpecificationController extends Controller{
             }
         }
 
+        // operating system
         String operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
 
         if(operatingSystem == null) {
             errorStringBuilder.append("- Amount operating system is required\n");
             specificationView.getComboBoxOperatingSystem().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
         }
 
         // check if there is an error
@@ -173,35 +175,35 @@ public class SpecificationController extends Controller{
             // blokkeert de uitvoering van de code
             alert.showAndWait();
 
+            return false;
             // else show information
         } else {
-            try {
-                //reset fields
-                specificationView.getTextFieldInch().setText("");
-                specificationView.getTextFieldHeight().setText("");
-                specificationView.getTextFieldWidth().setText("");
-                specificationView.getTextFieldThickness().setText("");
-                specificationView.getCheckBoxFingerprintSensor().setSelected(false);
-                specificationView.getComboBoxOperatingSystem().setPromptText("What is the operatingsystem?");
-                specificationView.getTextAreaNote().setText("");
 
-            } catch (Exception ex) {
-                System.out.println("Oh nee!");
-            }
+            boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
+            String noteField = specificationView.getTextAreaNote().getText();
+
 
             Specification specification = new Specification(
-                    inch, height, width, thickness, operatingSystem
+                    inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField
             );
-
-            specificationObservableList.add(new Specification(inch, height, width, thickness, operatingSystem));
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(specification.toString());
             alert.showAndWait();
-        }
 
-        showSpecification();
-        return isTrue;
+            return true;
+        }
+    }
+
+    private void resetFields() {
+        //reset fields
+        specificationView.getTextFieldInch().setText("");
+        specificationView.getTextFieldHeight().setText("");
+        specificationView.getTextFieldWidth().setText("");
+        specificationView.getTextFieldThickness().setText("");
+        specificationView.getCheckBoxFingerprintSensor().setSelected(false);
+        specificationView.getComboBoxOperatingSystem().setPromptText("What is the operatingsystem?");
+        specificationView.getTextAreaNote().setText("");
     }
 
     private void showSpecification() {

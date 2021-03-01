@@ -88,7 +88,7 @@ public class SmartphoneView extends View{
                 "Samsung A series",
                 "Samsung J series",
                 "Samsung M series"
-                );
+        );
         // default text for when there is no option selected
         comboBoxSerie.setPromptText("series");
 

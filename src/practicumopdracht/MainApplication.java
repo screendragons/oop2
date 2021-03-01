@@ -5,12 +5,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import practicumopdracht.controllers.Controller;
 import practicumopdracht.controllers.SmartphoneController;
+import practicumopdracht.data.DetailDAO;
+import practicumopdracht.data.MasterDAO;
 
 public class MainApplication extends Application {
     private final String TITLE = "Smartphone - specificatie";
     private final int WIDTH = 800;
     private final int HEIGHT = 550;
     private static Stage stage;
+    private static MasterDAO masterDAO;
+    private static DetailDAO detailDAO;
 
     @Override
     public void start(Stage stage) {
@@ -32,5 +36,13 @@ public class MainApplication extends Application {
     public static void switchController(Controller controller){
         stage.setScene(new Scene(controller.getView().getRoot()));
         stage.show();
+    }
+
+    public static MasterDAO getMasterDAO() {
+        return masterDAO;
+    }
+
+    public static DetailDAO getDetailDAO() {
+        return detailDAO;
     }
 }

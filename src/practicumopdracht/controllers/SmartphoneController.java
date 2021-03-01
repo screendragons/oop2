@@ -25,12 +25,8 @@ public class SmartphoneController extends Controller {
         smartphoneView = new SmartphoneView();
 
         // link multiple actions to the save button
-        smartphoneView.getButtonSave().setOnAction(event -> {
-            if(validationSmart(smartphoneView)) {
-                // save specification
-                saveSmartphone(smartphoneView, smartphoneObservableList);
-            }
-        });
+        smartphoneView.getButtonSave().setOnAction(event -> validationSmart(smartphoneView));
+
         // switch to detail view
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
 
@@ -43,17 +39,7 @@ public class SmartphoneController extends Controller {
         smartphoneObservableList = FXCollections.observableArrayList();
     }
 
-    private void saveSmartphone(SmartphoneView masterView, ObservableList<Smartphone> observableList) {
-
-        String smartphoneName = masterView.getTextFieldSmartphoneName().getText().trim();
-        Object serie = masterView.getComboBoxSerie().getValue();
-        LocalDate releaseDate = masterView.getReleaseDate().getValue();
-
-        observableList.add(new Smartphone(smartphoneName, (String) serie, releaseDate));
-    }
-
     private boolean validationSmart(SmartphoneView smartphoneView) {
-        boolean isTrue = true;
 
         StringBuilder errorStringBuilder = new StringBuilder();
 
@@ -64,7 +50,6 @@ public class SmartphoneController extends Controller {
         if(smartphoneName.equals("")) {
             errorStringBuilder.append("- Enter the brand name of the smartphone \n");
             smartphoneView.getTextFieldSmartphoneName().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
         }
 
         // serie
@@ -73,7 +58,6 @@ public class SmartphoneController extends Controller {
         if(serie == null) {
             errorStringBuilder.append("- Serie is unknown\n");
             smartphoneView.getComboBoxSerie().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
         }
 
         // release date
@@ -82,7 +66,6 @@ public class SmartphoneController extends Controller {
         if(releaseDate == null) {
             errorStringBuilder.append("- Release date is unknown \n");
             smartphoneView.getReleaseDate().setStyle("-fx-border-color: #ff0000");
-            isTrue = false;
         }
 
         // check if there is an error
@@ -94,31 +77,32 @@ public class SmartphoneController extends Controller {
             alert.showAndWait();
 
             // else show information
-        } else {
-            try {
-                //reset fields
-                smartphoneView.getTextFieldSmartphoneName().setText("");
-                smartphoneView.getComboBoxSerie().setPromptText("series");
-                smartphoneView.getReleaseDate().setValue(null);
-
-            } catch (Exception ex) {
-                System.out.println("Oh nee!");
-            }
-
-            Smartphone smartphone = new Smartphone(
-                    smartphoneName, serie, releaseDate
-            );
-
-            smartphoneObservableList.add(new Smartphone(smartphoneName, serie, releaseDate));
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText(smartphone.toString());
-            alert.showAndWait();
+            return false;
         }
 
+        try {
+            //reset fields
+            smartphoneView.getTextFieldSmartphoneName().setText("");
+            smartphoneView.getComboBoxSerie().setPromptText("series");
+            smartphoneView.getReleaseDate().setValue(null);
+
+        } catch (Exception ex) {
+            System.out.println("Oh nee!");
+        }
+
+        Smartphone smartphone = new Smartphone(
+                smartphoneName, serie, releaseDate
+        );
+
+        smartphoneObservableList.add(smartphone);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText(smartphone.toString());
+        alert.showAndWait();
+
         showSmartphone();
-        // TODO how to dont show list when there is missing one input
-        return isTrue;
+
+        return true;
     }
 
     private void showSmartphone() {

@@ -25,15 +25,6 @@ public class Specification {
         this.note = note;
     }
 
-    public Specification(double inchField, double heightField, double widthField, double thicknessField,
-                         Object operatingSystem) {
-        this.inch = inchField;
-        this.height = heightField;
-        this.width = widthField;
-        this.thickness = thicknessField;
-        this.operatingSystem = operatingSystem;
-    }
-
     public double getHeight() {
         return height;
     }
