@@ -12,10 +12,9 @@ import practicumopdracht.models.Smartphone;
 /**
  * Functionality:
  *
- *
  * @author Chi Yu Yeung
  */
-public class SmartphoneView extends View{
+public class SmartphoneView extends View {
     // labels
     private Label labelSmartphoneName;
     private Label labelSerie;

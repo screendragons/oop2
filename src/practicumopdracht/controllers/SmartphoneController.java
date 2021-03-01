@@ -16,15 +16,13 @@ import java.time.LocalDate;
  * @author Chi Yu Yeung
  */
 public class SmartphoneController extends Controller {
-    // geen controller in de view. Maar de view in de controller
-    // koppel de view aan de controller
     private SmartphoneView smartphoneView;
     private ObservableList<Smartphone> smartphoneObservableList;
 
     public SmartphoneController() {
         smartphoneView = new SmartphoneView();
 
-        // link multiple actions to the save button
+        // link validation to the save button
         smartphoneView.getButtonSave().setOnAction(event -> validationSmart(smartphoneView));
 
         // switch to detail view
@@ -40,14 +38,12 @@ public class SmartphoneController extends Controller {
     }
 
     private boolean validationSmart(SmartphoneView smartphoneView) {
-
         StringBuilder errorStringBuilder = new StringBuilder();
 
-        // TODO fix unselected red borders
         // smartphone name
         String smartphoneName = smartphoneView.getTextFieldSmartphoneName().getText().trim();
 
-        if(smartphoneName.equals("")) {
+        if (smartphoneName.equals("")) {
             errorStringBuilder.append("- Enter the brand name of the smartphone \n");
             smartphoneView.getTextFieldSmartphoneName().setStyle("-fx-border-color: #ff0000");
         }
@@ -55,7 +51,7 @@ public class SmartphoneController extends Controller {
         // serie
         String serie = smartphoneView.getComboBoxSerie().getValue();
 
-        if(serie == null) {
+        if (serie == null) {
             errorStringBuilder.append("- Serie is unknown\n");
             smartphoneView.getComboBoxSerie().setStyle("-fx-border-color: #ff0000");
         }
@@ -63,7 +59,7 @@ public class SmartphoneController extends Controller {
         // release date
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
-        if(releaseDate == null) {
+        if (releaseDate == null) {
             errorStringBuilder.append("- Release date is unknown \n");
             smartphoneView.getReleaseDate().setStyle("-fx-border-color: #ff0000");
         }

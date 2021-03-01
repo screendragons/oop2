@@ -124,7 +124,7 @@ public class SpecificationView extends View {
         gridPaneSpec.add(comboBoxOperatingSystem, 1, 5);
 
         gridPaneSpec.add(labelNotes, 0, 6);
-        gridPaneSpec.add(textAreaNote, 1,6);
+        gridPaneSpec.add(textAreaNote, 1, 6);
 
         // buttons
         gridPaneSpec.add(buttonSave, 2, 8);

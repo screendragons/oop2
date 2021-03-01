@@ -73,6 +73,10 @@ public class Specification {
         this.note = note;
     }
 
+//    private Smartphone hoortBij() {
+//
+//    }
+
     @Override
     public String toString() {
         return String.format(

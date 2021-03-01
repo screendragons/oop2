@@ -1,9 +1,4 @@
 package practicumopdracht.data;
 
-/**
- * Functionality:
- *
- * @author Chi Yu Yeung
- */
-public class DAO {
+public interface DAO {
 }

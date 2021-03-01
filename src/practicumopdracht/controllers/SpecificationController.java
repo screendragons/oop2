@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import practicumopdracht.MainApplication;
+import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 import practicumopdracht.views.SpecificationView;
 import practicumopdracht.views.View;
@@ -13,7 +14,7 @@ import practicumopdracht.views.View;
  *
  * @author Chi Yu Yeung
  */
-public class SpecificationController extends Controller{
+public class SpecificationController extends Controller {
     private SpecificationView specificationView;
     private ObservableList<Specification> specificationObservableList;
 
@@ -23,7 +24,7 @@ public class SpecificationController extends Controller{
         // link multiple actions to the save button
         specificationView.getButtonSave().setOnAction(event ->
         {
-            if(validationSpec(specificationView)) {
+            if (validationSpec(specificationView)) {
                 // save specification
                 saveSpecification(specificationView, specificationObservableList);
             }
@@ -88,18 +89,17 @@ public class SpecificationController extends Controller{
         double inch = 0;
 
         // inch
-        if(inchString.isEmpty()) {
+        if (inchString.isEmpty()) {
             errorStringBuilder.append("- Amount inch is required\n");
             specificationView.getTextFieldInch().setStyle("-fx-border-color: #ff0000");
         } else {
             try {
                 inch = Double.parseDouble(inchString);
 
-                if(inch < 1) {
+                if (inch < 1) {
                     errorStringBuilder.append("- Amount inch is too small and can't be smaller than 1\n");
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 errorStringBuilder.append("- Amount inch is not a valid number\n");
             }
         }
@@ -108,17 +108,16 @@ public class SpecificationController extends Controller{
         String heightString = specificationView.getTextFieldHeight().getText().trim();
         double height = 0;
 
-        if(heightString.isEmpty()) {
+        if (heightString.isEmpty()) {
             errorStringBuilder.append("- Amount height is required\n");
             specificationView.getTextFieldHeight().setStyle("-fx-border-color: #ff0000");
         } else {
             try {
                 height = Double.parseDouble(heightString);
-                if(height < 0.1) {
+                if (height < 0.1) {
                     errorStringBuilder.append("- Amount height is too small and can't be smaller than 0.1\n");
                 }
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 errorStringBuilder.append("- Amount height is not a valid number\n");
             }
         }
@@ -127,7 +126,7 @@ public class SpecificationController extends Controller{
         String widthString = specificationView.getTextFieldWidth().getText().trim();
         double width = 0;
 
-        if(widthString.isEmpty()) {
+        if (widthString.isEmpty()) {
             errorStringBuilder.append("- Amount width is required\n");
             specificationView.getTextFieldWidth().setStyle("-fx-border-color: #ff0000");
         } else {
@@ -145,7 +144,7 @@ public class SpecificationController extends Controller{
         String thicknessString = specificationView.getTextFieldThickness().getText().trim();
         double thickness = 0;
 
-        if(thicknessString.isEmpty()) {
+        if (thicknessString.isEmpty()) {
             errorStringBuilder.append("- Amount thickness is required\n");
             specificationView.getTextFieldThickness().setStyle("-fx-border-color: #ff0000");
         } else {
@@ -162,7 +161,7 @@ public class SpecificationController extends Controller{
         // operating system
         String operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
 
-        if(operatingSystem == null) {
+        if (operatingSystem == null) {
             errorStringBuilder.append("- Amount operating system is required\n");
             specificationView.getComboBoxOperatingSystem().setStyle("-fx-border-color: #ff0000");
         }
@@ -172,16 +171,15 @@ public class SpecificationController extends Controller{
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setHeaderText(errorStringBuilder.toString());
-            // blokkeert de uitvoering van de code
+
+            // blocks the performance of the code
             alert.showAndWait();
 
             return false;
             // else show information
         } else {
-
             boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
             String noteField = specificationView.getTextAreaNote().getText();
-
 
             Specification specification = new Specification(
                     inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField
@@ -225,6 +223,10 @@ public class SpecificationController extends Controller{
 
     public void switchToSmartphone() {
         MainApplication.switchController(new SmartphoneController());
+    }
+
+    public void SpecificationController (Smartphone smartphone) {
+
     }
 
     @Override
