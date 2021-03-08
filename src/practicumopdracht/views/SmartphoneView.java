@@ -18,10 +18,12 @@ public class SmartphoneView extends View {
     // labels
     private Label labelSmartphoneName;
     private Label labelSerie;
+    private Label labelVersion;
     private Label labelReleaseDate;
 
     // textfield
     private TextField textFieldSmartphoneName;
+    private TextField textFieldVersion;
 
     // datepicker
     private DatePicker releaseDate;
@@ -32,6 +34,7 @@ public class SmartphoneView extends View {
     private Button buttonEdit;
     private Button buttonDelete;
     private Button buttonSwitch;
+    private Button buttonLoadDAO;
 
     // combobox
     private ComboBox<String> comboBoxSerie;
@@ -54,10 +57,12 @@ public class SmartphoneView extends View {
         // labels
         labelSmartphoneName = new Label("Smartphone name");
         labelSerie = new Label("Serie name");
+        labelVersion = new Label("Version");
         labelReleaseDate = new Label("Release date");
 
         // textfield
         textFieldSmartphoneName = new TextField();
+        textFieldVersion = new TextField();
 
         // combobox
         comboBoxSerie = new ComboBox<>();
@@ -71,6 +76,7 @@ public class SmartphoneView extends View {
         buttonEdit = new Button("Edit");
         buttonDelete = new Button("Delete");
         buttonSwitch = new Button("Switch to details");
+        buttonLoadDAO = new Button("Load from DAO");
 
         listView = new ListView<>();
         gridPaneSmart = new GridPane();
@@ -99,8 +105,11 @@ public class SmartphoneView extends View {
         gridPaneSmart.add(labelSerie, 0, 1);
         gridPaneSmart.add(comboBoxSerie, 1, 1);
 
-        gridPaneSmart.add(labelReleaseDate, 0, 2);
-        gridPaneSmart.add(releaseDate, 1, 2);
+        gridPaneSmart.add(labelVersion, 0, 2);
+        gridPaneSmart.add(textFieldVersion, 1,2);
+
+        gridPaneSmart.add(labelReleaseDate, 0, 3);
+        gridPaneSmart.add(releaseDate, 1, 3);
 
         // buttons
         gridPaneSmart.add(buttonSave, 2, 8);
@@ -108,12 +117,14 @@ public class SmartphoneView extends View {
         gridPaneSmart.add(buttonEdit, 4, 8);
         gridPaneSmart.add(buttonDelete, 5, 8);
         gridPaneSmart.add(buttonSwitch, 6, 8);
+        gridPaneSmart.add(buttonLoadDAO, 8,8);
 
         // buttons added to hbox
         menuButtonsSmart = new HBox();
         menuButtonsSmart.setPadding(new Insets(10, 10, 10, 100));
         menuButtonsSmart.setSpacing(20); // distance between buttons
-        menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch);
+        menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch,
+                buttonLoadDAO);
 
         vBoxSmart = new VBox();
 
@@ -132,6 +143,10 @@ public class SmartphoneView extends View {
 
     public TextField getTextFieldSmartphoneName() {
         return textFieldSmartphoneName;
+    }
+
+    public TextField getTextFieldVersion() {
+        return textFieldVersion;
     }
 
     public ComboBox<String> getComboBoxSerie() {
@@ -160,6 +175,10 @@ public class SmartphoneView extends View {
 
     public Button getButtonSwitch() {
         return buttonSwitch;
+    }
+
+    public Button getButtonLoadDAO() {
+        return buttonLoadDAO;
     }
 
     public ListView<Smartphone> getListView() {

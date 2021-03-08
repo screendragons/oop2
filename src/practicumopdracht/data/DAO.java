@@ -1,4 +1,11 @@
 package practicumopdracht.data;
 
-public interface DAO {
+import java.util.List;
+
+public interface DAO<Smartphone> {
+     List<Smartphone> getAll();
+     void addOrUpdate(Smartphone object);
+     void remove(Smartphone object);
+     boolean save();
+     boolean load();
 }

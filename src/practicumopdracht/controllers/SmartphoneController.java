@@ -3,8 +3,13 @@ package practicumopdracht.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import practicumopdracht.Main;
 import practicumopdracht.MainApplication;
+import practicumopdracht.data.DAO;
+import practicumopdracht.data.FakeSmartphoneDAO;
+import practicumopdracht.data.SmartphoneDAO;
 import practicumopdracht.models.Smartphone;
+import practicumopdracht.models.Specification;
 import practicumopdracht.views.SmartphoneView;
 import practicumopdracht.views.View;
 
@@ -23,21 +28,51 @@ public class SmartphoneController extends Controller {
         smartphoneView = new SmartphoneView();
 
         // link validation to the save button
-        smartphoneView.getButtonSave().setOnAction(event -> validationSmart(smartphoneView));
+        smartphoneView.getButtonSave().setOnAction(event ->
+        {
+            if (validation(smartphoneView)) {
+                // save specification
+                save(smartphoneView, smartphoneObservableList);
+            }
+        });
 
         // switch to detail view
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
 
         // edit button
-        smartphoneView.getButtonEdit().setOnAction(event -> editSmart());
+        smartphoneView.getButtonEdit().setOnAction(event -> edit());
 
         // delete button
-        smartphoneView.getButtonDelete().setOnAction(event -> deleteSmart());
+        smartphoneView.getButtonDelete().setOnAction(event -> delete());
+
+        // DAO button
+        smartphoneView.getButtonLoadDAO().setOnAction(event -> loadFromDAO());
 
         smartphoneObservableList = FXCollections.observableArrayList();
+
+        MainApplication.getSmartphoneDAO().load();
     }
 
-    private boolean validationSmart(SmartphoneView smartphoneView) {
+    private void save(SmartphoneView masterView, ObservableList<Smartphone> observableList) {
+        int versionField = 0;
+
+        try {
+            versionField = Integer.parseInt(masterView.getTextFieldVersion().getText().trim());
+        } catch (Exception e) {
+
+        }
+
+        String nameField = masterView.getTextFieldSmartphoneName().getText();
+        Object serie = masterView.getComboBoxSerie().getValue();
+        LocalDate releaseDate = masterView.getReleaseDate().getValue();
+
+        observableList.add(new Smartphone(nameField, (String) serie, versionField, releaseDate));
+
+        show();
+        resetFields();
+    }
+
+    private boolean validation(SmartphoneView smartphoneView) {
         StringBuilder errorStringBuilder = new StringBuilder();
 
         // smartphone name
@@ -56,6 +91,25 @@ public class SmartphoneController extends Controller {
             smartphoneView.getComboBoxSerie().setStyle("-fx-border-color: #ff0000");
         }
 
+        // version
+        String versionString = smartphoneView.getTextFieldVersion().getText().trim();
+        int version = 0;
+
+        if (versionString.isEmpty()) {
+            errorStringBuilder.append("- Version is required\n");
+            smartphoneView.getTextFieldVersion().setStyle("-fx-border-color: #ff0000");
+        } else {
+            try {
+                version = Integer.parseInt(versionString);
+
+                if (version < 1) {
+                    errorStringBuilder.append("- Amount inch is too small and can't be smaller than 1\n");
+                }
+            } catch (Exception ex) {
+                errorStringBuilder.append("- Amount inch is not a valid number\n");
+            }
+        }
+        
         // release date
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
@@ -74,45 +128,42 @@ public class SmartphoneController extends Controller {
 
             // else show information
             return false;
+        } else {
+            Smartphone smartphone = new Smartphone(
+                    smartphoneName, serie, version, releaseDate
+            );
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(smartphone.toString());
+            alert.showAndWait();
+
+            return true;
         }
-
-        try {
-            //reset fields
-            smartphoneView.getTextFieldSmartphoneName().setText("");
-            smartphoneView.getComboBoxSerie().setPromptText("series");
-            smartphoneView.getReleaseDate().setValue(null);
-
-        } catch (Exception ex) {
-            System.out.println("Oh nee!");
-        }
-
-        Smartphone smartphone = new Smartphone(
-                smartphoneName, serie, releaseDate
-        );
-
-        smartphoneObservableList.add(smartphone);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(smartphone.toString());
-        alert.showAndWait();
-
-        showSmartphone();
-
-        return true;
     }
 
-    private void showSmartphone() {
-        ObservableList<Smartphone> smartList = FXCollections.observableArrayList(smartphoneObservableList);
-        smartphoneView.getListView().setItems(smartList);
+    private void resetFields() {
+        //reset fields
+        smartphoneView.getTextFieldSmartphoneName().setText("");
+        smartphoneView.getComboBoxSerie().setPromptText("series");
+        smartphoneView.getTextFieldVersion().setText("");
+        smartphoneView.getReleaseDate().setValue(null);
     }
 
-    private void editSmart() {
+    private void show() {
+        ObservableList<Smartphone> smartList1 = FXCollections.observableArrayList(smartphoneObservableList);
+
+        ObservableList<Smartphone> smartList2 = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
+        smartphoneView.getListView().setItems(smartList2);
+
+    }
+
+    private void edit() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("You clicked on the edit button!");
         alert.showAndWait();
     }
 
-    private void deleteSmart() {
+    private void delete() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText("You clicked on the delete button!");
         alert.showAndWait();
@@ -120,6 +171,12 @@ public class SmartphoneController extends Controller {
 
     public void switchToSpecifications() {
         MainApplication.switchController(new SpecificationController());
+    }
+
+    private void loadFromDAO() {
+       DAO smartphoneDAO = new FakeSmartphoneDAO();
+       smartphoneDAO.load();
+       smartphoneObservableList.addAll(smartphoneDAO.getAll());
     }
 
     @Override

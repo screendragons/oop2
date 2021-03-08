@@ -6,6 +6,8 @@ package practicumopdracht.models;
  * @author Chi Yu Yeung
  */
 public class Specification {
+    private int id;
+
     private double inch;
     private double height;
     private double width;
@@ -73,9 +75,17 @@ public class Specification {
         this.note = note;
     }
 
-//    private Smartphone hoortBij() {
-//
-//    }
+    private Smartphone hoortBij() {
+        return hoortBij();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {

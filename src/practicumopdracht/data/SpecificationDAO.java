@@ -3,6 +3,7 @@ package practicumopdracht.data;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,12 +11,21 @@ import java.util.List;
  *
  * @author Chi Yu Yeung
  */
-public abstract class SpecificationDAO implements DAO {
+public abstract class SpecificationDAO implements DAO<Smartphone> {
     protected List<Specification> objects;
 
-//    public List<Specification> getAllFor(Smartphone object) {
-//
-//    }
+    public SpecificationDAO() {
+        this.objects = new ArrayList<>();
+    }
+
+    public List<Specification> getAllFor(Smartphone object) {
+        return this.objects;
+    }
+
+    @Override
+    public void addOrUpdate(Smartphone object) {
+
+    }
 
     public abstract boolean load();
 

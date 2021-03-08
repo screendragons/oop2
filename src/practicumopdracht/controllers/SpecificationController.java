@@ -24,26 +24,26 @@ public class SpecificationController extends Controller {
         // link multiple actions to the save button
         specificationView.getButtonSave().setOnAction(event ->
         {
-            if (validationSpec(specificationView)) {
+            if (validation(specificationView)) {
                 // save specification
-                saveSpecification(specificationView, specificationObservableList);
+                save(specificationView, specificationObservableList);
             }
         });
         // switch to master view
         specificationView.getButtonSwitch().setOnAction(event -> switchToSmartphone());
 
         // edit button
-        specificationView.getButtonEdit().setOnAction(event -> editSpecification());
+        specificationView.getButtonEdit().setOnAction(event -> edit());
 
         // delete button
-        specificationView.getButtonDelete().setOnAction(event -> deleteSpecification());
+        specificationView.getButtonDelete().setOnAction(event -> delete());
 
         // observable list
         specificationObservableList = FXCollections.observableArrayList();
     }
 
 
-    private void saveSpecification(SpecificationView detailView, ObservableList<Specification> observableList) {
+    private void save(SpecificationView detailView, ObservableList<Specification> observableList) {
         // inch
         double inchField = 0;
         // height
@@ -62,7 +62,7 @@ public class SpecificationController extends Controller {
             widthField = Double.parseDouble(detailView.getTextFieldWidth().getText().trim());
             // thickness
             thicknessField = Double.parseDouble(detailView.getTextFieldThickness().getText().trim());
-        } catch (Exception ex) {
+        } catch (Exception e) {
 
         }
 
@@ -78,11 +78,11 @@ public class SpecificationController extends Controller {
                 (String) operatingSystem, noteField
         ));
 
-        showSpecification();
+        show();
         resetFields();
     }
 
-    private boolean validationSpec(SpecificationView specificationView) {
+    private boolean validation(SpecificationView specificationView) {
         StringBuilder errorStringBuilder = new StringBuilder();
 
         String inchString = specificationView.getTextFieldInch().getText().trim();
@@ -204,18 +204,18 @@ public class SpecificationController extends Controller {
         specificationView.getTextAreaNote().setText("");
     }
 
-    private void showSpecification() {
+    private void show() {
         ObservableList<Specification> specList = FXCollections.observableArrayList(specificationObservableList);
         specificationView.getListView().setItems(specList);
     }
 
-    public void editSpecification() {
+    public void edit() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("You clicked on the edit button!");
         alert.showAndWait();
     }
 
-    public void deleteSpecification() {
+    public void delete() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText("You clicked on the delete button!");
         alert.showAndWait();

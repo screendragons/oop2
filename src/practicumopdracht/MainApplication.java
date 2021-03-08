@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import practicumopdracht.controllers.Controller;
 import practicumopdracht.controllers.SmartphoneController;
+import practicumopdracht.data.FakeSmartphoneDAO;
 import practicumopdracht.data.SmartphoneDAO;
 import practicumopdracht.data.SpecificationDAO;
 
@@ -13,7 +14,7 @@ public class MainApplication extends Application {
     private final int WIDTH = 800;
     private final int HEIGHT = 550;
     private static Stage stage;
-    private static SmartphoneDAO smartphoneDAO;
+    private static SmartphoneDAO smartphoneDAO = new FakeSmartphoneDAO();
     private static SpecificationDAO specificationDAO;
 
     @Override
