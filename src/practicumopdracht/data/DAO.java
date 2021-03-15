@@ -2,10 +2,11 @@ package practicumopdracht.data;
 
 import java.util.List;
 
-public interface DAO<Smartphone> {
-     List<Smartphone> getAll();
-     void addOrUpdate(Smartphone object);
-     void remove(Smartphone object);
+public interface DAO<T> {
+     List<T> getAll();
+     T getById(int id);
+     void addOrUpdate(T object);
+     void remove(T object);
      boolean save();
      boolean load();
 }

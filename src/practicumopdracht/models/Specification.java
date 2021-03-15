@@ -1,12 +1,15 @@
 package practicumopdracht.models;
 
+import java.io.Serializable;
+
 /**
  * Functionality:
  *
  * @author Chi Yu Yeung
  */
-public class Specification {
+public class Specification implements Serializable {
     private int id;
+    private static int uniqueID = 1;
 
     private double inch;
     private double height;
@@ -16,8 +19,10 @@ public class Specification {
     private Object operatingSystem;
     private String note;
 
+    private int hoortBij;
+
     public Specification(double inch, double height, double width, double thickness,
-                         boolean fingerprintSensor, String operatingSystem, String note) {
+                         boolean fingerprintSensor, String operatingSystem, String note, int hoortBij) {
         this.inch = inch;
         this.height = height;
         this.width = width;
@@ -25,6 +30,8 @@ public class Specification {
         this.fingerprintSensor = fingerprintSensor;
         this.operatingSystem = operatingSystem;
         this.note = note;
+        this.id = uniqueID++;
+        this.hoortBij = hoortBij;
     }
 
     public double getHeight() {
@@ -75,16 +82,12 @@ public class Specification {
         this.note = note;
     }
 
-    private Smartphone hoortBij() {
-        return hoortBij();
+    public int getHoortBij() {
+        return hoortBij;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     @Override

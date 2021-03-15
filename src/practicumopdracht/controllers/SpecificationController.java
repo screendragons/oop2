@@ -18,7 +18,7 @@ public class SpecificationController extends Controller {
     private SpecificationView specificationView;
     private ObservableList<Specification> specificationObservableList;
 
-    public SpecificationController() {
+    public SpecificationController(Smartphone smartphone) {
         specificationView = new SpecificationView();
 
         // link multiple actions to the save button
@@ -29,6 +29,7 @@ public class SpecificationController extends Controller {
                 save(specificationView, specificationObservableList);
             }
         });
+
         // switch to master view
         specificationView.getButtonSwitch().setOnAction(event -> switchToSmartphone());
 
@@ -40,6 +41,15 @@ public class SpecificationController extends Controller {
 
         // observable list
         specificationObservableList = FXCollections.observableArrayList();
+
+        // list in specifications
+        ObservableList detaillist = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(smartphone));
+        specificationView.getListView().setItems(detaillist);
+
+        ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
+        specificationView.getComboBoxMaster().setItems(masterData);
+
+        MainApplication.getSpecificationDAO().load();
     }
 
 
@@ -73,9 +83,11 @@ public class SpecificationController extends Controller {
 
         String noteField = detailView.getTextAreaNote().getText();
 
+        int master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem().getId();
+
         observableList.add(new Specification(
                 inchField, heightField, widthField, thicknessField, fingerprintSensor,
-                (String) operatingSystem, noteField
+                (String) operatingSystem, noteField, master
         ));
 
         show();
@@ -181,8 +193,10 @@ public class SpecificationController extends Controller {
             boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
             String noteField = specificationView.getTextAreaNote().getText();
 
+            int master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem().getId();
+
             Specification specification = new Specification(
-                    inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField
+                    inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField, master
             );
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -223,10 +237,6 @@ public class SpecificationController extends Controller {
 
     public void switchToSmartphone() {
         MainApplication.switchController(new SmartphoneController());
-    }
-
-    public void SpecificationController (Smartphone smartphone) {
-
     }
 
     @Override

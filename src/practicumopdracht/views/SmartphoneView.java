@@ -34,12 +34,12 @@ public class SmartphoneView extends View {
     private Button buttonEdit;
     private Button buttonDelete;
     private Button buttonSwitch;
+    private Button buttonSaveDAO;
     private Button buttonLoadDAO;
 
     // combobox
     private ComboBox<String> comboBoxSerie;
 
-    // TODO vragen
     private ListView<Smartphone> listView;
 
     private GridPane gridPaneSmart;
@@ -76,6 +76,7 @@ public class SmartphoneView extends View {
         buttonEdit = new Button("Edit");
         buttonDelete = new Button("Delete");
         buttonSwitch = new Button("Switch to details");
+        buttonSaveDAO = new Button("Save to DAO");
         buttonLoadDAO = new Button("Load from DAO");
 
         listView = new ListView<>();
@@ -117,6 +118,7 @@ public class SmartphoneView extends View {
         gridPaneSmart.add(buttonEdit, 4, 8);
         gridPaneSmart.add(buttonDelete, 5, 8);
         gridPaneSmart.add(buttonSwitch, 6, 8);
+        gridPaneSmart.add(buttonSaveDAO, 7, 8);
         gridPaneSmart.add(buttonLoadDAO, 8,8);
 
         // buttons added to hbox
@@ -124,7 +126,7 @@ public class SmartphoneView extends View {
         menuButtonsSmart.setPadding(new Insets(10, 10, 10, 100));
         menuButtonsSmart.setSpacing(20); // distance between buttons
         menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch,
-                buttonLoadDAO);
+                buttonSaveDAO, buttonLoadDAO);
 
         vBoxSmart = new VBox();
 
@@ -175,6 +177,10 @@ public class SmartphoneView extends View {
 
     public Button getButtonSwitch() {
         return buttonSwitch;
+    }
+
+    public Button getButtonSaveDAO() {
+        return buttonSaveDAO;
     }
 
     public Button getButtonLoadDAO() {

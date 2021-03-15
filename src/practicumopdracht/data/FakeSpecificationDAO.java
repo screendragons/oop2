@@ -1,8 +1,6 @@
 package practicumopdracht.data;
 
-import practicumopdracht.models.Smartphone;
-
-import java.util.List;
+import practicumopdracht.models.Specification;
 
 /**
  * Functionality:
@@ -10,24 +8,17 @@ import java.util.List;
  * @author Chi Yu Yeung
  */
 public class FakeSpecificationDAO extends SpecificationDAO {
-
     @Override
-    public List<Smartphone> getAll() {
-        return null;
-    }
-
-    @Override
-    public void remove(Smartphone object) {
-
+    public boolean save() {
+        return true;
     }
 
     @Override
     public boolean load() {
-        return false;
-    }
+        Specification specification1 = new Specification(1.00, 2.00, 4,0.1, true,
+                "iOS", "Een mooie smartphone", 1);
+        addOrUpdate(specification1);
 
-    @Override
-    public boolean save() {
-        return false;
+        return true;
     }
 }

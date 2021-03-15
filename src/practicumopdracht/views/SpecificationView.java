@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 
 /**
@@ -16,6 +17,7 @@ import practicumopdracht.models.Specification;
  */
 public class SpecificationView extends View {
     // labels
+    private Label labelMaster;
     private Label labelInch;
     private Label labelHeight;
     private Label labelWidth;
@@ -33,7 +35,10 @@ public class SpecificationView extends View {
     // checkbox
     private CheckBox checkBoxFingerprintSensor;
 
-    // combobox
+    // combobox master
+    private ComboBox<Smartphone> comboBoxMaster;
+
+    // combobox OS
     private ComboBox<String> comboBoxOperatingSystem;
 
     // note
@@ -60,6 +65,7 @@ public class SpecificationView extends View {
     }
 
     private void initializeRoot() {
+        labelMaster = new Label("Smartphone");
         // labels
         labelInch = new Label("Number of inches");
         labelHeight = new Label("Length smartphone");
@@ -77,6 +83,9 @@ public class SpecificationView extends View {
 
         // checkbox
         checkBoxFingerprintSensor = new CheckBox();
+
+        // combobox master
+        comboBoxMaster = new ComboBox<>();
 
         // combobox operating system
         comboBoxOperatingSystem = new ComboBox<>();
@@ -105,33 +114,37 @@ public class SpecificationView extends View {
 
         // Constructs a new Insets instance with four different offsets
         gridPaneSpec.setPadding(new Insets(5, 10, 10, 10));
-        gridPaneSpec.add(labelInch, 0, 0);
-        gridPaneSpec.add(textFieldInch, 1, 0);
 
-        gridPaneSpec.add(labelHeight, 0, 1);
-        gridPaneSpec.add(textFieldHeight, 1, 1);
+        gridPaneSpec.add(labelMaster, 0, 0);
+        gridPaneSpec.add(comboBoxMaster, 1, 0);
 
-        gridPaneSpec.add(labelWidth, 0, 2);
-        gridPaneSpec.add(textFieldWidth, 1, 2);
+        gridPaneSpec.add(labelInch, 0, 1);
+        gridPaneSpec.add(textFieldInch, 1, 1);
 
-        gridPaneSpec.add(labelThickness, 0, 3);
-        gridPaneSpec.add(textFieldThickness, 1, 3);
+        gridPaneSpec.add(labelHeight, 0, 2);
+        gridPaneSpec.add(textFieldHeight, 1, 2);
 
-        gridPaneSpec.add(labelFingerprintSensor, 0, 4);
-        gridPaneSpec.add(checkBoxFingerprintSensor, 1, 4);
+        gridPaneSpec.add(labelWidth, 0, 3);
+        gridPaneSpec.add(textFieldWidth, 1, 3);
 
-        gridPaneSpec.add(labelOperatingSystem, 0, 5);
-        gridPaneSpec.add(comboBoxOperatingSystem, 1, 5);
+        gridPaneSpec.add(labelThickness, 0, 4);
+        gridPaneSpec.add(textFieldThickness, 1, 4);
 
-        gridPaneSpec.add(labelNotes, 0, 6);
-        gridPaneSpec.add(textAreaNote, 1, 6);
+        gridPaneSpec.add(labelFingerprintSensor, 0, 5);
+        gridPaneSpec.add(checkBoxFingerprintSensor, 1, 5);
+
+        gridPaneSpec.add(labelOperatingSystem, 0, 6);
+        gridPaneSpec.add(comboBoxOperatingSystem, 1, 6);
+
+        gridPaneSpec.add(labelNotes, 0, 7);
+        gridPaneSpec.add(textAreaNote, 1, 7);
 
         // buttons
-        gridPaneSpec.add(buttonSave, 2, 8);
-        gridPaneSpec.add(buttonNew, 3, 8);
-        gridPaneSpec.add(buttonEdit, 4, 8);
-        gridPaneSpec.add(buttonDelete, 5, 8);
-        gridPaneSpec.add(buttonSwitch, 6, 8);
+        gridPaneSpec.add(buttonSave, 2, 9);
+        gridPaneSpec.add(buttonNew, 3, 9);
+        gridPaneSpec.add(buttonEdit, 4, 9);
+        gridPaneSpec.add(buttonDelete, 5, 9);
+        gridPaneSpec.add(buttonSwitch, 6, 9);
 
         // buttons added to hbox
         menuButtonsSpec = new HBox();
@@ -176,6 +189,10 @@ public class SpecificationView extends View {
 
     public ComboBox<String> getComboBoxOperatingSystem() {
         return comboBoxOperatingSystem;
+    }
+
+    public ComboBox<Smartphone> getComboBoxMaster() {
+        return comboBoxMaster;
     }
 
     public TextArea getTextAreaNote() {

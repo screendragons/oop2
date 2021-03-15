@@ -3,13 +3,8 @@ package practicumopdracht.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import practicumopdracht.Main;
 import practicumopdracht.MainApplication;
-import practicumopdracht.data.DAO;
-import practicumopdracht.data.FakeSmartphoneDAO;
-import practicumopdracht.data.SmartphoneDAO;
 import practicumopdracht.models.Smartphone;
-import practicumopdracht.models.Specification;
 import practicumopdracht.views.SmartphoneView;
 import practicumopdracht.views.View;
 
@@ -45,12 +40,16 @@ public class SmartphoneController extends Controller {
         // delete button
         smartphoneView.getButtonDelete().setOnAction(event -> delete());
 
-        // DAO button
+        // Load DAO button
         smartphoneView.getButtonLoadDAO().setOnAction(event -> loadFromDAO());
+
+        // save DAO
+        smartphoneView.getButtonSaveDAO().setOnAction(event -> MainApplication.getSmartphoneDAO().save());
 
         smartphoneObservableList = FXCollections.observableArrayList();
 
         MainApplication.getSmartphoneDAO().load();
+
     }
 
     private void save(SmartphoneView masterView, ObservableList<Smartphone> observableList) {
@@ -66,7 +65,7 @@ public class SmartphoneController extends Controller {
         Object serie = masterView.getComboBoxSerie().getValue();
         LocalDate releaseDate = masterView.getReleaseDate().getValue();
 
-        observableList.add(new Smartphone(nameField, (String) serie, versionField, releaseDate));
+        MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField, releaseDate));
 
         show();
         resetFields();
@@ -170,13 +169,15 @@ public class SmartphoneController extends Controller {
     }
 
     public void switchToSpecifications() {
-        MainApplication.switchController(new SpecificationController());
+        Smartphone masterID = smartphoneView.getListView().getSelectionModel().getSelectedItem();
+
+        System.out.println(smartphoneView.getListView().getSelectionModel().getSelectedItem());
+
+        MainApplication.switchController(new SpecificationController(masterID));
     }
 
     private void loadFromDAO() {
-       DAO smartphoneDAO = new FakeSmartphoneDAO();
-       smartphoneDAO.load();
-       smartphoneObservableList.addAll(smartphoneDAO.getAll());
+       show();
     }
 
     @Override

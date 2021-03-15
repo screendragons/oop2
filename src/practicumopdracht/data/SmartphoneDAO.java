@@ -19,6 +19,11 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
         load();
     }
 
+    @Override
+    public List<Smartphone> getAll() {
+        return Collections.unmodifiableList(objects);
+    }
+
     public Smartphone getById(int id) {
         for (Smartphone smartphone : objects) {
             if(smartphone.getId() == id) {
@@ -28,21 +33,6 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
         return null;
     }
 
-    private int getUniqueId() {
-        int highestId = 0;
-
-        for(Smartphone smartphone: objects) {
-            if(smartphone.getId() > highestId) {
-                highestId = smartphone.getId();
-            }
-        }
-        return highestId + 1;
-    }
-
-    @Override
-    public List<Smartphone> getAll() {
-        return Collections.unmodifiableList(objects);
-    }
     @Override
     public void addOrUpdate(Smartphone object) {
         if(!objects.contains(object)) {
@@ -57,6 +47,17 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
         if(foundSmartphone != null) {
             objects.remove(foundSmartphone);
         }
+    }
+
+    private int getUniqueId() {
+        int highestId = 0;
+
+        for(Smartphone smartphone: objects) {
+            if(smartphone.getId() > highestId) {
+                highestId = smartphone.getId();
+            }
+        }
+        return highestId + 1;
     }
 
     @Override

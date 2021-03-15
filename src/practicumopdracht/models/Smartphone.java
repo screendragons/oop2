@@ -1,5 +1,6 @@
 package practicumopdracht.models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -7,8 +8,11 @@ import java.time.LocalDate;
  *
  * @author Chi Yu Yeung
  */
-public class Smartphone {
+public class Smartphone implements Serializable {
     private int id;
+    private static int uniqueID = 1;
+    //
+
     private String smartphoneName;
     private Object serie;
     private int version;
@@ -19,6 +23,7 @@ public class Smartphone {
         this.serie = serie;
         this.version = version;
         this.releaseDate = releaseDate;
+        this.id = uniqueID++;
     }
 
     public String getSmartphoneName() {
@@ -52,6 +57,7 @@ public class Smartphone {
     public void setId(int id) {
         this.id = id;
     }
+
 
     @Override
     public String toString() {
