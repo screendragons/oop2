@@ -1,3 +1,1 @@
-2
-1OnePlus Nord series12021-03-014
-testSamsung S series22021-05-20
+testOnePlus Nord series12021-03-19

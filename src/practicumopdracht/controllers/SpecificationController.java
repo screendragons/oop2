@@ -39,15 +39,18 @@ public class SpecificationController extends Controller {
         // delete button
         specificationView.getButtonDelete().setOnAction(event -> delete());
 
+        // TODO heb ik hier nog wat aan? want ik heb al aparte lists
         // observable list
         specificationObservableList = FXCollections.observableArrayList();
+
+        // master
+        ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
+        specificationView.getComboBoxMaster().setItems(masterData);
+        // TODO get a selected item of the master to show in the combobox
 
         // list in specifications
         ObservableList detaillist = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(smartphone));
         specificationView.getListView().setItems(detaillist);
-
-        ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
-        specificationView.getComboBoxMaster().setItems(masterData);
 
         MainApplication.getSpecificationDAO().load();
     }
@@ -83,7 +86,7 @@ public class SpecificationController extends Controller {
 
         String noteField = detailView.getTextAreaNote().getText();
 
-        int master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem().getId();
+        Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
 
         observableList.add(new Specification(
                 inchField, heightField, widthField, thicknessField, fingerprintSensor,
@@ -193,7 +196,7 @@ public class SpecificationController extends Controller {
             boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
             String noteField = specificationView.getTextAreaNote().getText();
 
-            int master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem().getId();
+            Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
 
             Specification specification = new Specification(
                     inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField, master

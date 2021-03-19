@@ -1,5 +1,6 @@
 package practicumopdracht.data;
 
+import com.sun.javafx.geom.transform.SingularMatrixException;
 import practicumopdracht.models.Smartphone;
 
 import java.util.ArrayList;
@@ -24,41 +25,39 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
         return Collections.unmodifiableList(objects);
     }
 
-    public Smartphone getById(int id) {
-        for (Smartphone smartphone : objects) {
-            if(smartphone.getId() == id) {
-                return smartphone;
-            }
+    public Smartphone getById(int index) {
+        return objects.get(index);
+    }
+
+    public int getIdFor(Smartphone object){
+        if(!objects.contains(object)) {
+            return objects.indexOf(object);
+        } else {
+            return -1;
         }
-        return null;
     }
 
     @Override
     public void addOrUpdate(Smartphone object) {
         if(!objects.contains(object)) {
             objects.add(object);
+        } else {
+            int index = objects.indexOf(object);
+            objects.set(index, object);
         }
     }
 
     @Override
     public void remove(Smartphone object) {
-        Smartphone foundSmartphone = getById(object.getId());
-
-        if(foundSmartphone != null) {
-            objects.remove(foundSmartphone);
-        }
+        // TODO kan in 1 regel code
+//        Smartphone foundSmartphone = getById(object.getId());
+//
+//        if(foundSmartphone != null) {
+//            objects.remove(foundSmartphone);
+//        }
     }
 
-    private int getUniqueId() {
-        int highestId = 0;
-
-        for(Smartphone smartphone: objects) {
-            if(smartphone.getId() > highestId) {
-                highestId = smartphone.getId();
-            }
-        }
-        return highestId + 1;
-    }
+    // TODO get one item for in the detail view
 
     @Override
     public abstract boolean load();

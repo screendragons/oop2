@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import practicumopdracht.models.Smartphone;
 
+import javax.swing.*;
+
 /**
  * Functionality:
  *
@@ -46,6 +48,13 @@ public class SmartphoneView extends View {
     private VBox vBoxSmart;
     private HBox menuButtonsSmart;
     private BorderPane borderPane;
+    private BorderPane menuBorderPane;
+
+    private Menu menu;
+    private MenuItem menuItemSave;
+    private MenuItem menuItemLoad;
+    private MenuItem menuItemExit;
+    private MenuBar menuBar;
 
     private Parent root;
 
@@ -54,6 +63,17 @@ public class SmartphoneView extends View {
     }
 
     private void initializeRoot() {
+        // menu
+        menu = new Menu("File");
+
+        // menu items
+        menuItemSave = new MenuItem("Save");
+        menuItemLoad = new MenuItem("Load");
+        menuItemExit = new MenuItem("Exit");
+
+        // menubar
+        menuBar = new MenuBar();
+
         // labels
         labelSmartphoneName = new Label("Smartphone name");
         labelSerie = new Label("Serie name");
@@ -98,6 +118,14 @@ public class SmartphoneView extends View {
         // default text for when there is no option selected
         comboBoxSerie.setPromptText("series");
 
+        // add items to the menu
+        menu.getItems().add(menuItemSave);
+        menu.getItems().add(menuItemLoad);
+        menu.getItems().add(menuItemExit);
+
+        // add the menu to the menubar
+        menuBar.getMenus().add(menu);
+
         // Constructs a new Insets instance with four different offsets
         gridPaneSmart.setPadding(new Insets(10, 10, 10, 10));
         gridPaneSmart.add(labelSmartphoneName, 0, 0);
@@ -130,17 +158,26 @@ public class SmartphoneView extends View {
 
         vBoxSmart = new VBox();
 
+        menuBorderPane = new BorderPane(menuBar);
+
         vBoxSmart.setPadding(new Insets(10, 10, 10, 10));
-        vBoxSmart.getChildren().addAll(gridPaneSmart, menuButtonsSmart, listView);
+        vBoxSmart.getChildren().addAll(menuBorderPane, gridPaneSmart, menuButtonsSmart, listView);
 
         borderPane = new BorderPane();
         borderPane.setCenter(vBoxSmart);
         root = borderPane;
     }
 
-    @Override
-    public Parent getRoot() {
-        return root;
+    public MenuItem getMenuItemSave() {
+        return menuItemSave;
+    }
+
+    public MenuItem getMenuItemLoad() {
+        return menuItemLoad;
+    }
+
+    public MenuItem getMenuItemExit() {
+        return menuItemExit;
     }
 
     public TextField getTextFieldSmartphoneName() {
@@ -189,5 +226,10 @@ public class SmartphoneView extends View {
 
     public ListView<Smartphone> getListView() {
         return listView;
+    }
+
+    @Override
+    public Parent getRoot() {
+        return root;
     }
 }

@@ -26,35 +26,25 @@ public abstract class SpecificationDAO implements DAO<Specification> {
 
     /**
      * haal alle objecten op die bij een masterID horen
-     * @param object
+     * @param smartphone
      * @return
      */
-    public List<Specification> getAllFor(Smartphone object) {
-        List<Specification> specificationList = new ArrayList<>();
-        for (int i = 0; i < objects.size(); i++) {
-            if(objects.get(i).getHoortBij() == object.getId()) {
-                specificationList.add(objects.get(i));
+    public List<Specification> getAllFor(Smartphone smartphone) {
+        List<Specification> temporaryList = new ArrayList<>();
+
+        for(Specification specification : objects) {
+            if(smartphone == specification.getHoortBij()) {
+                temporaryList.add(specification);
             }
         }
-        return specificationList;
+        return temporaryList;
     }
-
-//    public List<Specification> getAllFor(int masterID) {
-//        List<Specification> temporaryList = new ArrayList<>();
-//
-//        for(Specification specification : objects) {
-//            if(masterID == specification.getHoortBij()) {
-//                temporaryList.add(specification);
-//            }
-//        }
-//        return temporaryList;
-//    }
 
     public Specification getById(int id) {
         for (Specification specification : objects) {
-            if(specification.getId() == id) {
-                return specification;
-            }
+//            if(specification.getId() == id) {
+//                return specification;
+//            }
 
             // TODO wat is het verschil tussen hoortbij en getId?
 //            if(id == specification.getHoortBij()) {
@@ -73,14 +63,12 @@ public abstract class SpecificationDAO implements DAO<Specification> {
 
     @Override
     public void remove(Specification object) {
-        Specification foundSpecification = getById(object.getId());
-
-        if(foundSpecification != null) {
-            objects.remove(foundSpecification);
-        }
+//        Specification foundSpecification = getById(object.getId());
+//
+//        if(foundSpecification != null) {
+//            objects.remove(foundSpecification);
+//        }
     }
-
-
 
     public abstract boolean load();
 

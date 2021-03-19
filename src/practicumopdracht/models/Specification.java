@@ -8,9 +8,6 @@ import java.io.Serializable;
  * @author Chi Yu Yeung
  */
 public class Specification implements Serializable {
-    private int id;
-    private static int uniqueID = 1;
-
     private double inch;
     private double height;
     private double width;
@@ -19,10 +16,10 @@ public class Specification implements Serializable {
     private Object operatingSystem;
     private String note;
 
-    private int hoortBij;
+    private Smartphone hoortBij;
 
     public Specification(double inch, double height, double width, double thickness,
-                         boolean fingerprintSensor, String operatingSystem, String note, int hoortBij) {
+                         boolean fingerprintSensor, String operatingSystem, String note, Smartphone hoortBij) {
         this.inch = inch;
         this.height = height;
         this.width = width;
@@ -30,7 +27,6 @@ public class Specification implements Serializable {
         this.fingerprintSensor = fingerprintSensor;
         this.operatingSystem = operatingSystem;
         this.note = note;
-        this.id = uniqueID++;
         this.hoortBij = hoortBij;
     }
 
@@ -82,12 +78,8 @@ public class Specification implements Serializable {
         this.note = note;
     }
 
-    public int getHoortBij() {
+    public Smartphone getHoortBij() {
         return hoortBij;
-    }
-
-    public int getId() {
-        return id;
     }
 
     @Override

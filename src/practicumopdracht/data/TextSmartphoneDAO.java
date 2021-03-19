@@ -13,9 +13,9 @@ import java.util.Scanner;
  * @author Chi Yu Yeung
  */
 public class TextSmartphoneDAO extends SmartphoneDAO{
-
     private static final String FILENAME = "smartphones.txt";
 
+    // TODO moeten er voor de TextDAOs ook een knop worden gemaakt om deze in te laden?
     @Override
     public boolean save() {
         File file = new File(FILENAME);
@@ -26,18 +26,18 @@ public class TextSmartphoneDAO extends SmartphoneDAO{
 //            printWriter.println(objects.size());
 
             for(Smartphone smartphone : objects) {
-                printWriter.println(smartphone.getId());
-                printWriter.print(smartphone.getSmartphoneName());
-                printWriter.print(smartphone.getSerie());
-                printWriter.print(smartphone.getVersion());
-                printWriter.print(smartphone.getReleaseDate());
+//                printWriter.println(smartphone.getId());
+                printWriter.print(smartphone.getSmartphoneName() + " ");
+                printWriter.print(smartphone.getSerie() + " ");
+                printWriter.print(smartphone.getVersion() + " ");
+                printWriter.print(smartphone.getReleaseDate() + "\n");
             }
 
             printWriter.close();
 
             return true;
         } catch (Exception e) {
-            System.err.println(e.toString());
+            System.err.println(e.toString() + "\n" + "Bestand niet gevonden!");
         }
         return false;
     }
@@ -46,7 +46,10 @@ public class TextSmartphoneDAO extends SmartphoneDAO{
     public boolean load() {
         File file = new File(FILENAME);
         try (Scanner scanner = new Scanner(file)) {
+            // empty the list
+            objects.clear();
             while (scanner.hasNext()) {
+                // TODO moet er een int id in?
                 int id = Integer.parseInt(scanner.nextLine());
                 String smartphoneName = scanner.nextLine();
                 Object serie = scanner.nextLine();
@@ -57,7 +60,7 @@ public class TextSmartphoneDAO extends SmartphoneDAO{
                 objects.add(smartphone);
             }
         } catch (Exception e) {
-
+            System.err.println(e.toString() + "\n" + "Bestand niet gevonden!");
         }
 
         return false;
