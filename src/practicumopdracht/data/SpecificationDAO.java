@@ -13,10 +13,10 @@ import java.util.List;
  * @author Chi Yu Yeung
  */
 public abstract class SpecificationDAO implements DAO<Specification> {
-    protected List<Specification> objects;
+    protected List<Specification> objects = new ArrayList<>();
 
     public SpecificationDAO() {
-        this.objects = new ArrayList<>();
+        load();
     }
 
     @Override
@@ -41,33 +41,22 @@ public abstract class SpecificationDAO implements DAO<Specification> {
     }
 
     public Specification getById(int id) {
-        for (Specification specification : objects) {
-//            if(specification.getId() == id) {
-//                return specification;
-//            }
-
-            // TODO wat is het verschil tussen hoortbij en getId?
-//            if(id == specification.getHoortBij()) {
-//                return specification;
-//            }
-        }
-        return null;
+        return objects.get(id);
     }
 
     @Override
     public void addOrUpdate(Specification object) {
         if(!objects.contains(object)) {
             objects.add(object);
+        } else {
+            int index = objects.indexOf(object);
+            objects.set(index, object);
         }
     }
 
     @Override
     public void remove(Specification object) {
-//        Specification foundSpecification = getById(object.getId());
-//
-//        if(foundSpecification != null) {
-//            objects.remove(foundSpecification);
-//        }
+        objects.remove(object);
     }
 
     public abstract boolean load();

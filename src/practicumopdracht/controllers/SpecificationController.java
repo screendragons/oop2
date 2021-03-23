@@ -39,22 +39,19 @@ public class SpecificationController extends Controller {
         // delete button
         specificationView.getButtonDelete().setOnAction(event -> delete());
 
-        // TODO heb ik hier nog wat aan? want ik heb al aparte lists
-        // observable list
-        specificationObservableList = FXCollections.observableArrayList();
-
         // master
         ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
+        System.out.println(smartphone);
         specificationView.getComboBoxMaster().setItems(masterData);
-        // TODO get a selected item of the master to show in the combobox
+        specificationView.getComboBoxMaster().setValue(smartphone);
 
         // list in specifications
-        ObservableList detaillist = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(smartphone));
-        specificationView.getListView().setItems(detaillist);
+        ObservableList detailList = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(smartphone));
+        specificationView.getListView().setItems(detailList);
 
+        // TODO code verplpaatsen in de load fucntie zetten in het menu item Load
         MainApplication.getSpecificationDAO().load();
     }
-
 
     private void save(SpecificationView detailView, ObservableList<Specification> observableList) {
         // inch
@@ -88,6 +85,7 @@ public class SpecificationController extends Controller {
 
         Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
 
+        // TODO veranderen in DAO -> dan blijft hij opgeslagen in het scherm (net als in de master controller)
         observableList.add(new Specification(
                 inchField, heightField, widthField, thicknessField, fingerprintSensor,
                 (String) operatingSystem, noteField, master

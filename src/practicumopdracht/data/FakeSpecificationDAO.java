@@ -1,5 +1,6 @@
 package practicumopdracht.data;
 
+import practicumopdracht.MainApplication;
 import practicumopdracht.models.Specification;
 
 /**
@@ -15,10 +16,10 @@ public class FakeSpecificationDAO extends SpecificationDAO {
 
     @Override
     public boolean load() {
-        // TODO fix hoortBij
-//        Specification specification1 = new Specification(1.00, 2.00, 4,0.1, true,
-//                "iOS", "Een mooie smartphone", 1);
-//        addOrUpdate(specification1);
+        Specification specification1 = new Specification(1.00, 2.00, 4,0.1, true,
+                "iOS", "Een mooie smartphone", MainApplication.getSmartphoneDAO().getById(0));
+        // TODO make more fake specs
+        addOrUpdate(specification1);
 
         return true;
     }

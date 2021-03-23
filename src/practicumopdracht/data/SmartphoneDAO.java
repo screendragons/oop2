@@ -1,6 +1,5 @@
 package practicumopdracht.data;
 
-import com.sun.javafx.geom.transform.SingularMatrixException;
 import practicumopdracht.models.Smartphone;
 
 import java.util.ArrayList;
@@ -13,10 +12,9 @@ import java.util.List;
  * @author Chi Yu Yeung
  */
 public abstract class SmartphoneDAO implements DAO<Smartphone> {
-    protected List<Smartphone> objects;
+    protected List<Smartphone> objects = new ArrayList<>();
 
     public SmartphoneDAO() {
-        objects = new ArrayList<>();
         load();
     }
 
@@ -26,6 +24,9 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
     }
 
     public Smartphone getById(int index) {
+        if(objects.size() == 0) {
+           return null;
+        }
         return objects.get(index);
     }
 
@@ -49,15 +50,8 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
 
     @Override
     public void remove(Smartphone object) {
-        // TODO kan in 1 regel code
-//        Smartphone foundSmartphone = getById(object.getId());
-//
-//        if(foundSmartphone != null) {
-//            objects.remove(foundSmartphone);
-//        }
+        objects.remove(object);
     }
-
-    // TODO get one item for in the detail view
 
     @Override
     public abstract boolean load();

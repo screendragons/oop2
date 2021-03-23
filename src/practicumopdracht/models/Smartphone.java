@@ -26,20 +26,32 @@ public class Smartphone implements Serializable {
         return smartphoneName;
     }
 
+    public void setSmartphoneName(String smartphoneName) {
+        this.smartphoneName = smartphoneName;
+    }
+
     public Object getSerie() {
         return serie;
+    }
+
+    public void setSerie(Object serie) {
+        this.serie = serie;
     }
 
     public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
     public void setSerie(String serie) {
         this.serie = serie;
     }
 
-    public int getVersion() {
-        return version;
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public void setReleaseDate(LocalDate releaseDate) {

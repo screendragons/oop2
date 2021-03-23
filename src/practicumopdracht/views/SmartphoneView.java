@@ -9,8 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import practicumopdracht.models.Smartphone;
 
-import javax.swing.*;
-
 /**
  * Functionality:
  *

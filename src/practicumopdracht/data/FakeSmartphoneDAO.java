@@ -20,8 +20,7 @@ public class FakeSmartphoneDAO extends SmartphoneDAO{
         // clears the object list and adds the fake dao information
         objects.clear();
 
-
-        // TODO fake data in Load Function and not in save!
+        // TODO fake data in menu item
         Smartphone smartphone1 = new Smartphone("Samsung S21", "S series", 1,
                 LocalDate.of(2021, 1, 14));
         Smartphone smartphone2 = new Smartphone("OnePlus 8T", "T series", 1,

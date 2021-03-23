@@ -3,7 +3,6 @@ package practicumopdracht.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
 import practicumopdracht.MainApplication;
 import practicumopdracht.data.DAO;
 import practicumopdracht.models.Smartphone;
@@ -24,63 +23,70 @@ public class SmartphoneController extends Controller {
     private Smartphone selectedSmartphone;
 
     public SmartphoneController() {
-        smartphoneView = new SmartphoneView();
+        smartphoneDAO = MainApplication.getSmartphoneDAO();
 
+        smartphoneView = new SmartphoneView();
         // menu items
         smartphoneView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
 
 //        smartphoneView.getMenuItemExit().setOnAction(event -> exit());
 
+        // voor de text, object en fake DAO's
         smartphoneView.getMenuItemSave().setOnAction(event -> {
-            if (validation(smartphoneView)) {
-                // save specification
-                save(smartphoneView, smartphoneObservableList);
-            }
+
         });
 
         // link validation to the save button
-        // TODO is deze knop nog nodig?
+        // voor de algemene DAO's
         smartphoneView.getButtonSave().setOnAction(event ->
         {
             if (validation(smartphoneView)) {
                 // save specification
                 save(smartphoneView, smartphoneObservableList);
             }
+            smartphoneDAO.save();
         });
 
-        // switch to detail view
-//        smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications(smartphoneView.getListView().getSelectionModel().getSelectedItem()));
+        smartphoneView.getButtonNew().setOnAction(event -> newPhone());
 
         // edit button
-//        smartphoneView.getButtonEdit().setOnAction(event -> edit());
+        // TODO edit function doesn't work
+        smartphoneView.getButtonEdit().setOnAction(event -> editCheck(selectedSmartphone));
 
         // delete button
         smartphoneView.getButtonDelete().setOnAction(event -> delete());
 
-        // Load DAO button
-        // TODO is deze knop nog nodig?
+        // switch to detail view
+        smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
+
+        // TODO hoeft niet meer, is al in de menu optie boven
+        // Load textDAO
         smartphoneView.getButtonLoadDAO().setOnAction(event -> loadFromDAO());
 
+        // TODO hoeft niet meer, is al in de menu optie boven
         // save DAO
         smartphoneView.getButtonSaveDAO().setOnAction(event -> MainApplication.getSmartphoneDAO().save());
 
         smartphoneObservableList = FXCollections.observableArrayList();
 
-        smartphoneView.getButtonSwitch().setOnAction(event -> seeDetails());
-
-        // TODO select the right item to get the right information
+        // TODO select the right item (master) to get the right information (detail)
         // what is the difference between selectedIndexProperty and selectedItemProperty
+        // replaces the old value with the new by editing
         smartphoneView.getListView().getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, oldSmartphone, newSmartphone) -> {
-                    if (newSmartphone == null || newSmartphone == oldSmartphone) {
+                    if (newSmartphone == null || oldSmartphone == newSmartphone) {
                         return;
                     }
+                    editCheck(newSmartphone);
                 });
-        MainApplication.getSmartphoneDAO().load();
-
+        show();
     }
 
     private void save(SmartphoneView masterView, ObservableList<Smartphone> observableList) {
+
+        String nameField = masterView.getTextFieldSmartphoneName().getText();
+        Object serie = masterView.getComboBoxSerie().getValue();
+
         int versionField = 0;
 
         try {
@@ -89,8 +95,7 @@ public class SmartphoneController extends Controller {
 
         }
 
-        String nameField = masterView.getTextFieldSmartphoneName().getText();
-        Object serie = masterView.getComboBoxSerie().getValue();
+        // TODO local date doesn't work
         LocalDate releaseDate = masterView.getReleaseDate().getValue();
 
         MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField, releaseDate));
@@ -136,7 +141,7 @@ public class SmartphoneController extends Controller {
                 errorStringBuilder.append("- Version is not a valid number\n");
             }
         }
-        
+
         // release date
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
@@ -177,50 +182,68 @@ public class SmartphoneController extends Controller {
     }
 
     private void show() {
-        ObservableList<Smartphone> smartList1 = FXCollections.observableArrayList(smartphoneObservableList);
-
-        ObservableList<Smartphone> smartList2 = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
-        smartphoneView.getListView().setItems(smartList2);
+        ObservableList<Smartphone> smartList = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
+//        FXCollections.sort(smartList2, );
+        smartphoneView.getListView().setItems(smartList);
 
     }
 
-    private void edit(Smartphone smartphone) {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setHeaderText("You clicked on the edit button!");
-//        alert.showAndWait();
+    private void newPhone() {
 
-        smartphoneView.getTextFieldSmartphoneName().setText(smartphone.getSmartphoneName());
-        smartphoneView.getComboBoxSerie().setValue((String) smartphone.getSerie());
-        smartphoneView.getTextFieldVersion().setText(String.valueOf(smartphone.getVersion()));
-        smartphoneView.getReleaseDate().setPromptText(String.valueOf(smartphone.getReleaseDate()));
-        // TODO check ^
+        // TODO add pop up with dat je een nieuwe item kan aanmaken
+        resetFields();
     }
 
+    private void editCheck(Smartphone smartphone) {
+        selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
+
+        if(selectedSmartphone != null) {
+
+            smartphoneView.getTextFieldSmartphoneName().setText(selectedSmartphone.getSmartphoneName());
+
+            // TODO change just like above ^
+            selectedSmartphone.setSerie(smartphoneView.getComboBoxSerie().getValue());
+
+            try {
+                selectedSmartphone.setVersion(Integer.parseInt(smartphoneView.getTextFieldVersion().getText()));
+            } catch (Exception e) {
+
+            }
+
+            selectedSmartphone.setReleaseDate(smartphoneView.getReleaseDate().getValue());
+//        } else {
+//            smartphoneDAO.addOrUpdate(smartphone);
+        }
+    }
+
+    // TODO delete function not working
+    // TODO todo after save function
     private void delete() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText("You clicked on the delete button!");
-        alert.showAndWait();
+        selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
+
+        // unselect item when the application is started, preventing from deleting something by accident
+        if(selectedSmartphone == null) {
+            return;
+        }
+
+        smartphoneObservableList.remove(selectedSmartphone);
+
+        smartphoneDAO.remove(selectedSmartphone);
     }
 
     public void switchToSpecifications() {
-        Smartphone masterID = smartphoneView.getListView().getSelectionModel().getSelectedItem();
+        Smartphone smartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
-        System.out.println(smartphoneView.getListView().getSelectionModel().getSelectedItem());
-
-        MainApplication.switchController(new SpecificationController(masterID));
+        MainApplication.switchController(new SpecificationController(smartphone));
     }
 
     private void loadFromDAO() {
-       show();
+        smartphoneDAO.load();
+        show();
     }
 
     public void enableButton() {
         smartphoneView.getButtonSwitch().setDisable(true);
-    }
-
-    private void seeDetails() {
-        // TODO select item
-//        MainApplication.switchController(new SmartphoneController(selectedSmartphone));
     }
 
     @Override

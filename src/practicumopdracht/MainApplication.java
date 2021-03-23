@@ -23,6 +23,10 @@ public class MainApplication extends Application {
 
             return;
         }
+
+        // TODO hier de binairy, fake, text en object aanroepen bij het testen
+        // het verschilt in wat je wilt doen, met 1 regel code moet je het kunnen veranderen (inheritance)
+
         MainApplication.stage = stage;
 
         stage.setTitle(String.format("Practicumopdracht OOP2 - %s", Main.studentNaam, TITLE));

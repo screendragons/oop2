@@ -15,7 +15,6 @@ import java.util.Scanner;
 public class TextSmartphoneDAO extends SmartphoneDAO{
     private static final String FILENAME = "smartphones.txt";
 
-    // TODO moeten er voor de TextDAOs ook een knop worden gemaakt om deze in te laden?
     @Override
     public boolean save() {
         File file = new File(FILENAME);
@@ -23,47 +22,46 @@ public class TextSmartphoneDAO extends SmartphoneDAO{
         try {
             PrintWriter printWriter = new PrintWriter(file);
 
-//            printWriter.println(objects.size());
-
             for(Smartphone smartphone : objects) {
 //                printWriter.println(smartphone.getId());
-                printWriter.print(smartphone.getSmartphoneName() + " ");
-                printWriter.print(smartphone.getSerie() + " ");
-                printWriter.print(smartphone.getVersion() + " ");
+                printWriter.print(smartphone.getSmartphoneName() + ",");
+                printWriter.print(smartphone.getSerie() + ",");
+                printWriter.print(smartphone.getVersion() + ",");
                 printWriter.print(smartphone.getReleaseDate() + "\n");
             }
 
             printWriter.close();
-
-            return true;
         } catch (Exception e) {
-            System.err.println(e.toString() + "\n" + "Bestand niet gevonden!");
+//            System.err.println(e.toString() + "\n" + "save Bestand niet gevonden!");
+            return false;
+
         }
-        return false;
+        return true;
     }
 
+    // TODO load functie werkt niet
     @Override
     public boolean load() {
         File file = new File(FILENAME);
+        // empty the list
+        objects.clear();
+
         try (Scanner scanner = new Scanner(file)) {
-            // empty the list
-            objects.clear();
             while (scanner.hasNext()) {
-                // TODO moet er een int id in?
-                int id = Integer.parseInt(scanner.nextLine());
                 String smartphoneName = scanner.nextLine();
                 Object serie = scanner.nextLine();
                 int version = Integer.parseInt(scanner.nextLine());
                 LocalDate releaseDate = LocalDate.parse(scanner.nextLine());
 
                 Smartphone smartphone = new Smartphone(smartphoneName, (String) serie, version, releaseDate);
-                objects.add(smartphone);
+                addOrUpdate(smartphone);
             }
         } catch (Exception e) {
-            System.err.println(e.toString() + "\n" + "Bestand niet gevonden!");
+            System.err.println(e.toString() + "\n" + "load Bestand niet gevonden!");
+            return false;
         }
 
-        return false;
+        return true;
     }
 
 }
