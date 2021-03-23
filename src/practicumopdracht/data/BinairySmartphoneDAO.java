@@ -6,7 +6,7 @@ package practicumopdracht.data;
  * @author Chi Yu Yeung
  */
 public class BinairySmartphoneDAO extends SmartphoneDAO{
-    private final String FILENAME = "smaartphones.dot";
+    private final String FILENAME = "smaartphones.dat";
 
     @Override
     public boolean load() {

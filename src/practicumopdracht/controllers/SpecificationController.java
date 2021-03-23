@@ -48,9 +48,6 @@ public class SpecificationController extends Controller {
         // list in specifications
         ObservableList detailList = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(smartphone));
         specificationView.getListView().setItems(detailList);
-
-        // TODO code verplpaatsen in de load fucntie zetten in het menu item Load
-        MainApplication.getSpecificationDAO().load();
     }
 
     private void save(SpecificationView detailView, ObservableList<Specification> observableList) {
@@ -85,8 +82,7 @@ public class SpecificationController extends Controller {
 
         Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
 
-        // TODO veranderen in DAO -> dan blijft hij opgeslagen in het scherm (net als in de master controller)
-        observableList.add(new Specification(
+        MainApplication.getSpecificationDAO().addOrUpdate(new Specification(
                 inchField, heightField, widthField, thicknessField, fingerprintSensor,
                 (String) operatingSystem, noteField, master
         ));
@@ -220,7 +216,7 @@ public class SpecificationController extends Controller {
     }
 
     private void show() {
-        ObservableList<Specification> specList = FXCollections.observableArrayList(specificationObservableList);
+        ObservableList<Specification> specList = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAll());
         specificationView.getListView().setItems(specList);
     }
 

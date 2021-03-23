@@ -8,12 +8,12 @@ import practicumopdracht.controllers.SmartphoneController;
 import practicumopdracht.data.*;
 
 public class MainApplication extends Application {
-    private final String TITLE = "Smartphone - specificatie";
+    private final String TITLE = "Smartphone -> specificatie";
     private final int WIDTH = 800;
     private final int HEIGHT = 550;
     private static Stage stage;
-    private static SmartphoneDAO smartphoneDAO = new TextSmartphoneDAO();
-    private static SpecificationDAO specificationDAO = new FakeSpecificationDAO();
+    private static SmartphoneDAO smartphoneDAO;
+    private static SpecificationDAO specificationDAO;
 
     @Override
     public void start(Stage stage) {
@@ -24,12 +24,20 @@ public class MainApplication extends Application {
             return;
         }
 
-        // TODO hier de binairy, fake, text en object aanroepen bij het testen
-        // het verschilt in wat je wilt doen, met 1 regel code moet je het kunnen veranderen (inheritance)
+        // switch easily between the DAO's
+        // master
+        smartphoneDAO = new TextSmartphoneDAO();
+//        smartphoneDAO = new FakeSmartphoneDAO();
+//        smartphoneDAO = new BinairySmartphoneDAO();
+
+        // detail
+        specificationDAO = new TextSpecificationDAO();
+//        specificationDAO = new FakeSpecificationDAO();
+//        specificationDAO = new ObjectSpecificationDAO();
 
         MainApplication.stage = stage;
 
-        stage.setTitle(String.format("Practicumopdracht OOP2 - %s", Main.studentNaam, TITLE));
+        stage.setTitle(String.format("Practicumopdracht OOP2 - %s - %s", Main.studentNaam, TITLE));
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
 

@@ -46,10 +46,6 @@ public class Smartphone implements Serializable {
         return version;
     }
 
-    public void setSerie(String serie) {
-        this.serie = serie;
-    }
-
     public void setVersion(int version) {
         this.version = version;
     }

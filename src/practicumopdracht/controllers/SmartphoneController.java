@@ -26,6 +26,7 @@ public class SmartphoneController extends Controller {
         smartphoneDAO = MainApplication.getSmartphoneDAO();
 
         smartphoneView = new SmartphoneView();
+
         // menu items
         smartphoneView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
 
@@ -33,7 +34,8 @@ public class SmartphoneController extends Controller {
 
         // voor de text, object en fake DAO's
         smartphoneView.getMenuItemSave().setOnAction(event -> {
-
+            // DAO
+            saveFromDAO();
         });
 
         // link validation to the save button
@@ -58,14 +60,6 @@ public class SmartphoneController extends Controller {
 
         // switch to detail view
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
-
-        // TODO hoeft niet meer, is al in de menu optie boven
-        // Load textDAO
-        smartphoneView.getButtonLoadDAO().setOnAction(event -> loadFromDAO());
-
-        // TODO hoeft niet meer, is al in de menu optie boven
-        // save DAO
-        smartphoneView.getButtonSaveDAO().setOnAction(event -> MainApplication.getSmartphoneDAO().save());
 
         smartphoneObservableList = FXCollections.observableArrayList();
 
@@ -189,30 +183,32 @@ public class SmartphoneController extends Controller {
     }
 
     private void newPhone() {
+        // TODO verder gaan met de pop up, if yes then this if no then this
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Are you sure you want to create a new phone? ");
+        alert.showAndWait();
 
-        // TODO add pop up with dat je een nieuwe item kan aanmaken
         resetFields();
     }
 
-    private void editCheck(Smartphone smartphone) {
+    private void editCheck(Smartphone newSmartphone) {
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
         if(selectedSmartphone != null) {
 
             smartphoneView.getTextFieldSmartphoneName().setText(selectedSmartphone.getSmartphoneName());
 
-            // TODO change just like above ^
-            selectedSmartphone.setSerie(smartphoneView.getComboBoxSerie().getValue());
+            smartphoneView.getComboBoxSerie().setValue((String) selectedSmartphone.getSerie());
 
             try {
-                selectedSmartphone.setVersion(Integer.parseInt(smartphoneView.getTextFieldVersion().getText()));
+                int versionString = selectedSmartphone.getVersion();
+                smartphoneView.getTextFieldVersion().setText(String.valueOf(Integer.parseInt(String.valueOf(versionString))));
+
             } catch (Exception e) {
 
             }
 
-            selectedSmartphone.setReleaseDate(smartphoneView.getReleaseDate().getValue());
-//        } else {
-//            smartphoneDAO.addOrUpdate(smartphone);
+            smartphoneView.getReleaseDate().setValue(selectedSmartphone.getReleaseDate());
         }
     }
 
@@ -238,8 +234,13 @@ public class SmartphoneController extends Controller {
     }
 
     private void loadFromDAO() {
-        smartphoneDAO.load();
+        MainApplication.getSmartphoneDAO().load();
+//        smartphoneDAO.load();
         show();
+    }
+
+    private void saveFromDAO() {
+        MainApplication.getSmartphoneDAO().save();
     }
 
     public void enableButton() {
