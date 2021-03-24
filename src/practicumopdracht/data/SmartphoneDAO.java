@@ -36,6 +36,7 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
         } else {
             return -1;
         }
+        // TODO Maak daarom gebruik van de getIdForin de MasterDAO om de hoortBij-referentie op te kunnen opslaan? week 5 punt 3
     }
 
     @Override

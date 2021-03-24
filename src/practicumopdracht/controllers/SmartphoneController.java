@@ -1,8 +1,10 @@
 package practicumopdracht.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import practicumopdracht.Main;
 import practicumopdracht.MainApplication;
 import practicumopdracht.data.DAO;
 import practicumopdracht.models.Smartphone;
@@ -28,15 +30,15 @@ public class SmartphoneController extends Controller {
         smartphoneView = new SmartphoneView();
 
         // menu items
-        smartphoneView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
-
-//        smartphoneView.getMenuItemExit().setOnAction(event -> exit());
-
         // voor de text, object en fake DAO's
         smartphoneView.getMenuItemSave().setOnAction(event -> {
             // DAO
             saveFromDAO();
         });
+
+        smartphoneView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
+
+        smartphoneView.getMenuItemExit().setOnAction(event -> exit());
 
         // link validation to the save button
         // voor de algemene DAO's
@@ -49,6 +51,7 @@ public class SmartphoneController extends Controller {
             smartphoneDAO.save();
         });
 
+        // new button
         smartphoneView.getButtonNew().setOnAction(event -> newPhone());
 
         // edit button
@@ -63,16 +66,26 @@ public class SmartphoneController extends Controller {
 
         smartphoneObservableList = FXCollections.observableArrayList();
 
-        // TODO select the right item (master) to get the right information (detail)
-        // what is the difference between selectedIndexProperty and selectedItemProperty
         // replaces the old value with the new by editing
         smartphoneView.getListView().getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, oldSmartphone, newSmartphone) -> {
                     if (newSmartphone == null || oldSmartphone == newSmartphone) {
                         return;
                     }
+
+                    enableNewButton();
+                    enableDeleteButton();
+                    enableSwitchButton();
+
+                    enableEditButton();
                     editCheck(newSmartphone);
                 });
+
+        enableSaveButton();
+        disableNewButton();
+        disableEditButton();
+        disableDeleteButton();
+        disableSwitchButton();
         show();
     }
 
@@ -89,7 +102,6 @@ public class SmartphoneController extends Controller {
 
         }
 
-        // TODO local date doesn't work
         LocalDate releaseDate = masterView.getReleaseDate().getValue();
 
         MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField, releaseDate));
@@ -183,7 +195,7 @@ public class SmartphoneController extends Controller {
     }
 
     private void newPhone() {
-        // TODO verder gaan met de pop up, if yes then this if no then this
+        // TODO newbutton -> pop up -> hoe moet je een ja en nee knop maken?
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Are you sure you want to create a new phone? ");
         alert.showAndWait();
@@ -192,6 +204,7 @@ public class SmartphoneController extends Controller {
     }
 
     private void editCheck(Smartphone newSmartphone) {
+        // TODO als ik edit, dan maakt hij een nieuw item aan en vervangt hij niet de oude value
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
         if(selectedSmartphone != null) {
@@ -222,6 +235,11 @@ public class SmartphoneController extends Controller {
             return;
         }
 
+        // TODO deletebutton -> pop up -> hoe moet je een ja en nee knop maken?
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText("Are you sure you want to delete a phone? ");
+        alert.showAndWait();
+
         smartphoneObservableList.remove(selectedSmartphone);
 
         smartphoneDAO.remove(selectedSmartphone);
@@ -234,18 +252,65 @@ public class SmartphoneController extends Controller {
     }
 
     private void loadFromDAO() {
+        // TODO welke van de 2
         MainApplication.getSmartphoneDAO().load();
 //        smartphoneDAO.load();
+        MainApplication.getSpecificationDAO().load();
         show();
     }
 
     private void saveFromDAO() {
+        // TODO how do you create an alert with yes and no -> confirmation -> week 5. step 6
         MainApplication.getSmartphoneDAO().save();
+        MainApplication.getSpecificationDAO().save();
     }
 
-    public void enableButton() {
+    private void exit() {
+        // TODO how do you make alert as a reminder that some data aren't saved -> Yes/No
+        Platform.exit();
+    }
+
+    // enable and disable the buttons
+    private void enableSaveButton() {
+        smartphoneView.getButtonSave().setDisable(false);
+    }
+
+    private void disableSaveButton() {
+        smartphoneView.getButtonSave().setDisable(true);
+    }
+
+    private void enableNewButton() {
+        smartphoneView.getButtonNew().setDisable(false);
+    }
+
+    private void disableNewButton() {
+        smartphoneView.getButtonNew().setDisable(true);
+    }
+
+    private void enableEditButton() {
+        smartphoneView.getButtonEdit().setDisable(false);
+    }
+
+    private void disableEditButton() {
+        smartphoneView.getButtonEdit().setDisable(true);
+    }
+
+    private void enableDeleteButton() {
+        smartphoneView.getButtonDelete().setDisable(false);
+    }
+
+    private void disableDeleteButton() {
+        smartphoneView.getButtonDelete().setDisable(true);
+    }
+
+    public void enableSwitchButton() {
+        smartphoneView.getButtonSwitch().setDisable(false);
+    }
+
+    public void disableSwitchButton() {
         smartphoneView.getButtonSwitch().setDisable(true);
     }
+
 
     @Override
     public View getView() {

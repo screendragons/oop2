@@ -61,6 +61,7 @@ public class SmartphoneView extends View {
     }
 
     private void initializeRoot() {
+        // TODO moet de menu optie alleen in de masterview of ook in de detailview
         // menu
         menu = new Menu("File");
 
@@ -94,8 +95,8 @@ public class SmartphoneView extends View {
         buttonEdit = new Button("Edit");
         buttonDelete = new Button("Delete");
         buttonSwitch = new Button("Switch to details");
-        buttonSaveDAO = new Button("Save to DAO");
-        buttonLoadDAO = new Button("Load from DAO");
+//        buttonSaveDAO = new Button("Save to DAO");
+//        buttonLoadDAO = new Button("Load from DAO");
 
         listView = new ListView<>();
         gridPaneSmart = new GridPane();
@@ -144,15 +145,15 @@ public class SmartphoneView extends View {
         gridPaneSmart.add(buttonEdit, 4, 8);
         gridPaneSmart.add(buttonDelete, 5, 8);
         gridPaneSmart.add(buttonSwitch, 6, 8);
-        gridPaneSmart.add(buttonSaveDAO, 7, 8);
-        gridPaneSmart.add(buttonLoadDAO, 8,8);
+//        gridPaneSmart.add(buttonSaveDAO, 7, 8);
+//        gridPaneSmart.add(buttonLoadDAO, 8,8);
 
         // buttons added to hbox
         menuButtonsSmart = new HBox();
         menuButtonsSmart.setPadding(new Insets(10, 10, 10, 100));
         menuButtonsSmart.setSpacing(20); // distance between buttons
-        menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch,
-                buttonSaveDAO, buttonLoadDAO);
+        menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch);
+//                buttonSaveDAO, buttonLoadDAO);
 
         vBoxSmart = new VBox();
 

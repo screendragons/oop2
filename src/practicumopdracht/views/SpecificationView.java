@@ -86,6 +86,7 @@ public class SpecificationView extends View {
 
         // combobox master
         comboBoxMaster = new ComboBox<>();
+        comboBoxMaster.setPrefHeight(110);
 
         // combobox operating system
         comboBoxOperatingSystem = new ComboBox<>();
@@ -97,6 +98,7 @@ public class SpecificationView extends View {
         comboBoxOperatingSystem.setPromptText("What is the operatingsystem?");
 
         textAreaNote = new TextArea();
+        textAreaNote.setPrefHeight(100);
 
         // buttons
         buttonSave = new Button("Save");

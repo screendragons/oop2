@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author Chi Yu Yeung
  */
-public class TextSmartphoneDAO extends SmartphoneDAO{
+public class TextSmartphoneDAO extends SmartphoneDAO {
     private static final String FILENAME = "smartphones.txt";
 
     @Override
@@ -22,17 +22,18 @@ public class TextSmartphoneDAO extends SmartphoneDAO{
         try {
             PrintWriter printWriter = new PrintWriter(file);
 
-            for(Smartphone smartphone : objects) {
+            for (Smartphone smartphone : objects) {
+                // TODO kan de id weg? (hieronder)
 //                printWriter.println(smartphone.getId());
-                printWriter.print(smartphone.getSmartphoneName() + ",");
-                printWriter.print(smartphone.getSerie() + ",");
-                printWriter.print(smartphone.getVersion() + ",");
+                printWriter.print(smartphone.getSmartphoneName() + ", ");
+                printWriter.print(smartphone.getSerie() + ", ");
+                printWriter.print(smartphone.getVersion() + ", ");
                 printWriter.print(smartphone.getReleaseDate() + "\n");
             }
 
             printWriter.close();
         } catch (Exception e) {
-//            System.err.println(e.toString() + "\n" + "save Bestand niet gevonden!");
+//            System.err.println(e.toString() + "\n" + "Smartphone save bestand niet gevonden!");
             return false;
 
         }
@@ -57,7 +58,7 @@ public class TextSmartphoneDAO extends SmartphoneDAO{
                 addOrUpdate(smartphone);
             }
         } catch (Exception e) {
-            System.err.println(e.toString() + "\n" + "load Bestand niet gevonden!");
+//            System.err.println(e.toString() + "\n" + "Smartphone load bestand niet gevonden!");
             return false;
         }
 

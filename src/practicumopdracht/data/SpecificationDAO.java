@@ -41,6 +41,10 @@ public abstract class SpecificationDAO implements DAO<Specification> {
     }
 
     public Specification getById(int id) {
+//        return objects.get(id);
+        if(objects.size() == 0) {
+            return null;
+        }
         return objects.get(id);
     }
 

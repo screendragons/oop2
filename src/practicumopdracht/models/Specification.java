@@ -19,7 +19,7 @@ public class Specification implements Serializable {
     private Smartphone hoortBij;
 
     public Specification(double inch, double height, double width, double thickness,
-                         boolean fingerprintSensor, String operatingSystem, String note, Smartphone hoortBij) {
+                         boolean fingerprintSensor, Object operatingSystem, String note, Smartphone hoortBij) {
         this.inch = inch;
         this.height = height;
         this.width = width;
@@ -28,6 +28,14 @@ public class Specification implements Serializable {
         this.operatingSystem = operatingSystem;
         this.note = note;
         this.hoortBij = hoortBij;
+    }
+
+    public double getInch() {
+        return inch;
+    }
+
+    public void setInch(double inch) {
+        this.inch = inch;
     }
 
     public double getHeight() {
@@ -66,7 +74,7 @@ public class Specification implements Serializable {
         return operatingSystem;
     }
 
-    public void setOperatingSystem(String operatingSystem) {
+    public void setOperatingSystem(Object operatingSystem) {
         this.operatingSystem = operatingSystem;
     }
 
