@@ -1,5 +1,7 @@
 package practicumopdracht.data;
 
+import java.io.File;
+
 /**
  * Functionality:
  *
@@ -10,11 +12,15 @@ public class ObjectSpecificationDAO extends SpecificationDAO{
 
     @Override
     public boolean load() {
+        File file = new File(FILENAME);
+
         return false;
     }
 
     @Override
     public boolean save() {
+        File file = new File(FILENAME);
+
         return false;
     }
 }

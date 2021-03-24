@@ -7,13 +7,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import practicumopdracht.MainApplication;
-import practicumopdracht.data.DAO;
 import practicumopdracht.data.SmartphoneDAO;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.views.SmartphoneView;
 import practicumopdracht.views.View;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
 /**
  * Functionality:
@@ -32,8 +32,6 @@ public class SmartphoneController extends Controller {
         smartphoneDAO = MainApplication.getSmartphoneDAO();
 
         smartphoneView = new SmartphoneView();
-
-//        smartphoneObservableList = FXCollections.observableArrayList();
 
         // menu items
         // voor de text, object en fake DAO's
@@ -62,6 +60,7 @@ public class SmartphoneController extends Controller {
 
         // link validation to the save button
         // voor de algemene DAO's
+        // TODO get this data saved after starting and closing the application
         smartphoneView.getButtonSave().setOnAction(event ->
         {
             if (validation(smartphoneView)) {
@@ -76,7 +75,7 @@ public class SmartphoneController extends Controller {
 
         // edit button
         // TODO edit function doesn't work
-        smartphoneView.getButtonEdit().setOnAction(event -> editCheck(selectedSmartphone));
+        smartphoneView.getButtonEdit().setOnAction(event -> edit(selectedSmartphone));
 
         // delete button
         smartphoneView.getButtonDelete().setOnAction(event -> delete());
@@ -84,6 +83,10 @@ public class SmartphoneController extends Controller {
         // switch to detail view
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
 
+        smartphoneView.getBtnSortDescName().setOnAction(event -> sortAscName());
+        // TODO sort werkt niet
+        smartphoneView.getBtnSortDescName().setOnAction(event -> sortDescName());
+        
         // replaces the old value with the new by editing
         smartphoneView.getListView().getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, oldSmartphone, newSmartphone) -> {
@@ -96,7 +99,8 @@ public class SmartphoneController extends Controller {
                     enableSwitchButton();
 
                     enableEditButton();
-                    editCheck(newSmartphone);
+                    edit(newSmartphone);
+                    smartphoneDAO.addOrUpdate(newSmartphone);
                 });
 
         enableSaveButton();
@@ -105,6 +109,20 @@ public class SmartphoneController extends Controller {
         disableDeleteButton();
         disableSwitchButton();
         show();
+    }
+
+    private void sortAscName() {
+        if(this.smartphoneView.getBtnSortAscName().isSelected()) {
+            // TODO hoe kan ik ervoor zorgen dat ie niet null is? (smartphoneObservableList)
+            this.smartphoneObservableList.sort(new SortAscName());
+        }
+    }
+
+    private void sortDescName() {
+        if(this.smartphoneView.getBtnSortDescName().isSelected()) {
+            // TODO hoe kan ik ervoor zorgen dat ie niet null is? (smartphoneObservableList)
+            this.smartphoneObservableList.sort(new SortDescName());
+        }
     }
 
     private void save(SmartphoneView masterView, ObservableList<Smartphone> observableList) {
@@ -206,11 +224,13 @@ public class SmartphoneController extends Controller {
     }
 
     private void show() {
-        ObservableList<Smartphone> smartList = FXCollections.observableArrayList(smartphoneDAO.getAll());
+        // TODO moet je hier een aparte observable list gebruiken of gebruik je steeds dezelfde (van de attributen)
+        smartphoneObservableList = FXCollections.observableArrayList(smartphoneDAO.getAll());
 //        FXCollections.sort(smartList2, );
-        smartphoneView.getListView().setItems(smartList);
+        smartphoneView.getListView().setItems(smartphoneObservableList);
     }
 
+    // new button
     private void newPhone() {
         // TODO newbutton -> pop up -> hoe moet je een ja en nee knop maken?
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -220,7 +240,8 @@ public class SmartphoneController extends Controller {
         resetFields();
     }
 
-    private void editCheck(Smartphone newSmartphone) {
+    // edit button
+    private void edit(Smartphone newSmartphone) {
         // TODO als ik edit, dan maakt hij een nieuw item aan en vervangt hij niet de oude value
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
@@ -240,10 +261,13 @@ public class SmartphoneController extends Controller {
 
             smartphoneView.getReleaseDate().setValue(selectedSmartphone.getReleaseDate());
         }
+        smartphoneDAO.addOrUpdate(selectedSmartphone);
+
     }
 
     // TODO delete function not working
     // TODO todo after save function
+    // delete button
     private void delete() {
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
@@ -262,22 +286,27 @@ public class SmartphoneController extends Controller {
         smartphoneDAO.remove(selectedSmartphone);
     }
 
+    // switch to the second screen
     public void switchToSpecifications() {
         Smartphone smartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
         MainApplication.switchController(new SpecificationController(smartphone));
     }
 
+    // load to DAO
+    // TODO loading not working
     private void loadFromDAO() {
         smartphoneDAO.load();
         show();
     }
 
+    // save to the DAO
     private void saveFromDAO() {
         MainApplication.getSmartphoneDAO().save();
         MainApplication.getSpecificationDAO().save();
     }
 
+    // exit application
     private void exit() {
         // TODO how do you make alert as a reminder that some data aren't saved -> Yes/No
         Platform.exit();
@@ -324,6 +353,22 @@ public class SmartphoneController extends Controller {
         smartphoneView.getButtonSwitch().setDisable(true);
     }
 
+    // inner classes
+    public class SortDescName implements Comparator<Smartphone> {
+
+        @Override
+        public int compare(Smartphone o1, Smartphone o2) {
+            return o2.getSmartphoneName().compareTo(o1.getSmartphoneName());
+        }
+    }
+
+    public class SortAscName implements Comparator<Smartphone> {
+
+        @Override
+        public int compare(Smartphone o1, Smartphone o2) {
+            return o1.getSmartphoneName().compareTo(o2.getSmartphoneName());
+        }
+    }
 
     @Override
     public View getView() {

@@ -57,6 +57,13 @@ public class SpecificationView extends View {
     private VBox vBoxSpec;
     private HBox menuButtonsSpec;
     private BorderPane borderPane;
+    private BorderPane menuBorderPane;
+
+    private Menu menu;
+    private MenuItem menuItemSave;
+    private MenuItem menuItemLoad;
+    private MenuItem menuItemExit;
+    private MenuBar menuBar;
 
     private Parent root;
 
@@ -65,7 +72,20 @@ public class SpecificationView extends View {
     }
 
     private void initializeRoot() {
+        // menu
+        menu = new Menu("File");
+
+        // menu items
+        menuItemSave = new MenuItem("Save");
+        menuItemLoad = new MenuItem("Load");
+        menuItemExit = new MenuItem("Exit");
+
+        // menubar
+        menuBar = new MenuBar();
+
+        // master
         labelMaster = new Label("Smartphone");
+
         // labels
         labelInch = new Label("Number of inches");
         labelHeight = new Label("Length smartphone");
@@ -109,6 +129,14 @@ public class SpecificationView extends View {
 
         listView = new ListView<>();
         gridPaneSpec = new GridPane();
+
+        // add items to the menu
+        menu.getItems().add(menuItemSave);
+        menu.getItems().add(menuItemLoad);
+        menu.getItems().add(menuItemExit);
+
+        // add the menu to the menubar
+        menuBar.getMenus().add(menu);
 
         // sets a gap vertically
         gridPaneSpec.setVgap(10);
@@ -156,8 +184,10 @@ public class SpecificationView extends View {
 
         vBoxSpec = new VBox();
 
+        menuBorderPane = new BorderPane(menuBar);
+
         vBoxSpec.setPadding(new Insets(10, 10, 10, 10));
-        vBoxSpec.getChildren().addAll(gridPaneSpec, menuButtonsSpec, listView);
+        vBoxSpec.getChildren().addAll(menuBorderPane, gridPaneSpec, menuButtonsSpec, listView);
 
         borderPane = new BorderPane();
         borderPane.setCenter(vBoxSpec);
