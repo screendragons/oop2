@@ -12,15 +12,17 @@ import java.util.List;
  * @author Chi Yu Yeung
  */
 public abstract class SmartphoneDAO implements DAO<Smartphone> {
-    protected List<Smartphone> objects = new ArrayList<>();
+    protected List<Smartphone> objects;
 
     public SmartphoneDAO() {
+        objects = new ArrayList<>();
         load();
     }
 
     @Override
     public List<Smartphone> getAll() {
-        return Collections.unmodifiableList(objects);
+//        return Collections.unmodifiableList(objects);
+        return this.objects;
     }
 
     public Smartphone getById(int index) {

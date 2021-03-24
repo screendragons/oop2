@@ -37,6 +37,9 @@ public class SmartphoneView extends View {
     private Button buttonSaveDAO;
     private Button buttonLoadDAO;
 
+    // radio button
+    private RadioButton btnSortDescName;
+
     // combobox
     private ComboBox<String> comboBoxSerie;
 
@@ -98,6 +101,9 @@ public class SmartphoneView extends View {
 //        buttonSaveDAO = new Button("Save to DAO");
 //        buttonLoadDAO = new Button("Load from DAO");
 
+        // radiobuttons
+        btnSortDescName = new RadioButton("Sort descending by name");
+
         listView = new ListView<>();
         gridPaneSmart = new GridPane();
 
@@ -147,6 +153,9 @@ public class SmartphoneView extends View {
         gridPaneSmart.add(buttonSwitch, 6, 8);
 //        gridPaneSmart.add(buttonSaveDAO, 7, 8);
 //        gridPaneSmart.add(buttonLoadDAO, 8,8);
+
+        // radio buttons
+        gridPaneSmart.add(btnSortDescName, 1, 9);
 
         // buttons added to hbox
         menuButtonsSmart = new HBox();

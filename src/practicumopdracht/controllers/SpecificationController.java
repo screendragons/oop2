@@ -41,7 +41,6 @@ public class SpecificationController extends Controller {
 
         // master
         ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
-        System.out.println(smartphone);
         specificationView.getComboBoxMaster().setItems(masterData);
         specificationView.getComboBoxMaster().setValue(smartphone);
 

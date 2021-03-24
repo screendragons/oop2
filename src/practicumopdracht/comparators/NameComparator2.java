@@ -5,5 +5,5 @@ package practicumopdracht.comparators;
  *
  * @author Chi Yu Yeung
  */
-public class ExampleComparator1 {
+public class NameComparator2 {
 }

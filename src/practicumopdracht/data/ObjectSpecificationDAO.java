@@ -6,7 +6,7 @@ package practicumopdracht.data;
  * @author Chi Yu Yeung
  */
 public class ObjectSpecificationDAO extends SpecificationDAO{
-    private final String FILENAME = "smaartphones.dat";
+    private final String FILENAME = "specification.dat";
 
     @Override
     public boolean load() {

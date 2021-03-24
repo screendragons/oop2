@@ -4,9 +4,11 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import practicumopdracht.Main;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import practicumopdracht.MainApplication;
 import practicumopdracht.data.DAO;
+import practicumopdracht.data.SmartphoneDAO;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.views.SmartphoneView;
 import practicumopdracht.views.View;
@@ -19,7 +21,9 @@ import java.time.LocalDate;
  * @author Chi Yu Yeung
  */
 public class SmartphoneController extends Controller {
-    private DAO<Smartphone> smartphoneDAO;
+    private final ButtonType YES = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+    private final ButtonType NO = new ButtonType("No", ButtonBar.ButtonData.NO);
+    private SmartphoneDAO smartphoneDAO;
     private SmartphoneView smartphoneView;
     private ObservableList<Smartphone> smartphoneObservableList;
     private Smartphone selectedSmartphone;
@@ -29,11 +33,27 @@ public class SmartphoneController extends Controller {
 
         smartphoneView = new SmartphoneView();
 
+//        smartphoneObservableList = FXCollections.observableArrayList();
+
         // menu items
         // voor de text, object en fake DAO's
         smartphoneView.getMenuItemSave().setOnAction(event -> {
-            // DAO
-            saveFromDAO();
+            // TODO how do you create an alert with yes and no -> confirmation -> week 5. step 6
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save this application?", YES, NO);
+
+            alert.setContentText(selectedSmartphone.toString());
+            alert.showAndWait();
+
+            if(this.selectedSmartphone == null) {
+                System.err.println("Er is geen smartphone aangemaakt of geselecteerd!");
+            }
+
+            if (alert.getResult() == NO) {
+                return;
+            }
+            //
+            SmartphoneDAO smartphoneDAO = MainApplication.getSmartphoneDAO();
+            smartphoneDAO.addOrUpdate(selectedSmartphone);
         });
 
         smartphoneView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
@@ -63,8 +83,6 @@ public class SmartphoneController extends Controller {
 
         // switch to detail view
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
-
-        smartphoneObservableList = FXCollections.observableArrayList();
 
         // replaces the old value with the new by editing
         smartphoneView.getListView().getSelectionModel().selectedItemProperty()
@@ -115,7 +133,7 @@ public class SmartphoneController extends Controller {
 
         // smartphone name
         String smartphoneName = smartphoneView.getTextFieldSmartphoneName().getText().trim();
-
+        smartphoneView.getTextFieldSmartphoneName().setStyle("-fx-border-color: transparent");
         if (smartphoneName.equals("")) {
             errorStringBuilder.append("- Enter the brand name of the smartphone \n");
             smartphoneView.getTextFieldSmartphoneName().setStyle("-fx-border-color: #ff0000");
@@ -123,7 +141,7 @@ public class SmartphoneController extends Controller {
 
         // serie
         String serie = smartphoneView.getComboBoxSerie().getValue();
-
+        smartphoneView.getComboBoxSerie().setStyle("-fx-border-color: transparent");
         if (serie == null) {
             errorStringBuilder.append("- Serie is unknown\n");
             smartphoneView.getComboBoxSerie().setStyle("-fx-border-color: #ff0000");
@@ -132,7 +150,7 @@ public class SmartphoneController extends Controller {
         // version
         String versionString = smartphoneView.getTextFieldVersion().getText().trim();
         int version = 0;
-
+        smartphoneView.getTextFieldVersion().setStyle("-fx-border-color: transparent");
         if (versionString.isEmpty()) {
             errorStringBuilder.append("- Version is required\n");
             smartphoneView.getTextFieldVersion().setStyle("-fx-border-color: #ff0000");
@@ -150,7 +168,7 @@ public class SmartphoneController extends Controller {
 
         // release date
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
-
+        smartphoneView.getReleaseDate().setStyle("-fx-border-color: transparent");
         if (releaseDate == null) {
             errorStringBuilder.append("- Release date is unknown \n");
             smartphoneView.getReleaseDate().setStyle("-fx-border-color: #ff0000");
@@ -188,10 +206,9 @@ public class SmartphoneController extends Controller {
     }
 
     private void show() {
-        ObservableList<Smartphone> smartList = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
+        ObservableList<Smartphone> smartList = FXCollections.observableArrayList(smartphoneDAO.getAll());
 //        FXCollections.sort(smartList2, );
         smartphoneView.getListView().setItems(smartList);
-
     }
 
     private void newPhone() {
@@ -252,15 +269,11 @@ public class SmartphoneController extends Controller {
     }
 
     private void loadFromDAO() {
-        // TODO welke van de 2
-        MainApplication.getSmartphoneDAO().load();
-//        smartphoneDAO.load();
-        MainApplication.getSpecificationDAO().load();
+        smartphoneDAO.load();
         show();
     }
 
     private void saveFromDAO() {
-        // TODO how do you create an alert with yes and no -> confirmation -> week 5. step 6
         MainApplication.getSmartphoneDAO().save();
         MainApplication.getSpecificationDAO().save();
     }

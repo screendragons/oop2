@@ -16,7 +16,7 @@ public class Specification implements Serializable {
     private Object operatingSystem;
     private String note;
 
-    private Smartphone hoortBij;
+    private transient Smartphone hoortBij;
 
     public Specification(double inch, double height, double width, double thickness,
                          boolean fingerprintSensor, Object operatingSystem, String note, Smartphone hoortBij) {
