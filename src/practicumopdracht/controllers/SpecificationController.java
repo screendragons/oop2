@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import practicumopdracht.MainApplication;
+import practicumopdracht.data.SpecificationDAO;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 import practicumopdracht.views.SpecificationView;
@@ -17,6 +18,7 @@ import practicumopdracht.views.View;
 public class SpecificationController extends Controller {
     private SpecificationView specificationView;
     private ObservableList<Specification> specificationObservableList;
+    private SpecificationDAO specificationDAO;
 
     public SpecificationController(Smartphone smartphone) {
         specificationView = new SpecificationView();
@@ -28,6 +30,8 @@ public class SpecificationController extends Controller {
                 // save specification
                 save(specificationView, specificationObservableList);
             }
+            // TODO because "this.specificationDAO" is null
+            specificationDAO.save();
         });
 
         // switch to master view

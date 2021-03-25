@@ -3,6 +3,7 @@ package practicumopdracht.data;
 import practicumopdracht.models.Smartphone;
 
 import java.io.*;
+import java.time.LocalDate;
 
 /**
  * Functionality:
@@ -10,7 +11,6 @@ import java.io.*;
  * @author Chi Yu Yeung
  */
 public class BinairySmartphoneDAO extends SmartphoneDAO{
-    // TODO ik snap die IO niet lol
     private final String FILENAME = "smartphones.dat";
 
     @Override
@@ -19,22 +19,24 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
 
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
+            // with dataoutputstream you can work with binairy data
             DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
 
-            dataOutputStream.write(objects.size());
+            dataOutputStream.writeInt(objects.size());
 
             for(Smartphone smartphone : objects) {
                 dataOutputStream.writeInt(getIdFor(smartphone));
                 dataOutputStream.writeUTF(smartphone.getSmartphoneName());
                 dataOutputStream.writeUTF((String) smartphone.getSerie());
-//                dataOutputStream.writeUTF(Integer.parseInt(smartphone.getVersion()));
+                dataOutputStream.writeInt(smartphone.getVersion());
+                // TODO localDate UTF
 //                dataOutputStream.writeUTF(LocalDate.parse(smartphone.getReleaseDate()));
             }
 
             dataOutputStream.close();
 
         } catch (Exception e) {
-//            System.err.println(e.toString() + "\n" + "Smartphone save bestand niet gevonden!");
+            System.err.println(e.toString() + "\n" + "Binairy save bestand niet gevonden!");
             return false;
 
         }
@@ -46,7 +48,9 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
     public boolean load() {
         File file = new File(FILENAME);
 
+        objects.clear();
         try {
+            // read something, so inputstream
             FileInputStream fileInputStream = new FileInputStream(file);
             DataInputStream dataInputStream = new DataInputStream(fileInputStream);
 
@@ -55,13 +59,17 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
             for (int i = 0; i < amountSmartphones; i++) {
                 String smartphoneName = dataInputStream.readUTF();
                 Object serie = dataInputStream.readUTF();
-                int version = Integer.parseInt(dataInputStream.readUTF());
+                int version = dataInputStream.readInt();
+                // TODO fix localdate
 //                LocalDate releaseDate = dataInputStream.readUTF();
 //                addOrUpdate(new Smartphone(smartphoneName, (String) serie, version, releaseDate));
             }
 
+            // the file can be used for the second time after running the function
+            dataInputStream.close();
+
         } catch (Exception e) {
-//            System.err.println(e.toString() + "\n" + "Smartphone load bestand niet gevonden!");
+            System.err.println(e.toString() + "\n" + "Binairy load bestand niet gevonden!");
             return false;
         }
         return true;
