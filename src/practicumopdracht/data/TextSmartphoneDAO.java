@@ -44,7 +44,8 @@ public class TextSmartphoneDAO extends SmartphoneDAO {
         // empty the list
         objects.clear();
 
-        try (Scanner scanner = new Scanner(file)) {
+        try {
+            Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String output = scanner.nextLine();
                 String[] textSmartphone = output.split(",");
@@ -52,13 +53,12 @@ public class TextSmartphoneDAO extends SmartphoneDAO {
                 LocalDate releaseDate = LocalDate.parse(textSmartphone[3]);
 
                 Smartphone smartphone = new Smartphone(textSmartphone[0], textSmartphone[1], version, releaseDate);
-                objects.add(smartphone);
+                addOrUpdate(smartphone);
             }
         } catch (Exception e) {
             System.err.println(e.toString() + "\n" + "Smartphone load bestand niet gevonden!");
             return false;
         }
-
         return true;
     }
 

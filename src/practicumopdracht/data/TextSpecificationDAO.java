@@ -6,7 +6,6 @@ import practicumopdracht.models.Specification;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
@@ -16,6 +15,7 @@ import java.util.Scanner;
  */
 public class TextSpecificationDAO extends SpecificationDAO{
     private static final String FILENAME = "specifications.txt";
+    final int NOTE_POSITION = 7;
 
     @Override
     public boolean save() {
@@ -25,13 +25,15 @@ public class TextSpecificationDAO extends SpecificationDAO{
             PrintWriter printWriter = new PrintWriter(file);
 
             for (Specification specification : objects) {
-                printWriter.print(specification.getInch() + ", ");
-                printWriter.print(specification.getHeight() + ", ");
-                printWriter.print(specification.getWidth() + ", ");
-                printWriter.print(specification.getThickness() + ", ");
-                printWriter.print(specification.isFingerprintSensor() + ", ");
-                printWriter.print(specification.getOperatingSystem() + ", ");
-                printWriter.print(specification.getNote() + "\n");
+                int idFor = MainApplication.getSmartphoneDAO().getIdFor(specification.getHoortBij());
+                printWriter.print(idFor + ",");
+                printWriter.print(specification.getInch() + ",");
+                printWriter.print(specification.getHeight() + ",");
+                printWriter.print(specification.getWidth() + ",");
+                printWriter.print(specification.getThickness() + ",");
+                printWriter.print(specification.isFingerprintSensor() + ",");
+                printWriter.print(specification.getOperatingSystem() + ",");
+                printWriter.print(specification.getNote() + " \n");
             }
 
             printWriter.close();
@@ -50,27 +52,31 @@ public class TextSpecificationDAO extends SpecificationDAO{
         objects.clear();
 
         try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNext()) {
-                double inch = Double.parseDouble(scanner.nextLine());
-                double height = Double.parseDouble(scanner.nextLine());
-                double width = Double.parseDouble(scanner.nextLine());
-                double thickness = Double.parseDouble(scanner.nextLine());
-                boolean fingerprintSensor = Boolean.parseBoolean(scanner.nextLine());
-                Object operatingSystem = scanner.nextLine();
-                String note = scanner.nextLine();
-                // TODO hierover nadenken
-                // hoortbij moet een Smartphone zijn
-                // getIdFor moet een int zijn
-//                Smartphone hoortBij = MainApplication.getSmartphoneDAO().getIdFor(scanner.nextLine());
+            while (scanner.hasNextLine()) {
+                String output = scanner.nextLine();
+                String[] textSpecification = output.split(",");
 
-//                Specification specification = new Specification(inch, height, width , thickness, fingerprintSensor, operatingSystem, note, hoortBij);
-//                addOrUpdate(specification);
+                int idFor = Integer.parseInt(textSpecification[0]);
+                Smartphone hoortBij = MainApplication.getSmartphoneDAO().getById(idFor);
+
+                double inch = Double.parseDouble(textSpecification[1]);
+                double height = Double.parseDouble(textSpecification[2]);
+                double width = Double.parseDouble(textSpecification[3]);
+                double thickness = Double.parseDouble(textSpecification[4]);
+                boolean fingerprintSensor = Boolean.parseBoolean(textSpecification[5]);
+
+                Object operatingSystem = textSpecification[6];
+                //
+                String note = (textSpecification.length > NOTE_POSITION) ? textSpecification[7] : "";
+
+                Specification specification = new Specification(inch, height, width , thickness, fingerprintSensor,
+                        operatingSystem, note, hoortBij);
+                addOrUpdate(specification);
             }
         } catch (Exception e) {
-//            System.err.println(e.toString() + "\n" + "Smartphone load bestand niet gevonden!");
+            System.err.println(e.toString() + "\n" + "specifications load bestand niet gevonden!");
             return false;
         }
-
         return true;
     }
 

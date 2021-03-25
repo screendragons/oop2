@@ -3,16 +3,13 @@ package practicumopdracht.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import practicumopdracht.Main;
 import practicumopdracht.MainApplication;
-import practicumopdracht.data.SpecificationDAO;
+import practicumopdracht.comparators.DetailComparator;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 import practicumopdracht.views.SpecificationView;
 import practicumopdracht.views.View;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,6 +19,7 @@ import java.util.List;
  */
 public class SpecificationController extends Controller {
     private SpecificationView specificationView;
+    private DetailComparator detailComparator;
 
     public SpecificationController(Smartphone smartphone) {
         specificationView = new SpecificationView();
@@ -61,16 +59,19 @@ public class SpecificationController extends Controller {
 
     private void sortAscName() {
         if(this.specificationView.getBtnSortAscName().isSelected()) {
-            List<Specification> asc = specificationView.getListView().getItems();
-            asc.sort(new SortAscName());
-            specificationView.getListView().setItems(FXCollections.observableList(asc));
+            ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
+            detailComparator = new DetailComparator(false);
+            FXCollections.sort(specificationObservableList, detailComparator);
+            specificationView.getListView().setItems(specificationObservableList);
         }
     }
 
     private void sortDescName() {
         if(this.specificationView.getBtnSortDescName().isSelected()) {
-//            specificationView.getListView().sort(new SortDescName());
-            // TODO desc functie maken net als asc ^
+            ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
+            detailComparator = new DetailComparator(true);
+            FXCollections.sort(specificationObservableList, detailComparator);
+            specificationView.getListView().setItems(specificationObservableList);
         }
     }
 
@@ -260,25 +261,34 @@ public class SpecificationController extends Controller {
         MainApplication.switchController(new SmartphoneController());
     }
 
-    // inner classes
-    public class SortDescName implements Comparator<Specification> {
-
-        @Override
-        public int compare(Specification o1, Specification o2) {
-            return Double.compare(o2.getInch(), o1.getInch());
-        }
-    }
-
-    public class SortAscName implements Comparator<Specification> {
-
-        @Override
-        public int compare(Specification o1, Specification o2) {
-            return Double.compare(o1.getInch(), o2.getInch());
-        }
-    }
+//    public int compare(Fisherman o1, Fisherman o2) {
+//        // bert aap
+//        // get int of result
+//        // using toLowercase because highercase has a priority above lowercase
+//        int compareFirstname = o1.getFirstname().toLowerCase().compareTo(
+//                o2.getFirstname().toLowerCase()
+//        );
+//        // sort a/z
+//        // if equal 0
+//        // if first is first -1
+//        // if last is first 1
+//        final int MIN_RESULT = 0;
+//        // if firstname is equal sort on lastname
+//        if (compareFirstname == MIN_RESULT) {
+//            return o1.getLastname().toLowerCase().compareTo(o2.getLastname().toLowerCase());
+//        }
+//        if (sortZA) {
+//            // sort descending
+//            return -compareFirstname;
+//        }
+//        return compareFirstname;
+//    }
+//}
 
     @Override
     public View getView() {
         return specificationView;
     }
 }
+
+

@@ -33,7 +33,7 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
     }
 
     public int getIdFor(Smartphone object){
-        if(!objects.contains(object)) {
+        if (objects.contains(object)) {
             return objects.indexOf(object);
         } else {
             return -1;
