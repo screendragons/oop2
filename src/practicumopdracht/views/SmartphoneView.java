@@ -20,7 +20,6 @@ public class SmartphoneView extends View {
     private Label labelSerie;
     private Label labelVersion;
     private Label labelReleaseDate;
-    private Label labelSort;
 
     // textfield
     private TextField textFieldSmartphoneName;
@@ -38,10 +37,6 @@ public class SmartphoneView extends View {
     private Button buttonSaveDAO;
     private Button buttonLoadDAO;
 
-    // radio button
-    private RadioButton btnSortDescName;
-    private RadioButton btnSortAscName;
-
     // combobox
     private ComboBox<String> comboBoxSerie;
 
@@ -50,7 +45,6 @@ public class SmartphoneView extends View {
     private GridPane gridPaneSmart;
     private VBox vBoxSmart;
     private HBox menuButtonsSmart;
-    private HBox sort;
     private BorderPane borderPane;
     private BorderPane menuBorderPane;
 
@@ -83,7 +77,6 @@ public class SmartphoneView extends View {
         labelSerie = new Label("Serie name");
         labelVersion = new Label("Version");
         labelReleaseDate = new Label("Release date");
-        labelSort = new Label("Sort");
 
         // textfield
         textFieldSmartphoneName = new TextField();
@@ -104,13 +97,8 @@ public class SmartphoneView extends View {
 //        buttonSaveDAO = new Button("Save to DAO");
 //        buttonLoadDAO = new Button("Load from DAO");
 
-        // radiobuttons
-        btnSortDescName = new RadioButton("Sort descending by name (Z-A)");
-        btnSortAscName = new RadioButton("Sort ascending by name (A-Z)");
-
         listView = new ListView<>();
         gridPaneSmart = new GridPane();
-        sort = new HBox();
 
         // sets a gap vertically
         gridPaneSmart.setVgap(10);
@@ -159,9 +147,6 @@ public class SmartphoneView extends View {
 //        gridPaneSmart.add(buttonSaveDAO, 7, 8);
 //        gridPaneSmart.add(buttonLoadDAO, 8,8);
 
-        // radio buttons
-        gridPaneSmart.add(btnSortDescName, 0, 20);
-
         // buttons added to hbox
         menuButtonsSmart = new HBox();
         menuButtonsSmart.setPadding(new Insets(10, 10, 10, 120));
@@ -169,16 +154,12 @@ public class SmartphoneView extends View {
         menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch);
 //                buttonSaveDAO, buttonLoadDAO);
 
-        sort.setPadding(new Insets(10, 10, 10, 60));
-        sort.setSpacing(20);
-        sort.getChildren().addAll(labelSort, btnSortAscName, btnSortDescName);
-
         vBoxSmart = new VBox();
 
         menuBorderPane = new BorderPane(menuBar);
 
         vBoxSmart.setPadding(new Insets(10, 10, 10, 10));
-        vBoxSmart.getChildren().addAll(menuBorderPane, gridPaneSmart, menuButtonsSmart, listView, sort);
+        vBoxSmart.getChildren().addAll(menuBorderPane, gridPaneSmart, menuButtonsSmart, listView);
 
         borderPane = new BorderPane();
         borderPane.setCenter(vBoxSmart);
@@ -239,14 +220,6 @@ public class SmartphoneView extends View {
 
     public Button getButtonLoadDAO() {
         return buttonLoadDAO;
-    }
-
-    public RadioButton getBtnSortAscName() {
-        return btnSortAscName;
-    }
-
-    public RadioButton getBtnSortDescName() {
-        return btnSortDescName;
     }
 
     public ListView<Smartphone> getListView() {

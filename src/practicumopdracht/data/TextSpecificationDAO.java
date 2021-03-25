@@ -1,5 +1,6 @@
 package practicumopdracht.data;
 
+import practicumopdracht.MainApplication;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 
@@ -57,9 +58,11 @@ public class TextSpecificationDAO extends SpecificationDAO{
                 boolean fingerprintSensor = Boolean.parseBoolean(scanner.nextLine());
                 Object operatingSystem = scanner.nextLine();
                 String note = scanner.nextLine();
-//                // TODO welke scanner hoort erbij hoortBij?
-//                Smartphone hoortBij = smartphone;
-//
+                // TODO hierover nadenken
+                // hoortbij moet een Smartphone zijn
+                // getIdFor moet een int zijn
+//                Smartphone hoortBij = MainApplication.getSmartphoneDAO().getIdFor(scanner.nextLine());
+
 //                Specification specification = new Specification(inch, height, width , thickness, fingerprintSensor, operatingSystem, note, hoortBij);
 //                addOrUpdate(specification);
             }

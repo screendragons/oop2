@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.RadioButton;
 import practicumopdracht.MainApplication;
 import practicumopdracht.data.SmartphoneDAO;
 import practicumopdracht.models.Smartphone;
@@ -25,7 +26,6 @@ public class SmartphoneController extends Controller {
     private final ButtonType NO = new ButtonType("No", ButtonBar.ButtonData.NO);
     private SmartphoneDAO smartphoneDAO;
     private SmartphoneView smartphoneView;
-    private ObservableList<Smartphone> smartphoneObservableList;
     private Smartphone selectedSmartphone;
 
     public SmartphoneController() {
@@ -36,22 +36,24 @@ public class SmartphoneController extends Controller {
         // menu items
         // voor de text, object en fake DAO's
         smartphoneView.getMenuItemSave().setOnAction(event -> {
-            // TODO how do you create an alert with yes and no -> confirmation -> week 5. step 6
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save this application?", YES, NO);
-
-            alert.setContentText(selectedSmartphone.toString());
             alert.showAndWait();
+//
+//            if (alert.getResult() == NO) {
+//                Alert no = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
+//                no.show();
+//            }
 
-            if(this.selectedSmartphone == null) {
-                System.err.println("Er is geen smartphone aangemaakt of geselecteerd!");
+            if (alert.getResult() == YES) {
+                boolean isSaved = smartphoneDAO.save();
+                if(isSaved) {
+                    Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
+                    succes.show();
+                } else {
+                    Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not saved");
+                    fail.show();
+                }
             }
-
-            if (alert.getResult() == NO) {
-                return;
-            }
-            //
-            SmartphoneDAO smartphoneDAO = MainApplication.getSmartphoneDAO();
-            smartphoneDAO.addOrUpdate(selectedSmartphone);
         });
 
         smartphoneView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
@@ -65,16 +67,14 @@ public class SmartphoneController extends Controller {
         {
             if (validation(smartphoneView)) {
                 // save specification
-                save(smartphoneView, smartphoneObservableList);
+                save(smartphoneView);
             }
-            smartphoneDAO.save();
         });
 
         // new button
         smartphoneView.getButtonNew().setOnAction(event -> newPhone());
 
         // edit button
-        // TODO edit function doesn't work
         smartphoneView.getButtonEdit().setOnAction(event -> edit(selectedSmartphone));
 
         // delete button
@@ -82,10 +82,6 @@ public class SmartphoneController extends Controller {
 
         // switch to detail view
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
-
-        smartphoneView.getBtnSortDescName().setOnAction(event -> sortAscName());
-        // TODO sort werkt niet
-        smartphoneView.getBtnSortDescName().setOnAction(event -> sortDescName());
         
         // replaces the old value with the new by editing
         smartphoneView.getListView().getSelectionModel().selectedItemProperty()
@@ -100,7 +96,6 @@ public class SmartphoneController extends Controller {
 
                     enableEditButton();
                     edit(newSmartphone);
-                    smartphoneDAO.addOrUpdate(newSmartphone);
                 });
 
         enableSaveButton();
@@ -111,21 +106,7 @@ public class SmartphoneController extends Controller {
         show();
     }
 
-    private void sortAscName() {
-        if(this.smartphoneView.getBtnSortAscName().isSelected()) {
-            // TODO hoe kan ik ervoor zorgen dat ie niet null is? (smartphoneObservableList)
-            this.smartphoneObservableList.sort(new SortAscName());
-        }
-    }
-
-    private void sortDescName() {
-        if(this.smartphoneView.getBtnSortDescName().isSelected()) {
-            // TODO hoe kan ik ervoor zorgen dat ie niet null is? (smartphoneObservableList)
-            this.smartphoneObservableList.sort(new SortDescName());
-        }
-    }
-
-    private void save(SmartphoneView masterView, ObservableList<Smartphone> observableList) {
+    private void save(SmartphoneView masterView) {
 
         String nameField = masterView.getTextFieldSmartphoneName().getText();
         Object serie = masterView.getComboBoxSerie().getValue();
@@ -140,7 +121,19 @@ public class SmartphoneController extends Controller {
 
         LocalDate releaseDate = masterView.getReleaseDate().getValue();
 
-        MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField, releaseDate));
+        // if the selected smartphone doesn't exist create one
+        if(selectedSmartphone == null) {
+            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField, releaseDate));
+        }
+        //else update the existing smartphone
+        else {
+            Smartphone smartphoneExists = selectedSmartphone;
+            selectedSmartphone.setSmartphoneName(nameField);
+            selectedSmartphone.setSerie(serie);
+            selectedSmartphone.setVersion(versionField);
+            selectedSmartphone.setReleaseDate(releaseDate);
+            MainApplication.getSmartphoneDAO().addOrUpdate(smartphoneExists);
+        }
 
         show();
         resetFields();
@@ -224,8 +217,7 @@ public class SmartphoneController extends Controller {
     }
 
     private void show() {
-        // TODO moet je hier een aparte observable list gebruiken of gebruik je steeds dezelfde (van de attributen)
-        smartphoneObservableList = FXCollections.observableArrayList(smartphoneDAO.getAll());
+        ObservableList smartphoneObservableList = FXCollections.observableArrayList(smartphoneDAO.getAll());
 //        FXCollections.sort(smartList2, );
         smartphoneView.getListView().setItems(smartphoneObservableList);
     }
@@ -242,7 +234,6 @@ public class SmartphoneController extends Controller {
 
     // edit button
     private void edit(Smartphone newSmartphone) {
-        // TODO als ik edit, dan maakt hij een nieuw item aan en vervangt hij niet de oude value
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
         if(selectedSmartphone != null) {
@@ -261,29 +252,26 @@ public class SmartphoneController extends Controller {
 
             smartphoneView.getReleaseDate().setValue(selectedSmartphone.getReleaseDate());
         }
-        smartphoneDAO.addOrUpdate(selectedSmartphone);
-
     }
 
-    // TODO delete function not working
-    // TODO todo after save function
     // delete button
     private void delete() {
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
         // unselect item when the application is started, preventing from deleting something by accident
         if(selectedSmartphone == null) {
+            System.out.println("delete functie");
             return;
         }
 
-        // TODO deletebutton -> pop up -> hoe moet je een ja en nee knop maken?
+        // TODO deletebutton -> pop up
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setHeaderText("Are you sure you want to delete a phone? ");
         alert.showAndWait();
 
-        smartphoneObservableList.remove(selectedSmartphone);
-
         smartphoneDAO.remove(selectedSmartphone);
+        show();
+        resetFields();
     }
 
     // switch to the second screen
@@ -294,7 +282,6 @@ public class SmartphoneController extends Controller {
     }
 
     // load to DAO
-    // TODO loading not working
     private void loadFromDAO() {
         smartphoneDAO.load();
         show();
@@ -351,23 +338,6 @@ public class SmartphoneController extends Controller {
 
     public void disableSwitchButton() {
         smartphoneView.getButtonSwitch().setDisable(true);
-    }
-
-    // inner classes
-    public class SortDescName implements Comparator<Smartphone> {
-
-        @Override
-        public int compare(Smartphone o1, Smartphone o2) {
-            return o2.getSmartphoneName().compareTo(o1.getSmartphoneName());
-        }
-    }
-
-    public class SortAscName implements Comparator<Smartphone> {
-
-        @Override
-        public int compare(Smartphone o1, Smartphone o2) {
-            return o1.getSmartphoneName().compareTo(o2.getSmartphoneName());
-        }
     }
 
     @Override

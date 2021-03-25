@@ -23,24 +23,21 @@ public class TextSmartphoneDAO extends SmartphoneDAO {
             PrintWriter printWriter = new PrintWriter(file);
 
             for (Smartphone smartphone : objects) {
-                // TODO kan de id weg? (hieronder)
-//                printWriter.println(smartphone.getId());
-                printWriter.print(smartphone.getSmartphoneName() + ", ");
-                printWriter.print(smartphone.getSerie() + ", ");
-                printWriter.print(smartphone.getVersion() + ", ");
+                printWriter.print(smartphone.getSmartphoneName() + ",");
+                printWriter.print(smartphone.getSerie() + ",");
+                printWriter.print(smartphone.getVersion() + ",");
                 printWriter.print(smartphone.getReleaseDate() + "\n");
             }
 
             printWriter.close();
         } catch (Exception e) {
-//            System.err.println(e.toString() + "\n" + "Smartphone save bestand niet gevonden!");
+            System.err.println(e.toString() + "\n" + "Smartphone save bestand niet gevonden!");
             return false;
 
         }
         return true;
     }
 
-    // TODO load functie werkt niet
     @Override
     public boolean load() {
         File file = new File(FILENAME);
@@ -48,17 +45,17 @@ public class TextSmartphoneDAO extends SmartphoneDAO {
         objects.clear();
 
         try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNext()) {
-                String smartphoneName = scanner.nextLine();
-                Object serie = scanner.nextLine();
-                int version = Integer.parseInt(scanner.nextLine());
-                LocalDate releaseDate = LocalDate.parse(scanner.nextLine());
+            while (scanner.hasNextLine()) {
+                String output = scanner.nextLine();
+                String[] textSmartphone = output.split(",");
+                int version = Integer.parseInt(textSmartphone[2]);
+                LocalDate releaseDate = LocalDate.parse(textSmartphone[3]);
 
-                Smartphone smartphone = new Smartphone(smartphoneName, (String) serie, version, releaseDate);
-                addOrUpdate(smartphone);
+                Smartphone smartphone = new Smartphone(textSmartphone[0], textSmartphone[1], version, releaseDate);
+                objects.add(smartphone);
             }
         } catch (Exception e) {
-//            System.err.println(e.toString() + "\n" + "Smartphone load bestand niet gevonden!");
+            System.err.println(e.toString() + "\n" + "Smartphone load bestand niet gevonden!");
             return false;
         }
 

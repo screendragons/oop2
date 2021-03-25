@@ -25,12 +25,18 @@ public class SpecificationView extends View {
     private Label labelFingerprintSensor;
     private Label labelOperatingSystem;
     private Label labelNotes;
+    private Label labelSort;
 
     // textfields
     private TextField textFieldInch;
     private TextField textFieldHeight;
     private TextField textFieldWidth;
     private TextField textFieldThickness;
+
+    // radio button
+    private ToggleGroup toggleGroup;
+    private RadioButton btnSortDescName;
+    private RadioButton btnSortAscName;
 
     // checkbox
     private CheckBox checkBoxFingerprintSensor;
@@ -56,6 +62,7 @@ public class SpecificationView extends View {
     private GridPane gridPaneSpec;
     private VBox vBoxSpec;
     private HBox menuButtonsSpec;
+    private HBox sort;
     private BorderPane borderPane;
     private BorderPane menuBorderPane;
 
@@ -94,6 +101,7 @@ public class SpecificationView extends View {
         labelFingerprintSensor = new Label("Fingerprint");
         labelOperatingSystem = new Label("Operatingsystem");
         labelNotes = new Label("Description");
+        labelSort = new Label("Sort");
 
         // textfields
         textFieldInch = new TextField();
@@ -127,8 +135,13 @@ public class SpecificationView extends View {
         buttonDelete = new Button("Delete");
         buttonSwitch = new Button("Switch to master");
 
+        // radiobuttons
+        btnSortDescName = new RadioButton("Sort descending by name (Z-A)");
+        btnSortAscName = new RadioButton("Sort ascending by name (A-Z)");
+
         listView = new ListView<>();
         gridPaneSpec = new GridPane();
+        sort = new HBox();
 
         // add items to the menu
         menu.getItems().add(menuItemSave);
@@ -181,13 +194,21 @@ public class SpecificationView extends View {
         menuButtonsSpec.setPadding(new Insets(10, 10, 10, 100));
         menuButtonsSpec.setSpacing(20); // distance between buttons
         menuButtonsSpec.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch);
+        // radio buttons
+        gridPaneSpec.add(btnSortDescName, 0, 20);
 
         vBoxSpec = new VBox();
 
         menuBorderPane = new BorderPane(menuBar);
 
+        sort.setPadding(new Insets(10, 10, 10, 60));
+        sort.setSpacing(20);
+        sort.getChildren().addAll(labelSort, btnSortAscName, btnSortDescName);
+        btnSortAscName.setToggleGroup(toggleGroup);
+        btnSortDescName.setToggleGroup(toggleGroup);
+
         vBoxSpec.setPadding(new Insets(10, 10, 10, 10));
-        vBoxSpec.getChildren().addAll(menuBorderPane, gridPaneSpec, menuButtonsSpec, listView);
+        vBoxSpec.getChildren().addAll(menuBorderPane, gridPaneSpec, menuButtonsSpec, listView, sort);
 
         borderPane = new BorderPane();
         borderPane.setCenter(vBoxSpec);
@@ -249,6 +270,14 @@ public class SpecificationView extends View {
 
     public Button getButtonSwitch() {
         return buttonSwitch;
+    }
+
+    public RadioButton getBtnSortAscName() {
+        return btnSortAscName;
+    }
+
+    public RadioButton getBtnSortDescName() {
+        return btnSortDescName;
     }
 
     public ListView<Specification> getListView() {

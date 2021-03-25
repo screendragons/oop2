@@ -44,10 +44,8 @@ public class ObjectSpecificationDAO extends SpecificationDAO{
             int amountSpecifications = objectInputStream.readInt();
 
             for (int i = 0; i < amountSpecifications; i++) {
-                SpecificationDAO specification = (SpecificationDAO) objectInputStream.readObject();
-
-                //TODO wat moet het zijn? I dont get it
-//                objects.addOrUpdate(specification);
+                Specification specification = (Specification) objectInputStream.readObject();
+                addOrUpdate(specification);
             }
         } catch (FileNotFoundException e) {
             System.err.println("Object load function error 1");

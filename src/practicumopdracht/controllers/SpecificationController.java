@@ -3,12 +3,17 @@ package practicumopdracht.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import practicumopdracht.Main;
 import practicumopdracht.MainApplication;
 import practicumopdracht.data.SpecificationDAO;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 import practicumopdracht.views.SpecificationView;
 import practicumopdracht.views.View;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Functionality:
@@ -17,8 +22,6 @@ import practicumopdracht.views.View;
  */
 public class SpecificationController extends Controller {
     private SpecificationView specificationView;
-    private ObservableList<Specification> specificationObservableList;
-    private SpecificationDAO specificationDAO;
 
     public SpecificationController(Smartphone smartphone) {
         specificationView = new SpecificationView();
@@ -28,10 +31,9 @@ public class SpecificationController extends Controller {
         {
             if (validation(specificationView)) {
                 // save specification
-                save(specificationView, specificationObservableList);
+                save(specificationView);
             }
-            // TODO because "this.specificationDAO" is null
-            specificationDAO.save();
+            MainApplication.getSpecificationDAO().save();
         });
 
         // switch to master view
@@ -43,6 +45,10 @@ public class SpecificationController extends Controller {
         // delete button
         specificationView.getButtonDelete().setOnAction(event -> delete());
 
+        specificationView.getBtnSortAscName().setOnAction(event -> sortAscName());
+
+        specificationView.getBtnSortDescName().setOnAction(event -> sortDescName());
+
         // master
         ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
         specificationView.getComboBoxMaster().setItems(masterData);
@@ -53,7 +59,22 @@ public class SpecificationController extends Controller {
         specificationView.getListView().setItems(detailList);
     }
 
-    private void save(SpecificationView detailView, ObservableList<Specification> observableList) {
+    private void sortAscName() {
+        if(this.specificationView.getBtnSortAscName().isSelected()) {
+            List<Specification> asc = specificationView.getListView().getItems();
+            asc.sort(new SortAscName());
+            specificationView.getListView().setItems(FXCollections.observableList(asc));
+        }
+    }
+
+    private void sortDescName() {
+        if(this.specificationView.getBtnSortDescName().isSelected()) {
+//            specificationView.getListView().sort(new SortDescName());
+            // TODO desc functie maken net als asc ^
+        }
+    }
+
+    private void save(SpecificationView detailView) {
         // inch
         double inchField = 0;
         // height
@@ -237,6 +258,23 @@ public class SpecificationController extends Controller {
 
     public void switchToSmartphone() {
         MainApplication.switchController(new SmartphoneController());
+    }
+
+    // inner classes
+    public class SortDescName implements Comparator<Specification> {
+
+        @Override
+        public int compare(Specification o1, Specification o2) {
+            return Double.compare(o2.getInch(), o1.getInch());
+        }
+    }
+
+    public class SortAscName implements Comparator<Specification> {
+
+        @Override
+        public int compare(Specification o1, Specification o2) {
+            return Double.compare(o1.getInch(), o2.getInch());
+        }
     }
 
     @Override

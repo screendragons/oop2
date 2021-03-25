@@ -25,12 +25,11 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
             dataOutputStream.writeInt(objects.size());
 
             for(Smartphone smartphone : objects) {
-                dataOutputStream.writeInt(getIdFor(smartphone));
                 dataOutputStream.writeUTF(smartphone.getSmartphoneName());
                 dataOutputStream.writeUTF((String) smartphone.getSerie());
                 dataOutputStream.writeInt(smartphone.getVersion());
                 // TODO localDate UTF
-//                dataOutputStream.writeUTF(LocalDate.parse(smartphone.getReleaseDate()));
+//                dataOutputStream.write(LocalDate.parse(smartphone.getReleaseDate()));
             }
 
             dataOutputStream.close();
@@ -61,7 +60,7 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
                 Object serie = dataInputStream.readUTF();
                 int version = dataInputStream.readInt();
                 // TODO fix localdate
-//                LocalDate releaseDate = dataInputStream.readUTF();
+//                LocalDate releaseDate = dataInputStream.read;
 //                addOrUpdate(new Smartphone(smartphoneName, (String) serie, version, releaseDate));
             }
 
