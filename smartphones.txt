@@ -1,3 +1,4 @@
-Samsung M21,Samsung M series,5,2021-03-05
-OnePlus 8T,OnePlus Nord series,3,2021-03-26
-Samsung S21 FE,Samsung S series,1,2021-03-01
+Samsung Galaxy S21 FE,Samsung S series,3,2021-03-10
+OnePlus 9,OnePlus Nord series,6,2021-03-04
+OnePlus 8T,OnePlus Nord series,1,2021-03-11
+Xiaomi,Samsung M series,7,2021-03-11

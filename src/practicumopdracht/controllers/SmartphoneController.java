@@ -103,7 +103,20 @@ public class SmartphoneController extends Controller {
 
     // load to DAO
     private void loadFromDAO() {
-        smartphoneDAO.load();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to load this data?", YES, NO);
+        alert.showAndWait();
+
+        if (alert.getResult() == YES) {
+            boolean isSaved = smartphoneDAO.load();
+            if (isSaved) {
+                Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is loaded");
+                succes.show();
+            }
+        }
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not loaded");
+            fail.show();
+        }
         show();
     }
 
@@ -143,13 +156,13 @@ public class SmartphoneController extends Controller {
     }
 
     private void save() {
-        String nameField = smartphoneView.getTextFieldSmartphoneName().getText();
+        String name = smartphoneView.getTextFieldSmartphoneName().getText();
         Object serie = smartphoneView.getComboBoxSerie().getValue();
 
-        int versionField = 0;
+        int version = 0;
 
         try {
-            versionField = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
+            version = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
         } catch (Exception e) {
 
         }
@@ -157,16 +170,15 @@ public class SmartphoneController extends Controller {
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
         if (selectedSmartphone == null) {
-            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField,
+            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, (String) serie, version,
                     releaseDate));
         }
-//        if (selectedSmartphone != null) {
         //else update the existing smartphone
         else {
             Smartphone smartphoneExists = selectedSmartphone;
-            selectedSmartphone.setSmartphoneName(nameField);
+            selectedSmartphone.setSmartphoneName(name);
             selectedSmartphone.setSerie(serie);
-            selectedSmartphone.setVersion(versionField);
+            selectedSmartphone.setVersion(version);
             selectedSmartphone.setReleaseDate(releaseDate);
             MainApplication.getSmartphoneDAO().addOrUpdate(smartphoneExists);
         }
@@ -260,24 +272,43 @@ public class SmartphoneController extends Controller {
 
     // new button
     private void newPhone() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to create a new item?", YES, NO);
+        alert.showAndWait();
+
         resetFields();
 
-        String nameField = smartphoneView.getTextFieldSmartphoneName().getText();
+        String name = smartphoneView.getTextFieldSmartphoneName().getText();
         Object serie = smartphoneView.getComboBoxSerie().getValue();
 
-        int versionField = 0;
+        int version = 0;
 
         try {
-            versionField = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
+            version = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
         } catch (Exception e) {
 
         }
 
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
-        MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField,
-                releaseDate));
+        if (alert.getResult() == YES) {
+            // if the selected smartphone doesn't exist create one
+            if (selectedSmartphone == null) {
+                MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, (String) serie, version,
+                        releaseDate));
+            }
+            resetFields();
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
+            succes.show();
+        }
+
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "Item is not created");
+            fail.show();
+        }
+
+        resetFields();
     }
+
 
     // edit button
     private void edit(Smartphone newSmartphone) {
@@ -298,9 +329,7 @@ public class SmartphoneController extends Controller {
 
             smartphoneView.getReleaseDate().setValue(selectedSmartphone.getReleaseDate());
 
-            // TODO dit werkt niet
             if (smartphoneView.getButtonEdit().isPressed()) {
-                System.out.println("Hij komt hier");
                 disableDeleteButton();
                 disableSwitchButton();
             }

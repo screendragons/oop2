@@ -144,12 +144,12 @@ public class SpecificationController extends Controller {
                     operatingSystem, note, master
             ));
 
-            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
             succes.show();
         }
 
         if (alert.getResult() == NO) {
-            Alert fail = new Alert(Alert.AlertType.WARNING, "There won't be new data added");
+            Alert fail = new Alert(Alert.AlertType.WARNING, "There won't be new item added");
             fail.show();
         }
     }
