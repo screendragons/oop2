@@ -9,7 +9,7 @@ import java.io.*;
  *
  * @author Chi Yu Yeung
  */
-public class ObjectSpecificationDAO extends SpecificationDAO{
+public class ObjectSpecificationDAO extends SpecificationDAO {
     private final String FILENAME = "specification.obj";
 
     @Override
@@ -22,7 +22,7 @@ public class ObjectSpecificationDAO extends SpecificationDAO{
         ) {
             objectOutputStream.writeInt(objects.size());
 
-            for(Specification specification : objects) {
+            for (Specification specification : objects) {
                 objectOutputStream.writeObject(specification);
             }
         } catch (Exception e) {

@@ -40,7 +40,6 @@ public class SpecificationView extends View {
     private RadioButton btnSortAscTypeTwo;
     private RadioButton btnSortDescTypeTwo;
 
-
     // checkbox
     private CheckBox checkBoxFingerprintSensor;
 

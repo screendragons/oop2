@@ -10,7 +10,7 @@ import java.time.LocalDate;
  *
  * @author Chi Yu Yeung
  */
-public class BinairySmartphoneDAO extends SmartphoneDAO{
+public class BinairySmartphoneDAO extends SmartphoneDAO {
     private final String FILENAME = "smartphones.dat";
 
     @Override
@@ -24,7 +24,7 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
 
             dataOutputStream.writeInt(objects.size());
 
-            for(Smartphone smartphone : objects) {
+            for (Smartphone smartphone : objects) {
                 dataOutputStream.writeUTF(smartphone.getSmartphoneName());
                 dataOutputStream.writeUTF((String) smartphone.getSerie());
                 dataOutputStream.writeInt(smartphone.getVersion());

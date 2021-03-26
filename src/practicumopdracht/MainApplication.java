@@ -9,7 +9,7 @@ import practicumopdracht.controllers.SmartphoneController;
 import practicumopdracht.data.*;
 
 public class MainApplication extends Application {
-    private final String TITLE = "Smartphone -> specificatie";
+    private final String TITLE = "Smartphone -> specification";
     private final int WIDTH = 1000;
     private final int HEIGHT = 600;
     private static Stage stage;
@@ -27,14 +27,24 @@ public class MainApplication extends Application {
 
         // switch easily between the DAO's
         // master
-//        smartphoneDAO = new TextSmartphoneDAO();
+        // textDAO
+        smartphoneDAO = new TextSmartphoneDAO();
+
+        //fakeDAO
 //        smartphoneDAO = new FakeSmartphoneDAO();
-        smartphoneDAO = new BinairySmartphoneDAO();
+
+        // binairyDAO
+//        smartphoneDAO = new BinairySmartphoneDAO();
 
         // detail
-//        specificationDAO = new TextSpecificationDAO();
+        // textDAO
+        specificationDAO = new TextSpecificationDAO();
+
+        //fakeDAO
 //        specificationDAO = new FakeSpecificationDAO();
-        specificationDAO = new ObjectSpecificationDAO();
+
+        // objectDAO
+//        specificationDAO = new ObjectSpecificationDAO();
 
         MainApplication.stage = stage;
 

@@ -20,7 +20,6 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
 
     @Override
     public List<Smartphone> getAll() {
-//        return Collections.unmodifiableList(objects);
         return this.objects;
     }
 
