@@ -10,7 +10,7 @@ import practicumopdracht.data.*;
 
 public class MainApplication extends Application {
     private final String TITLE = "Smartphone -> specificatie";
-    private final int WIDTH = 800;
+    private final int WIDTH = 1000;
     private final int HEIGHT = 600;
     private static Stage stage;
     private static SmartphoneDAO smartphoneDAO;

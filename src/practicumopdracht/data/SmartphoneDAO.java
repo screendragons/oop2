@@ -52,7 +52,6 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
     @Override
     public void remove(Smartphone object) {
         objects.remove(object);
-//        System.out.println(objects.size());
     }
 
     @Override

@@ -48,7 +48,6 @@ public class SmartphoneView extends View {
     private HBox menuButtonsSmart;
     private HBox menuFileSort;
     private BorderPane borderPane;
-
     private BorderPane menuFileBorderPane;
     private BorderPane menuSortBorderPane;
 

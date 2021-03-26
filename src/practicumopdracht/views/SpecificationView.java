@@ -35,8 +35,11 @@ public class SpecificationView extends View {
 
     // radio button
     private ToggleGroup toggleGroup;
-    private RadioButton btnSortDescName;
-    private RadioButton btnSortAscName;
+    private RadioButton btnSortAscTypeOne;
+    private RadioButton btnSortDescTypeOne;
+    private RadioButton btnSortAscTypeTwo;
+    private RadioButton btnSortDescTypeTwo;
+
 
     // checkbox
     private CheckBox checkBoxFingerprintSensor;
@@ -136,12 +139,11 @@ public class SpecificationView extends View {
         buttonSwitch = new Button("Switch to master");
 
         // radiobuttons
-        btnSortDescName = new RadioButton("Sort descending by name (Z-A)");
-        btnSortAscName = new RadioButton("Sort ascending by name (A-Z)");
+        btnSortAscTypeOne = new RadioButton("Sort ascending #1 (A-Z)");
+        btnSortDescTypeOne = new RadioButton("Sort descending #1 (Z-A)");
 
-        listView = new ListView<>();
-        gridPaneSpec = new GridPane();
-        sort = new HBox();
+        btnSortAscTypeTwo = new RadioButton("Sort ascending #2 (A-Z)");
+        btnSortDescTypeTwo = new RadioButton("Sort descending #2 (Z-A)");
 
         // add items to the menu
         menu.getItems().add(menuItemSave);
@@ -152,6 +154,7 @@ public class SpecificationView extends View {
         menuBar.getMenus().add(menu);
 
         // sets a gap vertically
+        gridPaneSpec = new GridPane();
         gridPaneSpec.setVgap(10);
         gridPaneSpec.setHgap(10);
 
@@ -190,22 +193,31 @@ public class SpecificationView extends View {
         gridPaneSpec.add(buttonSwitch, 6, 9);
 
         // buttons added to hbox
+
         menuButtonsSpec = new HBox();
         menuButtonsSpec.setPadding(new Insets(10, 10, 10, 100));
         menuButtonsSpec.setSpacing(20); // distance between buttons
         menuButtonsSpec.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch);
         // radio buttons
-        gridPaneSpec.add(btnSortDescName, 0, 20);
-
-        vBoxSpec = new VBox();
+        gridPaneSpec.add(btnSortDescTypeOne, 0, 20);
 
         menuBorderPane = new BorderPane(menuBar);
 
+        sort = new HBox();
         sort.setPadding(new Insets(10, 10, 10, 60));
         sort.setSpacing(20);
-        sort.getChildren().addAll(labelSort, btnSortAscName, btnSortDescName);
-        btnSortAscName.setToggleGroup(toggleGroup);
-        btnSortDescName.setToggleGroup(toggleGroup);
+
+
+        btnSortAscTypeOne.setToggleGroup(toggleGroup);
+        btnSortDescTypeOne.setToggleGroup(toggleGroup);
+        btnSortAscTypeTwo.setToggleGroup(toggleGroup);
+        btnSortDescTypeTwo.setToggleGroup(toggleGroup);
+
+        sort.getChildren().addAll(labelSort, btnSortAscTypeOne, btnSortDescTypeOne,
+                btnSortAscTypeTwo, btnSortDescTypeTwo);
+
+        listView = new ListView<>();
+        vBoxSpec = new VBox();
 
         vBoxSpec.setPadding(new Insets(10, 10, 10, 10));
         vBoxSpec.getChildren().addAll(menuBorderPane, gridPaneSpec, menuButtonsSpec, listView, sort);
@@ -218,6 +230,34 @@ public class SpecificationView extends View {
     @Override
     public Parent getRoot() {
         return root;
+    }
+
+    public MenuItem getMenuItemSave() {
+        return menuItemSave;
+    }
+
+    public MenuItem getMenuItemLoad() {
+        return menuItemLoad;
+    }
+
+    public MenuItem getMenuItemExit() {
+        return menuItemExit;
+    }
+
+    public RadioButton getBtnSortAscTypeOne() {
+        return btnSortAscTypeOne;
+    }
+
+    public RadioButton getBtnSortDescTypeOne() {
+        return btnSortDescTypeOne;
+    }
+
+    public RadioButton getBtnSortAscTypeTwo() {
+        return btnSortAscTypeTwo;
+    }
+
+    public RadioButton getBtnSortDescTypeTwo() {
+        return btnSortDescTypeTwo;
     }
 
     public TextField getTextFieldInch() {
@@ -272,13 +312,7 @@ public class SpecificationView extends View {
         return buttonSwitch;
     }
 
-    public RadioButton getBtnSortAscName() {
-        return btnSortAscName;
-    }
 
-    public RadioButton getBtnSortDescName() {
-        return btnSortDescName;
-    }
 
     public ListView<Specification> getListView() {
         return listView;

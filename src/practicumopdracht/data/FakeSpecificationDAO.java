@@ -16,6 +16,8 @@ public class FakeSpecificationDAO extends SpecificationDAO {
 
     @Override
     public boolean load() {
+        objects.clear();
+
         Specification specification1 = new Specification(6, 15, 7,0.1, true,
                 "iOS", "Een mooie smartphone",
                 MainApplication.getSmartphoneDAO().getById(0));

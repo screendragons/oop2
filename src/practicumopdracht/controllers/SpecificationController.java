@@ -1,16 +1,18 @@
 package practicumopdracht.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import practicumopdracht.MainApplication;
 import practicumopdracht.comparators.DetailComparator;
+import practicumopdracht.data.SpecificationDAO;
 import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 import practicumopdracht.views.SpecificationView;
 import practicumopdracht.views.View;
-
-import java.util.List;
 
 /**
  * Functionality:
@@ -18,36 +20,27 @@ import java.util.List;
  * @author Chi Yu Yeung
  */
 public class SpecificationController extends Controller {
+    private final ButtonType YES = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+    private final ButtonType NO = new ButtonType("No", ButtonBar.ButtonData.NO);
+    private SpecificationDAO specificationDAO;
     private SpecificationView specificationView;
+    private Specification selectedSpecification;
     private DetailComparator detailComparator;
 
     public SpecificationController(Smartphone smartphone) {
+        specificationDAO = MainApplication.getSpecificationDAO();
+
         specificationView = new SpecificationView();
 
-        // link multiple actions to the save button
-        specificationView.getButtonSave().setOnAction(event ->
-        {
-            if (validation(specificationView)) {
-                // save specification
-                save(specificationView);
-            }
-            MainApplication.getSpecificationDAO().save();
-        });
+        // menu items
+        // for the text, object, binairy and fake DAO's
+        specificationView.getMenuItemSave().setOnAction(event -> saveToDAO());
 
-        // switch to master view
-        specificationView.getButtonSwitch().setOnAction(event -> switchToSmartphone());
+        specificationView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
 
-        // edit button
-        specificationView.getButtonEdit().setOnAction(event -> edit());
+        specificationView.getMenuItemExit().setOnAction(event -> exit());
 
-        // delete button
-        specificationView.getButtonDelete().setOnAction(event -> delete());
-
-        specificationView.getBtnSortAscName().setOnAction(event -> sortAscName());
-
-        specificationView.getBtnSortDescName().setOnAction(event -> sortDescName());
-
-        // master
+        // master combobox
         ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
         specificationView.getComboBoxMaster().setItems(masterData);
         specificationView.getComboBoxMaster().setValue(smartphone);
@@ -55,45 +48,189 @@ public class SpecificationController extends Controller {
         // list in specifications
         ObservableList detailList = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(smartphone));
         specificationView.getListView().setItems(detailList);
+
+        // link validation to the save button
+        // for the "normal" DAO's
+        specificationView.getButtonSave().setOnAction(event -> validationSaveBtn());
+
+        // new button
+        specificationView.getButtonNew().setOnAction(event -> newSpecification());
+
+        // edit button
+        specificationView.getButtonEdit().setOnAction(event -> edit(selectedSpecification));
+
+        // delete button
+        specificationView.getButtonDelete().setOnAction(event -> delete());
+
+        // switch to master view
+        specificationView.getButtonSwitch().setOnAction(event -> switchToSmartphone());
+
+        specificationView.getBtnSortAscTypeOne().setOnAction(event -> sortAscTypeOne());
+
+        specificationView.getBtnSortDescTypeOne().setOnAction(event -> sortDescTypeOne());
+
+        specificationView.getBtnSortAscTypeTwo().setOnAction(event -> sortAscTypeTwo());
+
+        specificationView.getBtnSortDescTypeTwo().setOnAction(event -> sortDescTypeTwo());
+
+        specificationView.getListView().getSelectionModel().selectedItemProperty()
+                .addListener((observableValue, oldSpecification, newSpecification) -> {
+                    if (newSpecification == null || oldSpecification == newSpecification) {
+                        return;
+                    }
+
+                    enableNewButton();
+                    enableDeleteButton();
+                    enableSwitchButton();
+
+                    enableEditButton();
+                    edit(oldSpecification);
+                });
+
+        enableSaveButton();
+        disableNewButton();
+        disableEditButton();
+        disableDeleteButton();
+        disableSwitchButton();
     }
 
-    private void sortAscName() {
-        if(this.specificationView.getBtnSortAscName().isSelected()) {
-            ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
-            detailComparator = new DetailComparator(false);
-            FXCollections.sort(specificationObservableList, detailComparator);
-            specificationView.getListView().setItems(specificationObservableList);
+    private void newSpecification() {
+        // TODO edit new function
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to create a new item?", YES, NO);
+        alert.showAndWait();
+
+        double inch = 0;
+        try {
+            inch = Double.parseDouble(specificationView.getTextFieldInch().getText().trim());
+        } catch (Exception e) {
+
+        }
+
+        double height = 0;
+        try {
+            height = Double.parseDouble(specificationView.getTextFieldHeight().getText().trim());
+        } catch (Exception e) {
+
+        }
+
+        double width = 0;
+        try {
+            width = Double.parseDouble(specificationView.getTextFieldWidth().getText().trim());
+        } catch (Exception e) {
+
+        }
+
+        double thickness = 0;
+        try {
+            thickness = Double.parseDouble(specificationView.getTextFieldThickness().getText().trim());
+        } catch (Exception e) {
+
+        }
+
+        // finger print sensor
+        boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
+
+        Object operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
+
+        String note = specificationView.getTextAreaNote().getText();
+
+        Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
+
+        if (alert.getResult() == YES) {
+            // if the selected smartphone doesn't exist create one
+            if (specificationView == null) {
+                MainApplication.getSpecificationDAO().addOrUpdate(new Specification(
+                        inch, height, width, thickness, fingerprintSensor,
+                        operatingSystem, note, master
+                ));
+            }
+            resetFields();
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
+            succes.show();
+        }
+
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "Item is not created");
+            fail.show();
+        }
+
+        resetFields();
+    }
+
+    private void saveToDAO() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to save this data?", YES, NO);
+        alert.showAndWait();
+
+        if (alert.getResult() == YES) {
+            boolean isSaved = specificationDAO.save();
+            if (isSaved) {
+                Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
+                succes.show();
+            }
+        }
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not saved");
+            fail.show();
         }
     }
 
-    private void sortDescName() {
-        if(this.specificationView.getBtnSortDescName().isSelected()) {
-            ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
-            detailComparator = new DetailComparator(true);
-            FXCollections.sort(specificationObservableList, detailComparator);
-            specificationView.getListView().setItems(specificationObservableList);
+    private void loadFromDAO() {
+        specificationDAO.load();
+        show();
+    }
+
+    private void exit() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want close the application?", YES, NO);
+        alert.showAndWait();
+
+        if (alert.getResult() == YES) {
+            Alert deciding = new Alert(Alert.AlertType.WARNING, "Are you sure you want to close the application?",
+                    YES, NO);
+            deciding.showAndWait();
+
+            if (deciding.getResult() == YES) {
+                Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The application will close.");
+                succes.show();
+                Platform.exit();
+            }
+
+            if (deciding.getResult() == NO) {
+                Alert fail = new Alert(Alert.AlertType.WARNING, "The application won't close");
+                fail.show();
+            }
+        }
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The application won't close");
+            fail.show();
+        }
+    }
+
+    private void validationSaveBtn() {
+        if (validation(specificationView)) {
+            // save specification
+            save(specificationView);
         }
     }
 
     private void save(SpecificationView detailView) {
         // inch
-        double inchField = 0;
+        double inch = 0;
         // height
-        double heightField = 0;
+        double height = 0;
         // width
-        double widthField = 0;
+        double width = 0;
         // thickness
-        double thicknessField = 0;
+        double thickness = 0;
 
         try {
             // inch
-            inchField = Double.parseDouble(detailView.getTextFieldInch().getText().trim());
+            inch = Double.parseDouble(detailView.getTextFieldInch().getText().trim());
             // height
-            heightField = Double.parseDouble(detailView.getTextFieldHeight().getText().trim());
+            height = Double.parseDouble(detailView.getTextFieldHeight().getText().trim());
             // width
-            widthField = Double.parseDouble(detailView.getTextFieldWidth().getText().trim());
+            width = Double.parseDouble(detailView.getTextFieldWidth().getText().trim());
             // thickness
-            thicknessField = Double.parseDouble(detailView.getTextFieldThickness().getText().trim());
+            thickness = Double.parseDouble(detailView.getTextFieldThickness().getText().trim());
         } catch (Exception e) {
 
         }
@@ -103,14 +240,25 @@ public class SpecificationController extends Controller {
 
         Object operatingSystem = detailView.getComboBoxOperatingSystem().getValue();
 
-        String noteField = detailView.getTextAreaNote().getText();
+        String note = detailView.getTextAreaNote().getText();
 
         Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
 
-        MainApplication.getSpecificationDAO().addOrUpdate(new Specification(
-                inchField, heightField, widthField, thicknessField, fingerprintSensor,
-                (String) operatingSystem, noteField, master
-        ));
+        if (selectedSpecification == null) {
+            MainApplication.getSpecificationDAO().addOrUpdate(new Specification(
+                    inch, height, width, thickness, fingerprintSensor,
+                    operatingSystem, note, master
+            ));
+        } else {
+            Specification specificationExists = selectedSpecification;
+            selectedSpecification.setInch(inch);
+            selectedSpecification.setHeight(height);
+            selectedSpecification.setWidth(width);
+            selectedSpecification.setThickness(thickness);
+            selectedSpecification.setFingerprintSensor(fingerprintSensor);
+            selectedSpecification.setNote(note);
+            MainApplication.getSpecificationDAO().addOrUpdate(specificationExists);
+        }
 
         show();
         resetFields();
@@ -245,20 +393,149 @@ public class SpecificationController extends Controller {
         specificationView.getListView().setItems(specList);
     }
 
-    public void edit() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("You clicked on the edit button!");
-        alert.showAndWait();
+    private void edit(Specification newSpecification) {
+        selectedSpecification = specificationView.getListView().getSelectionModel().getSelectedItem();
+
+        // using setters because you are editing something
+        if (selectedSpecification != null) {
+            try {
+                double inch = selectedSpecification.getInch();
+                specificationView.getTextFieldInch().setText(String.valueOf(inch));
+            } catch (Exception e) {
+
+            }
+            try {
+                double height = selectedSpecification.getHeight();
+                specificationView.getTextFieldHeight().setText(String.valueOf(height));
+            } catch (Exception e) {
+
+            }
+
+            try {
+                double width = selectedSpecification.getWidth();
+                specificationView.getTextFieldWidth().setText(String.valueOf(width));
+            } catch (Exception e) {
+
+            }
+
+            try {
+                double thickness = selectedSpecification.getThickness();
+                specificationView.getTextFieldThickness().setText(String.valueOf(thickness));
+            } catch (Exception e) {
+
+            }
+
+            specificationView.getCheckBoxFingerprintSensor().setSelected(selectedSpecification.isFingerprintSensor());
+
+            specificationView.getTextAreaNote().setText(selectedSpecification.getNote());
+
+            // TODO dit werkt niet
+            if (specificationView.getButtonEdit().isPressed()) {
+                System.out.println("Hij komt hier");
+                disableDeleteButton();
+                disableSwitchButton();
+            }
+        }
     }
 
     public void delete() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText("You clicked on the delete button!");
+        selectedSpecification = specificationView.getListView().getSelectionModel().getSelectedItem();
+
+        // unselect item when the application is started, preventing from deleting something by accident
+        if (selectedSpecification == null) {
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to delete this item?", YES, NO);
         alert.showAndWait();
+
+        if (alert.getResult() == YES) {
+            specificationDAO.remove(selectedSpecification);
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is deleted");
+            succes.show();
+        }
+
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not deleted");
+            fail.show();
+        }
+
+        show();
+        resetFields();
     }
 
     public void switchToSmartphone() {
         MainApplication.switchController(new SmartphoneController());
+    }
+
+    private void sortAscTypeOne() {
+        ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
+        detailComparator = new DetailComparator(false);
+        FXCollections.sort(specificationObservableList, detailComparator);
+        specificationView.getListView().setItems(specificationObservableList);
+    }
+
+    private void sortDescTypeOne() {
+        ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
+        detailComparator = new DetailComparator(true);
+        FXCollections.sort(specificationObservableList, detailComparator);
+        specificationView.getListView().setItems(specificationObservableList);
+    }
+
+    private void sortAscTypeTwo() {
+        ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
+        detailComparator = new DetailComparator(false);
+        FXCollections.sort(specificationObservableList, detailComparator);
+        specificationView.getListView().setItems(specificationObservableList);
+    }
+
+    private void sortDescTypeTwo() {
+        ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
+        detailComparator = new DetailComparator(true);
+        FXCollections.sort(specificationObservableList, detailComparator);
+        specificationView.getListView().setItems(specificationObservableList);
+    }
+
+
+    // enable and disable the buttons
+    private void enableSaveButton() {
+        specificationView.getButtonSave().setDisable(false);
+    }
+
+    private void disableSaveButton() {
+        specificationView.getButtonSave().setDisable(true);
+    }
+
+    private void enableNewButton() {
+        specificationView.getButtonNew().setDisable(false);
+    }
+
+    private void disableNewButton() {
+        specificationView.getButtonNew().setDisable(true);
+    }
+
+    private void enableEditButton() {
+        specificationView.getButtonEdit().setDisable(false);
+    }
+
+    private void disableEditButton() {
+        specificationView.getButtonEdit().setDisable(true);
+    }
+
+    private void enableDeleteButton() {
+        specificationView.getButtonDelete().setDisable(false);
+    }
+
+    private void disableDeleteButton() {
+        specificationView.getButtonDelete().setDisable(true);
+    }
+
+    public void enableSwitchButton() {
+        specificationView.getButtonSwitch().setDisable(false);
+    }
+
+    public void disableSwitchButton() {
+        specificationView.getButtonSwitch().setDisable(true);
     }
 
     @Override
