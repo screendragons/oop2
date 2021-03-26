@@ -28,7 +28,6 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
                 dataOutputStream.writeUTF(smartphone.getSmartphoneName());
                 dataOutputStream.writeUTF((String) smartphone.getSerie());
                 dataOutputStream.writeInt(smartphone.getVersion());
-                // TODO localDate UTF
                 LocalDate releaseDate = smartphone.getReleaseDate();
                 dataOutputStream.writeUTF(String.valueOf(releaseDate));
             }

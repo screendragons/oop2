@@ -27,14 +27,14 @@ public class MainApplication extends Application {
 
         // switch easily between the DAO's
         // master
-        smartphoneDAO = new TextSmartphoneDAO();
+//        smartphoneDAO = new TextSmartphoneDAO();
 //        smartphoneDAO = new FakeSmartphoneDAO();
-//        smartphoneDAO = new BinairySmartphoneDAO();
+        smartphoneDAO = new BinairySmartphoneDAO();
 
         // detail
-        specificationDAO = new TextSpecificationDAO();
+//        specificationDAO = new TextSpecificationDAO();
 //        specificationDAO = new FakeSpecificationDAO();
-//        specificationDAO = new ObjectSpecificationDAO();
+        specificationDAO = new ObjectSpecificationDAO();
 
         MainApplication.stage = stage;
 

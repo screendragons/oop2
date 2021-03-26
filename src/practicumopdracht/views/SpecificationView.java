@@ -207,7 +207,7 @@ public class SpecificationView extends View {
         sort.setPadding(new Insets(10, 10, 10, 60));
         sort.setSpacing(20);
 
-
+        toggleGroup = new ToggleGroup();
         btnSortAscTypeOne.setToggleGroup(toggleGroup);
         btnSortDescTypeOne.setToggleGroup(toggleGroup);
         btnSortAscTypeTwo.setToggleGroup(toggleGroup);
