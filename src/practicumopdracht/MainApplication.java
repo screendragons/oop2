@@ -2,6 +2,7 @@ package practicumopdracht;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import practicumopdracht.controllers.Controller;
 import practicumopdracht.controllers.SmartphoneController;
@@ -38,6 +39,7 @@ public class MainApplication extends Application {
         MainApplication.stage = stage;
 
         stage.setTitle(String.format("Practicumopdracht OOP2 - %s - %s", Main.studentNaam, TITLE));
+        stage.getIcons().add(new Image("file:phone.png"));
         stage.setWidth(WIDTH);
         stage.setHeight(HEIGHT);
 

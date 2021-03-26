@@ -1,1 +1,3 @@
 fjknfm,Samsung A series,9,2021-03-12
+test,Samsung J series,7,2021-03-16
+kfjkfjfklflk,OnePlus Nord series,6,2021-03-26

@@ -3,7 +3,6 @@ package practicumopdracht.data;
 import practicumopdracht.models.Smartphone;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -53,7 +52,7 @@ public abstract class SmartphoneDAO implements DAO<Smartphone> {
     @Override
     public void remove(Smartphone object) {
         objects.remove(object);
-        System.out.println(objects.size());
+//        System.out.println(objects.size());
     }
 
     @Override

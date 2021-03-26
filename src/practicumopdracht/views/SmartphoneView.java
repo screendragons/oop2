@@ -40,19 +40,30 @@ public class SmartphoneView extends View {
     // combobox
     private ComboBox<String> comboBoxSerie;
 
+    // listview
     private ListView<Smartphone> listView;
 
     private GridPane gridPaneSmart;
     private VBox vBoxSmart;
     private HBox menuButtonsSmart;
+    private HBox menuFileSort;
     private BorderPane borderPane;
-    private BorderPane menuBorderPane;
 
-    private Menu menu;
+    private BorderPane menuFileBorderPane;
+    private BorderPane menuSortBorderPane;
+
+    // menu file
+    private Menu menuFile;
     private MenuItem menuItemSave;
     private MenuItem menuItemLoad;
     private MenuItem menuItemExit;
-    private MenuBar menuBar;
+    private MenuBar menuBarFile;
+
+    // menu file
+    private Menu menuSort;
+    private MenuItem menuItemAsc;
+    private MenuItem menuItemDesc;
+    private MenuBar menuBarSort;
 
     private Parent root;
 
@@ -61,16 +72,23 @@ public class SmartphoneView extends View {
     }
 
     private void initializeRoot() {
-        // menu
-        menu = new Menu("File");
+        // menu file
+        menuFile = new Menu("File");
+        menuSort = new Menu("Sort");
 
         // menu items
+        // file
         menuItemSave = new MenuItem("Save");
         menuItemLoad = new MenuItem("Load");
         menuItemExit = new MenuItem("Exit");
 
+        //sort
+        menuItemAsc = new MenuItem("Sort ascending (A-Z)");
+        menuItemDesc = new MenuItem("Sort descending (Z-A)");
+
         // menubar
-        menuBar = new MenuBar();
+        menuBarFile = new MenuBar();
+        menuBarSort = new MenuBar();
 
         // labels
         labelSmartphoneName = new Label("Smartphone name");
@@ -116,15 +134,23 @@ public class SmartphoneView extends View {
         // default text for when there is no option selected
         comboBoxSerie.setPromptText("series");
 
-        // add items to the menu
-        menu.getItems().add(menuItemSave);
-        menu.getItems().add(menuItemLoad);
-        menu.getItems().add(menuItemExit);
+        // add items to the menu file
+        menuFile.getItems().add(menuItemSave);
+        menuFile.getItems().add(menuItemLoad);
+        menuFile.getItems().add(menuItemExit);
 
-        // add the menu to the menubar
-        menuBar.getMenus().add(menu);
+        // add items to the menu sort
+        menuSort.getItems().add(menuItemAsc);
+        menuSort.getItems().add(menuItemDesc);
 
-        // Constructs a new Insets instance with four different offsets
+        // add the menu to the menubar file
+        menuBarFile.getMenus().add(menuFile);
+
+        // add the menu to the menubar sort
+        menuBarSort.getMenus().add(menuSort);
+
+        // constructs a new Insets instance with four different offsets
+        // top right bottom left
         gridPaneSmart.setPadding(new Insets(10, 10, 10, 10));
         gridPaneSmart.add(labelSmartphoneName, 0, 0);
         gridPaneSmart.add(textFieldSmartphoneName, 1, 0);
@@ -156,10 +182,18 @@ public class SmartphoneView extends View {
 
         vBoxSmart = new VBox();
 
-        menuBorderPane = new BorderPane(menuBar);
+        // menu file
+        menuFileBorderPane = new BorderPane(menuBarFile);
+
+        // menu sort
+        menuSortBorderPane = new BorderPane(menuBarSort);
+
+        menuFileSort = new HBox();
+//        menuButtonsSmart.setPadding(new Insets(10, 10, 10, 10));
+        menuFileSort.getChildren().addAll(menuFileBorderPane, menuSortBorderPane);
 
         vBoxSmart.setPadding(new Insets(10, 10, 10, 10));
-        vBoxSmart.getChildren().addAll(menuBorderPane, gridPaneSmart, menuButtonsSmart, listView);
+        vBoxSmart.getChildren().addAll(menuFileSort , gridPaneSmart, menuButtonsSmart, listView);
 
         borderPane = new BorderPane();
         borderPane.setCenter(vBoxSmart);
@@ -176,6 +210,14 @@ public class SmartphoneView extends View {
 
     public MenuItem getMenuItemExit() {
         return menuItemExit;
+    }
+
+    public MenuItem getMenuItemAsc() {
+        return menuItemAsc;
+    }
+
+    public MenuItem getMenuItemDesc() {
+        return menuItemDesc;
     }
 
     public TextField getTextFieldSmartphoneName() {

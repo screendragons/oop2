@@ -8,6 +8,7 @@ import practicumopdracht.models.Smartphone;
  * @author Chi Yu Yeung
  */
 public class MasterComparator implements Comparable<Smartphone> {
+
     @Override
     public int compareTo(Smartphone o) {
         return 0;

@@ -35,41 +35,19 @@ public class SmartphoneController extends Controller {
 
         // menu items
         // voor de text, object en fake DAO's
-        smartphoneView.getMenuItemSave().setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to save this application?", YES, NO);
-            alert.showAndWait();
-//
-//            if (alert.getResult() == NO) {
-//                Alert no = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
-//                no.show();
-//            }
-
-            if (alert.getResult() == YES) {
-                boolean isSaved = smartphoneDAO.save();
-                if(isSaved) {
-                    Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
-                    succes.show();
-                } else {
-                    Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not saved");
-                    fail.show();
-                }
-            }
-        });
+        smartphoneView.getMenuItemSave().setOnAction(event -> menuSave());
 
         smartphoneView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
 
         smartphoneView.getMenuItemExit().setOnAction(event -> exit());
 
+        smartphoneView.getMenuItemAsc().setOnAction(event -> sortAsc());
+
+        smartphoneView.getMenuItemDesc().setOnAction(event -> sortDesc());
+
         // link validation to the save button
         // voor de algemene DAO's
-        // TODO get this data saved after starting and closing the application
-        smartphoneView.getButtonSave().setOnAction(event ->
-        {
-            if (validation(smartphoneView)) {
-                // save specification
-                save(smartphoneView);
-            }
-        });
+        smartphoneView.getButtonSave().setOnAction(event -> validationSaveBtn());
 
         // new button
         smartphoneView.getButtonNew().setOnAction(event -> newPhone());
@@ -82,7 +60,7 @@ public class SmartphoneController extends Controller {
 
         // switch to detail view
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
-        
+
         // replaces the old value with the new by editing
         smartphoneView.getListView().getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, oldSmartphone, newSmartphone) -> {
@@ -103,7 +81,40 @@ public class SmartphoneController extends Controller {
         disableEditButton();
         disableDeleteButton();
         disableSwitchButton();
+
         show();
+    }
+
+    private void menuSave() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to save this data?", YES, NO);
+        alert.showAndWait();
+
+        if (alert.getResult() == YES) {
+            boolean isSaved = smartphoneDAO.save();
+            if (isSaved) {
+                Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
+                succes.show();
+            }
+        }
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not saved");
+            fail.show();
+        }
+    }
+
+    private void sortAsc() {
+
+    }
+
+    private void sortDesc() {
+
+    }
+
+    private void validationSaveBtn() {
+        if (validation(smartphoneView)) {
+            // save specification
+            save(smartphoneView);
+        }
     }
 
     private void save(SmartphoneView masterView) {
@@ -122,7 +133,7 @@ public class SmartphoneController extends Controller {
         LocalDate releaseDate = masterView.getReleaseDate().getValue();
 
         // if the selected smartphone doesn't exist create one
-        if(selectedSmartphone == null) {
+        if (selectedSmartphone == null) {
             MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField, releaseDate));
         }
         //else update the existing smartphone
@@ -236,7 +247,7 @@ public class SmartphoneController extends Controller {
     private void edit(Smartphone newSmartphone) {
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
-        if(selectedSmartphone != null) {
+        if (selectedSmartphone != null) {
 
             smartphoneView.getTextFieldSmartphoneName().setText(selectedSmartphone.getSmartphoneName());
 
@@ -252,6 +263,8 @@ public class SmartphoneController extends Controller {
 
             smartphoneView.getReleaseDate().setValue(selectedSmartphone.getReleaseDate());
         }
+//        disableDeleteButton();
+//        disableSwitchButton();
     }
 
     // delete button
@@ -259,17 +272,24 @@ public class SmartphoneController extends Controller {
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
         // unselect item when the application is started, preventing from deleting something by accident
-        if(selectedSmartphone == null) {
-            System.out.println("delete functie");
+        if (selectedSmartphone == null) {
             return;
         }
 
-        // TODO deletebutton -> pop up
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setHeaderText("Are you sure you want to delete a phone? ");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to delete this item?", YES, NO);
         alert.showAndWait();
 
-        smartphoneDAO.remove(selectedSmartphone);
+        if (alert.getResult() == YES) {
+            smartphoneDAO.remove(selectedSmartphone);
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is deleted");
+            succes.show();
+        }
+
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not deleted");
+            fail.show();
+        }
+
         show();
         resetFields();
     }
@@ -285,12 +305,6 @@ public class SmartphoneController extends Controller {
     private void loadFromDAO() {
         smartphoneDAO.load();
         show();
-    }
-
-    // save to the DAO
-    private void saveFromDAO() {
-        MainApplication.getSmartphoneDAO().save();
-        MainApplication.getSpecificationDAO().save();
     }
 
     // exit application

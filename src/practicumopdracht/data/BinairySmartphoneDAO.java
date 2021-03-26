@@ -29,7 +29,8 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
                 dataOutputStream.writeUTF((String) smartphone.getSerie());
                 dataOutputStream.writeInt(smartphone.getVersion());
                 // TODO localDate UTF
-//                dataOutputStream.write(LocalDate.parse(smartphone.getReleaseDate()));
+                LocalDate releaseDate = smartphone.getReleaseDate();
+                dataOutputStream.writeUTF(String.valueOf(releaseDate));
             }
 
             dataOutputStream.close();
@@ -42,7 +43,6 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
         return true;
     }
 
-    // TODO load functie werkt niet
     @Override
     public boolean load() {
         File file = new File(FILENAME);
@@ -59,9 +59,10 @@ public class BinairySmartphoneDAO extends SmartphoneDAO{
                 String smartphoneName = dataInputStream.readUTF();
                 Object serie = dataInputStream.readUTF();
                 int version = dataInputStream.readInt();
-                // TODO fix localdate
-//                LocalDate releaseDate = dataInputStream.read;
-//                addOrUpdate(new Smartphone(smartphoneName, (String) serie, version, releaseDate));
+                String release = dataInputStream.readUTF();
+                LocalDate releaseDate = LocalDate.parse(release);
+
+                addOrUpdate(new Smartphone(smartphoneName, (String) serie, version, releaseDate));
             }
 
             // the file can be used for the second time after running the function
