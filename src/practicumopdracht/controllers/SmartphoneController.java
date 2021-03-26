@@ -136,29 +136,29 @@ public class SmartphoneController extends Controller {
     }
 
     private void validationSaveBtn() {
-        if (validation(smartphoneView)) {
+        if (validation()) {
             // save specification
-            save(smartphoneView);
+            save();
         }
     }
 
-    private void save(SmartphoneView masterView) {
-
-        String nameField = masterView.getTextFieldSmartphoneName().getText();
-        Object serie = masterView.getComboBoxSerie().getValue();
+    private void save() {
+        String nameField = smartphoneView.getTextFieldSmartphoneName().getText();
+        Object serie = smartphoneView.getComboBoxSerie().getValue();
 
         int versionField = 0;
 
         try {
-            versionField = Integer.parseInt(masterView.getTextFieldVersion().getText().trim());
+            versionField = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
         } catch (Exception e) {
 
         }
 
-        LocalDate releaseDate = masterView.getReleaseDate().getValue();
+        LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
         if (selectedSmartphone == null) {
-            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField, releaseDate));
+            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField,
+                    releaseDate));
         }
 //        if (selectedSmartphone != null) {
         //else update the existing smartphone
@@ -175,7 +175,7 @@ public class SmartphoneController extends Controller {
         resetFields();
     }
 
-    private boolean validation(SmartphoneView smartphoneView) {
+    private boolean validation() {
         StringBuilder errorStringBuilder = new StringBuilder();
 
         // smartphone name
@@ -260,11 +260,23 @@ public class SmartphoneController extends Controller {
 
     // new button
     private void newPhone() {
-//        if(selectedSmartphone == null) {
-        // TODO fix new function
-            resetFields();
+        resetFields();
 
-//        }
+        String nameField = smartphoneView.getTextFieldSmartphoneName().getText();
+        Object serie = smartphoneView.getComboBoxSerie().getValue();
+
+        int versionField = 0;
+
+        try {
+            versionField = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
+        } catch (Exception e) {
+
+        }
+
+        LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
+
+        MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(nameField, (String) serie, versionField,
+                releaseDate));
     }
 
     // edit button

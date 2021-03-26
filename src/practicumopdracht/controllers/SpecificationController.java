@@ -95,66 +95,63 @@ public class SpecificationController extends Controller {
     }
 
     private void newSpecification() {
-        // TODO edit new function
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to create a new item?", YES, NO);
         alert.showAndWait();
 
-        double inch = 0;
-        try {
-            inch = Double.parseDouble(specificationView.getTextFieldInch().getText().trim());
-        } catch (Exception e) {
+        resetFields();
 
-        }
+        if(alert.getResult() == YES) {
+            double inch = 0;
+            try {
+                inch = Double.parseDouble(specificationView.getTextFieldInch().getText().trim());
+            } catch (Exception e) {
 
-        double height = 0;
-        try {
-            height = Double.parseDouble(specificationView.getTextFieldHeight().getText().trim());
-        } catch (Exception e) {
-
-        }
-
-        double width = 0;
-        try {
-            width = Double.parseDouble(specificationView.getTextFieldWidth().getText().trim());
-        } catch (Exception e) {
-
-        }
-
-        double thickness = 0;
-        try {
-            thickness = Double.parseDouble(specificationView.getTextFieldThickness().getText().trim());
-        } catch (Exception e) {
-
-        }
-
-        // finger print sensor
-        boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
-
-        Object operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
-
-        String note = specificationView.getTextAreaNote().getText();
-
-        Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
-
-        if (alert.getResult() == YES) {
-            // if the selected smartphone doesn't exist create one
-            if (specificationView == null) {
-                MainApplication.getSpecificationDAO().addOrUpdate(new Specification(
-                        inch, height, width, thickness, fingerprintSensor,
-                        operatingSystem, note, master
-                ));
             }
-            resetFields();
-            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
+
+            double height = 0;
+            try {
+                height = Double.parseDouble(specificationView.getTextFieldHeight().getText().trim());
+            } catch (Exception e) {
+
+            }
+
+            double width = 0;
+            try {
+                width = Double.parseDouble(specificationView.getTextFieldWidth().getText().trim());
+            } catch (Exception e) {
+
+            }
+
+            double thickness = 0;
+            try {
+                thickness = Double.parseDouble(specificationView.getTextFieldThickness().getText().trim());
+            } catch (Exception e) {
+
+            }
+
+            // finger print sensor
+            boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
+
+            Object operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
+
+            String note = specificationView.getTextAreaNote().getText();
+
+            Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
+
+            // if the selected smartphone doesn't exist create one
+            MainApplication.getSpecificationDAO().addOrUpdate(new Specification(
+                    inch, height, width, thickness, fingerprintSensor,
+                    operatingSystem, note, master
+            ));
+
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
             succes.show();
         }
 
         if (alert.getResult() == NO) {
-            Alert fail = new Alert(Alert.AlertType.WARNING, "Item is not created");
+            Alert fail = new Alert(Alert.AlertType.WARNING, "There won't be new data added");
             fail.show();
         }
-
-        resetFields();
     }
 
     private void saveToDAO() {

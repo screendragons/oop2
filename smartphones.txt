@@ -1,1 +1,4 @@
-test,Samsung A series,5,2021-03-12
+Samsung M21,Samsung M series,5,2021-03-05
+OnePlus 8T,OnePlus Nord series,3,2021-03-26
+Samsung S21 FE,Samsung S series,1,2021-03-01
+dnmdn dm,Samsung A series,3,2021-03-04

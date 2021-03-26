@@ -312,8 +312,6 @@ public class SpecificationView extends View {
         return buttonSwitch;
     }
 
-
-
     public ListView<Specification> getListView() {
         return listView;
     }
