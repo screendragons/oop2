@@ -184,6 +184,7 @@ public class SpecificationController extends Controller {
         show();
         resetFields();
     }
+
     /**
      * The validation for when something wants to be saved
      *
@@ -282,12 +283,11 @@ public class SpecificationController extends Controller {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setHeaderText(errorStringBuilder.toString());
-
             // blocks the performance of the code
             alert.showAndWait();
-
             return false;
             // else show information
+
         } else {
             boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
             String noteField = specificationView.getTextAreaNote().getText();

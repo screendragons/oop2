@@ -184,39 +184,52 @@ public class SmartphoneController extends Controller {
      * Save function
      */
     private void save() {
-        // name
-        String name = smartphoneView.getTextFieldSmartphoneName().getText();
-        // serie
-        String serie = smartphoneView.getComboBoxSerie().getValue();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to save this data?", YES, NO);
+        alert.showAndWait();
 
-        // version
-        int version = 0;
+        if (alert.getResult() == YES) {
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
+            succes.show();
 
-        try {
-            version = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
-        } catch (Exception e) {
+            // name
+            String name = smartphoneView.getTextFieldSmartphoneName().getText();
+            // serie
+            String serie = smartphoneView.getComboBoxSerie().getValue();
 
+            // version
+            int version = 0;
+
+            try {
+                version = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
+            } catch (Exception e) {
+
+            }
+
+            // release date
+            LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
+
+            // if the selected smartphone is equal to null, add or update
+            if (selectedSmartphone == null) {
+                MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, serie, version,
+                        releaseDate));
+            }
+            // else update the existing smartphone
+            else {
+                selectedSmartphone.setSmartphoneName(name);
+                selectedSmartphone.setSerie(serie);
+                selectedSmartphone.setVersion(version);
+                selectedSmartphone.setReleaseDate(releaseDate);
+                MainApplication.getSmartphoneDAO().addOrUpdate(selectedSmartphone);
+            }
+
+            show();
+            resetFields();
         }
-
-        // release date
-        LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
-
-        // if the selected smartphone is equal to null, add or update
-        if (selectedSmartphone == null) {
-            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, serie, version,
-                    releaseDate));
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not saved");
+            fail.show();
         }
-        // else update the existing smartphone
-        else {
-            selectedSmartphone.setSmartphoneName(name);
-            selectedSmartphone.setSerie(serie);
-            selectedSmartphone.setVersion(version);
-            selectedSmartphone.setReleaseDate(releaseDate);
-            MainApplication.getSmartphoneDAO().addOrUpdate(selectedSmartphone);
-        }
-
         show();
-        resetFields();
     }
 
     /**
@@ -268,27 +281,25 @@ public class SmartphoneController extends Controller {
         if (releaseDate == null) {
             errorStringBuilder.append("- Release date is unknown \n");
             smartphoneView.getReleaseDate().setStyle("-fx-border-color: #ff0000");
-        }
 
-        // check if there is an error
+        } // check if there is an error
         if (errorStringBuilder.length() > 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setHeaderText(errorStringBuilder.toString());
-            // blokkeert de uitvoering van de code
+            // blocks the performance of the code
             alert.showAndWait();
-
             // else show information
             return false;
+
         } else {
             Smartphone smartphone = new Smartphone(
                     smartphoneName, serie, version, releaseDate
             );
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText(smartphone.toString());
             alert.showAndWait();
-
             return true;
         }
     }
@@ -323,7 +334,6 @@ public class SmartphoneController extends Controller {
         if (newPhone.getResult() == YES) {
             Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can now create a new phone");
             succes.show();
-            Platform.exit();
         }
 
         if (newPhone.getResult() == NO) {
