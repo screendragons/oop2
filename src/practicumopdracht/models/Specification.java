@@ -90,6 +90,10 @@ public class Specification implements Serializable {
         return hoortBij;
     }
 
+    public void setHoortBij(Smartphone hoortBij) {
+        this.hoortBij = hoortBij;
+    }
+
     @Override
     public String toString() {
         return String.format(

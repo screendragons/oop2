@@ -157,7 +157,7 @@ public class SmartphoneController extends Controller {
 
     private void save() {
         String name = smartphoneView.getTextFieldSmartphoneName().getText();
-        Object serie = smartphoneView.getComboBoxSerie().getValue();
+        String serie = smartphoneView.getComboBoxSerie().getValue();
 
         int version = 0;
 
@@ -170,17 +170,16 @@ public class SmartphoneController extends Controller {
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
         if (selectedSmartphone == null) {
-            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, (String) serie, version,
+            MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, serie, version,
                     releaseDate));
         }
         //else update the existing smartphone
         else {
-            Smartphone smartphoneExists = selectedSmartphone;
             selectedSmartphone.setSmartphoneName(name);
             selectedSmartphone.setSerie(serie);
             selectedSmartphone.setVersion(version);
             selectedSmartphone.setReleaseDate(releaseDate);
-            MainApplication.getSmartphoneDAO().addOrUpdate(smartphoneExists);
+            MainApplication.getSmartphoneDAO().addOrUpdate(selectedSmartphone);
         }
 
         show();
@@ -262,11 +261,12 @@ public class SmartphoneController extends Controller {
         smartphoneView.getComboBoxSerie().setPromptText("series");
         smartphoneView.getTextFieldVersion().setText("");
         smartphoneView.getReleaseDate().setValue(null);
+        // set the selected smartphone to default again
+        selectedSmartphone = null;
     }
 
     private void show() {
         ObservableList smartphoneObservableList = FXCollections.observableArrayList(smartphoneDAO.getAll());
-//        FXCollections.sort(smartList2, );
         smartphoneView.getListView().setItems(smartphoneObservableList);
     }
 
@@ -277,36 +277,34 @@ public class SmartphoneController extends Controller {
 
         resetFields();
 
-        String name = smartphoneView.getTextFieldSmartphoneName().getText();
-        Object serie = smartphoneView.getComboBoxSerie().getValue();
-
-        int version = 0;
-
-        try {
-            version = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
-        } catch (Exception e) {
-
-        }
-
-        LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
-
-        if (alert.getResult() == YES) {
-            // if the selected smartphone doesn't exist create one
-            if (selectedSmartphone == null) {
-                MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, (String) serie, version,
-                        releaseDate));
-            }
-            resetFields();
-            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
-            succes.show();
-        }
-
-        if (alert.getResult() == NO) {
-            Alert fail = new Alert(Alert.AlertType.WARNING, "Item is not created");
-            fail.show();
-        }
-
-        resetFields();
+//        String name = smartphoneView.getTextFieldSmartphoneName().getText();
+//        Object serie = smartphoneView.getComboBoxSerie().getValue();
+//
+//        int version = 0;
+//
+//        try {
+//            version = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
+//        } catch (Exception e) {
+//
+//        }
+//
+//        LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
+//
+//        if (alert.getResult() == YES) {
+//            // if the selected smartphone doesn't exist create one
+//            if (selectedSmartphone == null) {
+//                MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, (String) serie, version,
+//                        releaseDate));
+//            }
+//            resetFields();
+//            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
+//            succes.show();
+//        }
+//
+//        if (alert.getResult() == NO) {
+//            Alert fail = new Alert(Alert.AlertType.WARNING, "Item is not created");
+//            fail.show();
+//        }
     }
 
 
