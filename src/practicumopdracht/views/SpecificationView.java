@@ -68,12 +68,6 @@ public class SpecificationView extends View {
     private BorderPane borderPane;
     private BorderPane menuBorderPane;
 
-    private Menu menu;
-    private MenuItem menuItemSave;
-    private MenuItem menuItemLoad;
-    private MenuItem menuItemExit;
-    private MenuBar menuBar;
-
     private Parent root;
 
     public SpecificationView() {
@@ -81,17 +75,6 @@ public class SpecificationView extends View {
     }
 
     private void initializeRoot() {
-        // menu
-        menu = new Menu("File");
-
-        // menu items
-        menuItemSave = new MenuItem("Save");
-        menuItemLoad = new MenuItem("Load");
-        menuItemExit = new MenuItem("Exit");
-
-        // menubar
-        menuBar = new MenuBar();
-
         // master
         labelMaster = new Label("Smartphone");
 
@@ -144,14 +127,6 @@ public class SpecificationView extends View {
         btnSortAscTypeTwo = new RadioButton("Sort ascending #2 (A-Z)");
         btnSortDescTypeTwo = new RadioButton("Sort descending #2 (Z-A)");
 
-        // add items to the menu
-        menu.getItems().add(menuItemSave);
-        menu.getItems().add(menuItemLoad);
-        menu.getItems().add(menuItemExit);
-
-        // add the menu to the menubar
-        menuBar.getMenus().add(menu);
-
         // sets a gap vertically
         gridPaneSpec = new GridPane();
         gridPaneSpec.setVgap(10);
@@ -200,17 +175,9 @@ public class SpecificationView extends View {
         // radio buttons
         gridPaneSpec.add(btnSortDescTypeOne, 0, 20);
 
-        menuBorderPane = new BorderPane(menuBar);
-
         sort = new HBox();
         sort.setPadding(new Insets(10, 10, 10, 60));
         sort.setSpacing(20);
-
-        toggleGroup = new ToggleGroup();
-        btnSortAscTypeOne.setToggleGroup(toggleGroup);
-        btnSortDescTypeOne.setToggleGroup(toggleGroup);
-        btnSortAscTypeTwo.setToggleGroup(toggleGroup);
-        btnSortDescTypeTwo.setToggleGroup(toggleGroup);
 
         sort.getChildren().addAll(labelSort, btnSortAscTypeOne, btnSortDescTypeOne,
                 btnSortAscTypeTwo, btnSortDescTypeTwo);
@@ -219,7 +186,7 @@ public class SpecificationView extends View {
         vBoxSpec = new VBox();
 
         vBoxSpec.setPadding(new Insets(10, 10, 10, 10));
-        vBoxSpec.getChildren().addAll(menuBorderPane, gridPaneSpec, menuButtonsSpec, listView, sort);
+        vBoxSpec.getChildren().addAll(gridPaneSpec, menuButtonsSpec, listView, sort);
 
         borderPane = new BorderPane();
         borderPane.setCenter(vBoxSpec);
@@ -229,18 +196,6 @@ public class SpecificationView extends View {
     @Override
     public Parent getRoot() {
         return root;
-    }
-
-    public MenuItem getMenuItemSave() {
-        return menuItemSave;
-    }
-
-    public MenuItem getMenuItemLoad() {
-        return menuItemLoad;
-    }
-
-    public MenuItem getMenuItemExit() {
-        return menuItemExit;
     }
 
     public RadioButton getBtnSortAscTypeOne() {

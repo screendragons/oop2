@@ -9,11 +9,14 @@ import javafx.scene.control.ButtonType;
 import practicumopdracht.MainApplication;
 import practicumopdracht.comparators.MasterComparator;
 import practicumopdracht.data.SmartphoneDAO;
+import practicumopdracht.data.SpecificationDAO;
 import practicumopdracht.models.Smartphone;
+import practicumopdracht.models.Specification;
 import practicumopdracht.views.SmartphoneView;
 import practicumopdracht.views.View;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Functionality:
@@ -90,7 +93,8 @@ public class SmartphoneController extends Controller {
 
         if (alert.getResult() == YES) {
             boolean isSaved = smartphoneDAO.save();
-            if (isSaved) {
+            boolean isSavedSpecification = MainApplication.getSpecificationDAO().save();
+            if (isSaved && isSavedSpecification) {
                 Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
                 succes.show();
             }
@@ -347,6 +351,16 @@ public class SmartphoneController extends Controller {
         alert.showAndWait();
 
         if (alert.getResult() == YES) {
+            // delete all specifications
+            SpecificationDAO specificationDAO = MainApplication.getSpecificationDAO();
+            // get all the specs for the selected phone
+            List<Specification> specificationList = specificationDAO.getAllFor(selectedSmartphone);
+            // loop through the list
+            for (Specification specification : specificationList) {
+                // delete the items
+                specificationDAO.remove(specification);
+            }
+            // delete smartphone
             smartphoneDAO.remove(selectedSmartphone);
             Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is deleted");
             succes.show();

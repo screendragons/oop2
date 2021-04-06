@@ -33,13 +33,7 @@ public class SpecificationController extends Controller {
 
         specificationView = new SpecificationView();
 
-        // menu items
-        // for the text, object, binairy and fake DAO's
-        specificationView.getMenuItemSave().setOnAction(event -> saveToDAO());
-
-        specificationView.getMenuItemLoad().setOnAction(event -> loadFromDAO());
-
-        specificationView.getMenuItemExit().setOnAction(event -> exit());
+        selectedSmartphone = smartphone;
 
         // master combobox
         ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
@@ -64,7 +58,7 @@ public class SpecificationController extends Controller {
         specificationView.getButtonSave().setOnAction(event -> validationSaveBtn());
 
         // new button
-        specificationView.getButtonNew().setOnAction(event -> newSpecification());
+        specificationView.getButtonNew().setOnAction(event -> resetFields());
 
         // edit button
         specificationView.getButtonEdit().setOnAction(event -> edit(selectedSpecification));
@@ -103,66 +97,6 @@ public class SpecificationController extends Controller {
         disableNewButton();
         disableEditButton();
         disableDeleteButton();
-    }
-
-    private void newSpecification() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to create a new item?", YES, NO);
-        alert.showAndWait();
-
-        resetFields();
-
-        if(alert.getResult() == YES) {
-            double inch = 0;
-            try {
-                inch = Double.parseDouble(specificationView.getTextFieldInch().getText().trim());
-            } catch (Exception e) {
-
-            }
-
-            double height = 0;
-            try {
-                height = Double.parseDouble(specificationView.getTextFieldHeight().getText().trim());
-            } catch (Exception e) {
-
-            }
-
-            double width = 0;
-            try {
-                width = Double.parseDouble(specificationView.getTextFieldWidth().getText().trim());
-            } catch (Exception e) {
-
-            }
-
-            double thickness = 0;
-            try {
-                thickness = Double.parseDouble(specificationView.getTextFieldThickness().getText().trim());
-            } catch (Exception e) {
-
-            }
-
-            // finger print sensor
-            boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
-
-            Object operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
-
-            String note = specificationView.getTextAreaNote().getText();
-
-            Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
-
-            // if the selected smartphone doesn't exist create one
-            MainApplication.getSpecificationDAO().addOrUpdate(new Specification(
-                    inch, height, width, thickness, fingerprintSensor,
-                    operatingSystem, note, master
-            ));
-
-            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
-            succes.show();
-        }
-
-        if (alert.getResult() == NO) {
-            Alert fail = new Alert(Alert.AlertType.WARNING, "There won't be new item added");
-            fail.show();
-        }
     }
 
     private void saveToDAO() {
@@ -287,6 +221,7 @@ public class SpecificationController extends Controller {
         double inch = 0;
 
         // inch
+        // if the textfield is empty, then show an alert
         if (inchString.isEmpty()) {
             errorStringBuilder.append("- Amount inch is required\n");
             specificationView.getTextFieldInch().setStyle("-fx-border-color: #ff0000");
@@ -306,6 +241,7 @@ public class SpecificationController extends Controller {
         String heightString = specificationView.getTextFieldHeight().getText().trim();
         double height = 0;
 
+        // if the textfield is empty, then show an alert
         if (heightString.isEmpty()) {
             errorStringBuilder.append("- Amount height is required\n");
             specificationView.getTextFieldHeight().setStyle("-fx-border-color: #ff0000");
@@ -324,6 +260,7 @@ public class SpecificationController extends Controller {
         String widthString = specificationView.getTextFieldWidth().getText().trim();
         double width = 0;
 
+        // if the textfield is empty, then show an alert
         if (widthString.isEmpty()) {
             errorStringBuilder.append("- Amount width is required\n");
             specificationView.getTextFieldWidth().setStyle("-fx-border-color: #ff0000");
@@ -342,6 +279,7 @@ public class SpecificationController extends Controller {
         String thicknessString = specificationView.getTextFieldThickness().getText().trim();
         double thickness = 0;
 
+        // if the textfield is empty, then show an alert
         if (thicknessString.isEmpty()) {
             errorStringBuilder.append("- Amount thickness is required\n");
             specificationView.getTextFieldThickness().setStyle("-fx-border-color: #ff0000");

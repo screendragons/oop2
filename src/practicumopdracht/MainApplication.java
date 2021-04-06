@@ -41,10 +41,10 @@ public class MainApplication extends Application {
 //        specificationDAO = new TextSpecificationDAO();
 
         //fakeDAO
-//        specificationDAO = new FakeSpecificationDAO();
+        specificationDAO = new FakeSpecificationDAO();
 
         // objectDAO
-        specificationDAO = new ObjectSpecificationDAO();
+//        specificationDAO = new ObjectSpecificationDAO();
 
         MainApplication.stage = stage;
 
