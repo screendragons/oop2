@@ -5,17 +5,27 @@ import practicumopdracht.models.Smartphone;
 import java.util.Comparator;
 
 /**
- * Functionality:
+ * Functionality: The sort function for the master view
  *
  * @author Chi Yu Yeung
  */
 public class MasterComparator implements Comparator<Smartphone> {
     private boolean SORTZA;
 
+    /**
+     * constructor where sortza is the type of sortdescending
+     * @param sortDescending shows that SORTZA is true or false
+     */
     public MasterComparator(boolean sortDescending) {
         this.SORTZA = sortDescending;
     }
 
+    /**
+     * Compares two items, which is the smartphone name. If they are the same, then it will sort by the version
+     * @param o1 first comparator
+     * @param o2 second comparator
+     * @return
+     */
     @Override
     public int compare(Smartphone o1, Smartphone o2) {
         final int RESULT = o1.getSmartphoneName().toLowerCase().compareTo(o2.getSmartphoneName().toLowerCase());

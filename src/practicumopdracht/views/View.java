@@ -3,7 +3,7 @@ package practicumopdracht.views;
 import javafx.scene.Parent;
 
 /**
- * Functionality:
+ * Functionality: Get the root
  *
  * @author Chi Yu Yeung
  */

@@ -6,13 +6,18 @@ import java.io.*;
 import java.time.LocalDate;
 
 /**
- * Functionality:
+ * Functionality: Binairy DAO for master
  *
  * @author Chi Yu Yeung
  */
 public class BinairySmartphoneDAO extends SmartphoneDAO {
     private final String FILENAME = "smartphones.dat";
 
+    /**
+     * Save function
+     *
+     * @return
+     */
     @Override
     public boolean save() {
         File file = new File(FILENAME);
@@ -42,6 +47,11 @@ public class BinairySmartphoneDAO extends SmartphoneDAO {
         return true;
     }
 
+    /**
+     * Load function
+     *
+     * @return
+     */
     @Override
     public boolean load() {
         File file = new File(FILENAME);

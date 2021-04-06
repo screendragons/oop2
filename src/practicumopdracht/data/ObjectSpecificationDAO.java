@@ -6,13 +6,18 @@ import practicumopdracht.models.Specification;
 import java.io.*;
 
 /**
- * Functionality:
+ * Functionality: Object DAO for detail
  *
  * @author Chi Yu Yeung
  */
 public class ObjectSpecificationDAO extends SpecificationDAO {
     private final String FILENAME = "specification.obj";
 
+    /**
+     * Save function
+     *
+     * @return
+     */
     @Override
     public boolean save() {
         File file = new File(FILENAME);
@@ -29,17 +34,22 @@ public class ObjectSpecificationDAO extends SpecificationDAO {
                 objectOutputStream.writeObject(specification);
             }
         } catch (Exception e) {
-            System.err.println("Object save function error");
+            System.err.println("Object save bestand niet gevonden!");
+            return false;
         }
-        return false;
+        return true;
     }
 
+    /**
+     * Load function
+     *
+     * @return
+     */
     @Override
     public boolean load() {
         File file = new File(FILENAME);
 
         objects.clear();
-
         try (
                 FileInputStream fileInputStream = new FileInputStream(file);
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)

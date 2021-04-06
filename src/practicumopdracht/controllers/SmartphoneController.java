@@ -19,7 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Functionality:
+ * Functionality: Controller of the master
  *
  * @author Chi Yu Yeung
  */
@@ -27,12 +27,19 @@ public class SmartphoneController extends Controller {
     private final ButtonType YES = new ButtonType("Yes", ButtonBar.ButtonData.YES);
     private final ButtonType NO = new ButtonType("No", ButtonBar.ButtonData.NO);
     private SmartphoneDAO smartphoneDAO;
+    private SpecificationDAO specificationDAO;
     private SmartphoneView smartphoneView;
     private Smartphone selectedSmartphone;
     private MasterComparator masterComparator;
+    private ObservableList smartphoneObservableList;
 
+    /**
+     * Constructor to define all the attributes that are used and with the functions for the buttons
+     */
     public SmartphoneController() {
         smartphoneDAO = MainApplication.getSmartphoneDAO();
+
+        specificationDAO = MainApplication.getSpecificationDAO();
 
         smartphoneView = new SmartphoneView();
 
@@ -44,6 +51,7 @@ public class SmartphoneController extends Controller {
 
         smartphoneView.getMenuItemExit().setOnAction(event -> exit());
 
+        // sort the information
         smartphoneView.getMenuItemAsc().setOnAction(event -> sortAsc());
 
         smartphoneView.getMenuItemDesc().setOnAction(event -> sortDesc());
@@ -65,6 +73,7 @@ public class SmartphoneController extends Controller {
         smartphoneView.getButtonSwitch().setOnAction(event -> switchToSpecifications());
 
         // replaces the old value with the new by editing
+        // the listview
         smartphoneView.getListView().getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, oldSmartphone, newSmartphone) -> {
                     if (newSmartphone == null || oldSmartphone == newSmartphone) {
@@ -87,13 +96,18 @@ public class SmartphoneController extends Controller {
         show();
     }
 
+    /**
+     * Save information to the DAO
+     */
     private void saveToDAO() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to save this data?", YES, NO);
         alert.showAndWait();
 
         if (alert.getResult() == YES) {
+            // get the save function of the masterDAO
             boolean isSaved = smartphoneDAO.save();
-            boolean isSavedSpecification = MainApplication.getSpecificationDAO().save();
+            // get the save function of the specificationDAO
+            boolean isSavedSpecification = specificationDAO.save();
             if (isSaved && isSavedSpecification) {
                 Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
                 succes.show();
@@ -105,7 +119,9 @@ public class SmartphoneController extends Controller {
         }
     }
 
-    // load to DAO
+    /**
+     * Load the information from the DAO the the view
+     */
     private void loadFromDAO() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to load this data?", YES, NO);
         alert.showAndWait();
@@ -124,7 +140,9 @@ public class SmartphoneController extends Controller {
         show();
     }
 
-    // exit application
+    /**
+     * Close the application
+     */
     private void exit() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want close the application?", YES, NO);
         alert.showAndWait();
@@ -152,17 +170,26 @@ public class SmartphoneController extends Controller {
 
     }
 
+    /**
+     * Function that combines the validation and save funtion
+     */
     private void validationSaveBtn() {
         if (validation()) {
-            // save specification
+            // save smartphone
             save();
         }
     }
 
+    /**
+     * Save function
+     */
     private void save() {
+        // name
         String name = smartphoneView.getTextFieldSmartphoneName().getText();
+        // serie
         String serie = smartphoneView.getComboBoxSerie().getValue();
 
+        // version
         int version = 0;
 
         try {
@@ -171,13 +198,15 @@ public class SmartphoneController extends Controller {
 
         }
 
+        // release date
         LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
 
+        // if the selected smartphone is equal to null, add or update
         if (selectedSmartphone == null) {
             MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, serie, version,
                     releaseDate));
         }
-        //else update the existing smartphone
+        // else update the existing smartphone
         else {
             selectedSmartphone.setSmartphoneName(name);
             selectedSmartphone.setSerie(serie);
@@ -190,6 +219,11 @@ public class SmartphoneController extends Controller {
         resetFields();
     }
 
+    /**
+     * The validation for when something wants to be saved
+     *
+     * @return
+     */
     private boolean validation() {
         StringBuilder errorStringBuilder = new StringBuilder();
 
@@ -259,8 +293,10 @@ public class SmartphoneController extends Controller {
         }
     }
 
+    /**
+     * reset the fields
+     */
     private void resetFields() {
-        //reset fields
         smartphoneView.getTextFieldSmartphoneName().setText("");
         smartphoneView.getComboBoxSerie().setPromptText("series");
         smartphoneView.getTextFieldVersion().setText("");
@@ -269,50 +305,41 @@ public class SmartphoneController extends Controller {
         selectedSmartphone = null;
     }
 
+    /**
+     * Show the information in an obersableList by using the getAll function
+     */
     private void show() {
-        ObservableList smartphoneObservableList = FXCollections.observableArrayList(smartphoneDAO.getAll());
+        smartphoneObservableList = FXCollections.observableArrayList(smartphoneDAO.getAll());
         smartphoneView.getListView().setItems(smartphoneObservableList);
     }
 
-    // new button
+    /**
+     * New function where the fields will reset
+     */
     private void newPhone() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to create a new item?", YES, NO);
-        alert.showAndWait();
+        Alert newPhone = new Alert(Alert.AlertType.INFORMATION, "Do you want to create a new phone?", YES, NO);
+        newPhone.showAndWait();
+
+        if (newPhone.getResult() == YES) {
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can now create a new phone");
+            succes.show();
+            Platform.exit();
+        }
+
+        if (newPhone.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "Nothing will be created.");
+            fail.show();
+        }
 
         resetFields();
-
-//        String name = smartphoneView.getTextFieldSmartphoneName().getText();
-//        Object serie = smartphoneView.getComboBoxSerie().getValue();
-//
-//        int version = 0;
-//
-//        try {
-//            version = Integer.parseInt(smartphoneView.getTextFieldVersion().getText().trim());
-//        } catch (Exception e) {
-//
-//        }
-//
-//        LocalDate releaseDate = smartphoneView.getReleaseDate().getValue();
-//
-//        if (alert.getResult() == YES) {
-//            // if the selected smartphone doesn't exist create one
-//            if (selectedSmartphone == null) {
-//                MainApplication.getSmartphoneDAO().addOrUpdate(new Smartphone(name, (String) serie, version,
-//                        releaseDate));
-//            }
-//            resetFields();
-//            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can create an item");
-//            succes.show();
-//        }
-//
-//        if (alert.getResult() == NO) {
-//            Alert fail = new Alert(Alert.AlertType.WARNING, "Item is not created");
-//            fail.show();
-//        }
     }
 
 
-    // edit button
+    /**
+     * Edit the smartphone
+     *
+     * @param newSmartphone
+     */
     private void edit(Smartphone newSmartphone) {
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
@@ -338,7 +365,9 @@ public class SmartphoneController extends Controller {
         }
     }
 
-    // delete button
+    /**
+     * Delete the created phone
+     */
     private void delete() {
         selectedSmartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
@@ -375,21 +404,28 @@ public class SmartphoneController extends Controller {
         resetFields();
     }
 
-    // switch to the second screen
+    /**
+     * Switch to the second screen
+     */
     public void switchToSpecifications() {
         Smartphone smartphone = smartphoneView.getListView().getSelectionModel().getSelectedItem();
 
         MainApplication.switchController(new SpecificationController(smartphone));
     }
 
+    /**
+     * Sort ascending by name with the comparator
+     */
     private void sortAsc() {
-        // TODO test this out
         ObservableList<Smartphone> smartphoneObservableList = smartphoneView.getListView().getItems();
         masterComparator = new MasterComparator(false);
         FXCollections.sort(smartphoneObservableList, masterComparator);
         smartphoneView.getListView().setItems(smartphoneObservableList);
     }
 
+    /**
+     * Sort descending by name with the comparator
+     */
     private void sortDesc() {
         ObservableList<Smartphone> smartphoneObservableList = smartphoneView.getListView().getItems();
         masterComparator = new MasterComparator(true);
@@ -398,7 +434,9 @@ public class SmartphoneController extends Controller {
     }
 
 
-    // enable and disable the buttons
+    /**
+     * Enable and disable the buttons
+     */
     private void enableSaveButton() {
         smartphoneView.getButtonSave().setDisable(false);
     }
@@ -439,6 +477,11 @@ public class SmartphoneController extends Controller {
         smartphoneView.getButtonSwitch().setDisable(true);
     }
 
+    /**
+     * Get the view of the master
+     *
+     * @return
+     */
     @Override
     public View getView() {
         return smartphoneView;

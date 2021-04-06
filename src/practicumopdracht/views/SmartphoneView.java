@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import practicumopdracht.models.Smartphone;
 
 /**
- * Functionality:
+ * Functionality: View for the master
  *
  * @author Chi Yu Yeung
  */
@@ -34,8 +34,6 @@ public class SmartphoneView extends View {
     private Button buttonEdit;
     private Button buttonDelete;
     private Button buttonSwitch;
-    private Button buttonSaveDAO;
-    private Button buttonLoadDAO;
 
     // combobox
     private ComboBox<String> comboBoxSerie;
@@ -111,8 +109,6 @@ public class SmartphoneView extends View {
         buttonEdit = new Button("Edit");
         buttonDelete = new Button("Delete");
         buttonSwitch = new Button("Switch to details");
-//        buttonSaveDAO = new Button("Save to DAO");
-//        buttonLoadDAO = new Button("Load from DAO");
 
         listView = new ListView<>();
         gridPaneSmart = new GridPane();
@@ -158,7 +154,7 @@ public class SmartphoneView extends View {
         gridPaneSmart.add(comboBoxSerie, 1, 1);
 
         gridPaneSmart.add(labelVersion, 0, 2);
-        gridPaneSmart.add(textFieldVersion, 1,2);
+        gridPaneSmart.add(textFieldVersion, 1, 2);
 
         gridPaneSmart.add(labelReleaseDate, 0, 3);
         gridPaneSmart.add(releaseDate, 1, 3);
@@ -169,15 +165,12 @@ public class SmartphoneView extends View {
         gridPaneSmart.add(buttonEdit, 4, 8);
         gridPaneSmart.add(buttonDelete, 5, 8);
         gridPaneSmart.add(buttonSwitch, 6, 8);
-//        gridPaneSmart.add(buttonSaveDAO, 7, 8);
-//        gridPaneSmart.add(buttonLoadDAO, 8,8);
 
         // buttons added to hbox
         menuButtonsSmart = new HBox();
         menuButtonsSmart.setPadding(new Insets(10, 10, 10, 120));
         menuButtonsSmart.setSpacing(20); // distance between buttons
         menuButtonsSmart.getChildren().addAll(buttonSave, buttonNew, buttonEdit, buttonDelete, buttonSwitch);
-//                buttonSaveDAO, buttonLoadDAO);
 
         vBoxSmart = new VBox();
 
@@ -188,87 +181,159 @@ public class SmartphoneView extends View {
         menuSortBorderPane = new BorderPane(menuBarSort);
 
         menuFileSort = new HBox();
-//        menuButtonsSmart.setPadding(new Insets(10, 10, 10, 10));
         menuFileSort.getChildren().addAll(menuFileBorderPane, menuSortBorderPane);
 
         vBoxSmart.setPadding(new Insets(10, 10, 10, 10));
-        vBoxSmart.getChildren().addAll(menuFileSort , gridPaneSmart, menuButtonsSmart, listView);
+        vBoxSmart.getChildren().addAll(menuFileSort, gridPaneSmart, menuButtonsSmart, listView);
 
         borderPane = new BorderPane();
         borderPane.setCenter(vBoxSmart);
         root = borderPane;
     }
 
+    /**
+     * Get root
+     * Which was in the MainApplication, to get the right scene
+     *
+     * @return
+     */
+    @Override
+    public Parent getRoot() {
+        return root;
+    }
+
+    /**
+     * Get the menu save item
+     *
+     * @return
+     */
     public MenuItem getMenuItemSave() {
         return menuItemSave;
     }
 
+    /**
+     * Get the menu load item
+     *
+     * @return
+     */
     public MenuItem getMenuItemLoad() {
         return menuItemLoad;
     }
 
+    /**
+     * Get the menu exit item
+     *
+     * @return
+     */
     public MenuItem getMenuItemExit() {
         return menuItemExit;
     }
 
+    /**
+     * Get the menu ascending item
+     *
+     * @return
+     */
     public MenuItem getMenuItemAsc() {
         return menuItemAsc;
     }
 
+    /**
+     * Get the menu descending item
+     *
+     * @return
+     */
     public MenuItem getMenuItemDesc() {
         return menuItemDesc;
     }
 
+    /**
+     * Get the texfield smartphonename
+     *
+     * @return
+     */
     public TextField getTextFieldSmartphoneName() {
         return textFieldSmartphoneName;
     }
 
+    /**
+     * Get the texfield of the version
+     *
+     * @return
+     */
     public TextField getTextFieldVersion() {
         return textFieldVersion;
     }
 
+    /**
+     * Get the combobox of the series
+     *
+     * @return
+     */
     public ComboBox<String> getComboBoxSerie() {
         return comboBoxSerie;
     }
 
+    /**
+     * Get the release date
+     *
+     * @return
+     */
     public DatePicker getReleaseDate() {
         return releaseDate;
     }
 
+    /**
+     * Get the save button
+     *
+     * @return
+     */
     public Button getButtonSave() {
         return buttonSave;
     }
 
+    /**
+     * Get the new button
+     *
+     * @return
+     */
     public Button getButtonNew() {
         return buttonNew;
     }
 
+    /**
+     * Get the edit button
+     *
+     * @return
+     */
     public Button getButtonEdit() {
         return buttonEdit;
     }
 
+    /**
+     * Get the delete button
+     *
+     * @return
+     */
     public Button getButtonDelete() {
         return buttonDelete;
     }
 
+    /**
+     * Get the switch button
+     *
+     * @return
+     */
     public Button getButtonSwitch() {
         return buttonSwitch;
     }
 
-    public Button getButtonSaveDAO() {
-        return buttonSaveDAO;
-    }
-
-    public Button getButtonLoadDAO() {
-        return buttonLoadDAO;
-    }
-
+    /**
+     * Get the listview of the Smartphone
+     *
+     * @return
+     */
     public ListView<Smartphone> getListView() {
         return listView;
-    }
-
-    @Override
-    public Parent getRoot() {
-        return root;
     }
 }

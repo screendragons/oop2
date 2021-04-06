@@ -9,14 +9,19 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
- * Functionality:
+ * Functionality: The TextDAO of the detail
  *
  * @author Chi Yu Yeung
  */
-public class TextSpecificationDAO extends SpecificationDAO{
+public class TextSpecificationDAO extends SpecificationDAO {
     private static final String FILENAME = "specifications.txt";
     final int NOTE_POSITION = 7;
 
+    /**
+     * Save the information
+     *
+     * @return
+     */
     @Override
     public boolean save() {
         File file = new File(FILENAME);
@@ -35,16 +40,20 @@ public class TextSpecificationDAO extends SpecificationDAO{
                 printWriter.print(specification.getOperatingSystem() + ",");
                 printWriter.print(specification.getNote() + " \n");
             }
-
             printWriter.close();
-        } catch (Exception e) {
-//            System.err.println(e.toString() + "\n" + "Specification save bestand niet gevonden!");
-            return false;
 
+        } catch (Exception e) {
+            System.err.println(e.toString() + "\n" + "Specification save bestand niet gevonden!");
+            return false;
         }
         return true;
     }
 
+    /**
+     * Load the information
+     *
+     * @return
+     */
     @Override
     public boolean load() {
         File file = new File(FILENAME);
@@ -69,12 +78,13 @@ public class TextSpecificationDAO extends SpecificationDAO{
                 //
                 String note = (textSpecification.length > NOTE_POSITION) ? textSpecification[7] : "";
 
-                Specification specification = new Specification(inch, height, width , thickness, fingerprintSensor,
-                        operatingSystem, note, hoortBij);
+                Specification specification = new Specification(
+                        hoortBij, inch, height, width, thickness, fingerprintSensor, operatingSystem, note
+                );
                 addOrUpdate(specification);
             }
         } catch (Exception e) {
-            System.err.println(e.toString() + "\n" + "specifications load bestand niet gevonden!");
+            System.err.println(e.toString() + "\n" + "Specifications load bestand niet gevonden!");
             return false;
         }
         return true;

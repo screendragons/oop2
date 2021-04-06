@@ -8,13 +8,18 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 /**
- * Functionality:
+ * Functionality: The TextDAO of the master
  *
  * @author Chi Yu Yeung
  */
 public class TextSmartphoneDAO extends SmartphoneDAO {
     private static final String FILENAME = "smartphones.txt";
 
+    /**
+     * Save the information
+     *
+     * @return
+     */
     @Override
     public boolean save() {
         File file = new File(FILENAME);
@@ -28,16 +33,20 @@ public class TextSmartphoneDAO extends SmartphoneDAO {
                 printWriter.print(smartphone.getVersion() + ",");
                 printWriter.print(smartphone.getReleaseDate() + "\n");
             }
-
             printWriter.close();
+
         } catch (Exception e) {
             System.err.println(e.toString() + "\n" + "Smartphone save bestand niet gevonden!");
             return false;
-
         }
         return true;
     }
 
+    /**
+     * Load the information
+     *
+     * @return
+     */
     @Override
     public boolean load() {
         File file = new File(FILENAME);

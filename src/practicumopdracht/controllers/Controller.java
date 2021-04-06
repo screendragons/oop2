@@ -3,7 +3,7 @@ package practicumopdracht.controllers;
 import practicumopdracht.views.View;
 
 /**
- * Functionality:
+ * Functionality: Get the view
  *
  * @author Chi Yu Yeung
  */

@@ -11,7 +11,7 @@ import practicumopdracht.models.Smartphone;
 import practicumopdracht.models.Specification;
 
 /**
- * Functionality:
+ * Functionality: View for the detail
  *
  * @author Chi Yu Yeung
  */
@@ -66,7 +66,6 @@ public class SpecificationView extends View {
     private HBox menuButtonsSpec;
     private HBox sort;
     private BorderPane borderPane;
-    private BorderPane menuBorderPane;
 
     private Parent root;
 
@@ -198,75 +197,165 @@ public class SpecificationView extends View {
         return root;
     }
 
-    public RadioButton getBtnSortAscTypeOne() {
-        return btnSortAscTypeOne;
-    }
-
-    public RadioButton getBtnSortDescTypeOne() {
-        return btnSortDescTypeOne;
-    }
-
-    public RadioButton getBtnSortAscTypeTwo() {
-        return btnSortAscTypeTwo;
-    }
-
-    public RadioButton getBtnSortDescTypeTwo() {
-        return btnSortDescTypeTwo;
-    }
-
-    public TextField getTextFieldInch() {
-        return textFieldInch;
-    }
-
-    public TextField getTextFieldHeight() {
-        return textFieldHeight;
-    }
-
-    public TextField getTextFieldWidth() {
-        return textFieldWidth;
-    }
-
-    public TextField getTextFieldThickness() {
-        return textFieldThickness;
-    }
-
-    public CheckBox getCheckBoxFingerprintSensor() {
-        return checkBoxFingerprintSensor;
-    }
-
-    public ComboBox<String> getComboBoxOperatingSystem() {
-        return comboBoxOperatingSystem;
-    }
-
+    /**
+     * Get the combobox of master
+     *
+     * @return
+     */
     public ComboBox<Smartphone> getComboBoxMaster() {
         return comboBoxMaster;
     }
 
+    /**
+     * Get the textfield of inch
+     *
+     * @return
+     */
+    public TextField getTextFieldInch() {
+        return textFieldInch;
+    }
+
+    /**
+     * Get the textfield of height
+     *
+     * @return
+     */
+    public TextField getTextFieldHeight() {
+        return textFieldHeight;
+    }
+
+    /**
+     * Get the textfield of width
+     *
+     * @return
+     */
+    public TextField getTextFieldWidth() {
+        return textFieldWidth;
+    }
+
+    /**
+     * Get the textfield of thickness
+     *
+     * @return
+     */
+    public TextField getTextFieldThickness() {
+        return textFieldThickness;
+    }
+
+    /**
+     * Get the checkbox finger print sensor
+     *
+     * @return
+     */
+    public CheckBox getCheckBoxFingerprintSensor() {
+        return checkBoxFingerprintSensor;
+    }
+
+    /**
+     * Get the combobox of the operating system
+     *
+     * @return
+     */
+    public ComboBox<String> getComboBoxOperatingSystem() {
+        return comboBoxOperatingSystem;
+    }
+
+    /**
+     * Get the textarea of note
+     *
+     * @return
+     */
     public TextArea getTextAreaNote() {
         return textAreaNote;
     }
 
+    /**
+     * Get the save button
+     *
+     * @return
+     */
     public Button getButtonSave() {
         return buttonSave;
     }
 
+    /**
+     * Get the new button
+     *
+     * @return
+     */
     public Button getButtonNew() {
         return buttonNew;
     }
 
+    /**
+     * Get the edit button
+     *
+     * @return
+     */
     public Button getButtonEdit() {
         return buttonEdit;
     }
 
+    /**
+     * Get the delete button
+     *
+     * @return
+     */
     public Button getButtonDelete() {
         return buttonDelete;
     }
 
+    /**
+     * Get the switch button
+     *
+     * @return
+     */
     public Button getButtonSwitch() {
         return buttonSwitch;
     }
 
+    /**
+     * Get the listview of the Specification
+     *
+     * @return
+     */
     public ListView<Specification> getListView() {
         return listView;
+    }
+
+    /**
+     * Get the radio button of ascending type one
+     *
+     * @return
+     */
+    public RadioButton getBtnSortAscTypeOne() {
+        return btnSortAscTypeOne;
+    }
+
+    /**
+     * Get the radio button of descending type one
+     *
+     * @return
+     */
+    public RadioButton getBtnSortDescTypeOne() {
+        return btnSortDescTypeOne;
+    }
+
+    /**
+     * Get the radio button of ascending type two
+     *
+     * @return
+     */
+    public RadioButton getBtnSortAscTypeTwo() {
+        return btnSortAscTypeTwo;
+    }
+
+    /**
+     * Get the radio button of descending type two
+     *
+     * @return
+     */
+    public RadioButton getBtnSortDescTypeTwo() {
+        return btnSortDescTypeTwo;
     }
 }

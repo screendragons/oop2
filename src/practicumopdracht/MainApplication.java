@@ -56,15 +56,27 @@ public class MainApplication extends Application {
         switchController(new SmartphoneController());
     }
 
+    /**
+     * To switch to the other screen
+     * @param controller
+     */
     public static void switchController(Controller controller) {
         stage.setScene(new Scene(controller.getView().getRoot()));
         stage.show();
     }
 
+    /**
+     * Get the master DAO, the type DAO will change in the start method
+     * @return
+     */
     public static SmartphoneDAO getSmartphoneDAO() {
         return smartphoneDAO;
     }
 
+    /**
+     * Get the detail DAO, the type DAO will change in the start method
+     * @return
+     */
     public static SpecificationDAO getSpecificationDAO() {
         return specificationDAO;
     }

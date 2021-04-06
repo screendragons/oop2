@@ -15,7 +15,7 @@ import practicumopdracht.views.SpecificationView;
 import practicumopdracht.views.View;
 
 /**
- * Functionality:
+ * Functionality: Controller of the detail
  *
  * @author Chi Yu Yeung
  */
@@ -27,7 +27,11 @@ public class SpecificationController extends Controller {
     private Specification selectedSpecification;
     private DetailComparator detailComparator;
     private Smartphone selectedSmartphone;
+    private Smartphone master;
 
+    /**
+     * Constructor to define all the attributes that are used and with the functions for the buttons
+     */
     public SpecificationController(Smartphone smartphone) {
         specificationDAO = MainApplication.getSpecificationDAO();
 
@@ -42,7 +46,9 @@ public class SpecificationController extends Controller {
         specificationView.getComboBoxMaster().getSelectionModel().selectedItemProperty().addListener(
                 ((observableValue, oldSmartphone, newSmartphone) -> {
                     selectedSmartphone = newSmartphone;
-                    ObservableList detailList = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(selectedSmartphone));
+                    ObservableList detailList = FXCollections.observableArrayList(
+                            MainApplication.getSpecificationDAO().getAllFor(selectedSmartphone)
+                    );
                     specificationView.getListView().setItems(detailList);
                     // to clear the fields if you select an other smartphone
                     resetFields();
@@ -78,6 +84,8 @@ public class SpecificationController extends Controller {
 
         specificationView.getBtnSortDescTypeTwo().setOnAction(event -> sortDescTypeTwo());
 
+        // replaces the old value with the new by editing
+        // the listview
         specificationView.getListView().getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, oldSpecification, newSpecification) -> {
                     if (newSpecification == null || oldSpecification == newSpecification) {
@@ -86,7 +94,6 @@ public class SpecificationController extends Controller {
 
                     enableNewButton();
                     enableDeleteButton();
-
                     enableEditButton();
                     edit(oldSpecification);
 
@@ -99,54 +106,9 @@ public class SpecificationController extends Controller {
         disableDeleteButton();
     }
 
-    private void saveToDAO() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to save this data?", YES, NO);
-        alert.showAndWait();
-
-        if (alert.getResult() == YES) {
-            boolean isSaved = specificationDAO.save();
-            if (isSaved) {
-                Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
-                succes.show();
-            }
-        }
-        if (alert.getResult() == NO) {
-            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not saved");
-            fail.show();
-        }
-    }
-
-    private void loadFromDAO() {
-        specificationDAO.load();
-        show();
-    }
-
-    private void exit() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want close the application?", YES, NO);
-        alert.showAndWait();
-
-        if (alert.getResult() == YES) {
-            Alert deciding = new Alert(Alert.AlertType.WARNING, "Are you sure you want to close the application?",
-                    YES, NO);
-            deciding.showAndWait();
-
-            if (deciding.getResult() == YES) {
-                Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The application will close.");
-                succes.show();
-                Platform.exit();
-            }
-
-            if (deciding.getResult() == NO) {
-                Alert fail = new Alert(Alert.AlertType.WARNING, "The application won't close");
-                fail.show();
-            }
-        }
-        if (alert.getResult() == NO) {
-            Alert fail = new Alert(Alert.AlertType.WARNING, "The application won't close");
-            fail.show();
-        }
-    }
-
+    /**
+     * Function that combines the validation and save funtion
+     */
     private void validationSaveBtn() {
         if (validation()) {
             // save specification
@@ -155,7 +117,13 @@ public class SpecificationController extends Controller {
         }
     }
 
+    /**
+     * Save function
+     */
     private void save() {
+        // get the selected item of the master combobox
+        master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
+
         // inch
         double inch = 0;
         // height
@@ -181,39 +149,46 @@ public class SpecificationController extends Controller {
         // finger print sensor
         boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
 
+        // operating system
         Object operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
 
+        // note
         String note = specificationView.getTextAreaNote().getText();
 
-        Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
-
+        // if the selected smartphone is equal to null, add or update
         if (selectedSpecification == null) {
             Specification specification = new Specification(
+                    master,
                     inch,
                     height,
                     width,
                     thickness,
                     fingerprintSensor,
                     operatingSystem,
-                    note,
-                    master
+                    note
             );
             MainApplication.getSpecificationDAO().addOrUpdate(specification);
-        } else {
-            Specification specificationExists = selectedSpecification;
+
+        }
+        // else update the existing specification
+        else {
             selectedSpecification.setInch(inch);
             selectedSpecification.setHeight(height);
             selectedSpecification.setWidth(width);
             selectedSpecification.setThickness(thickness);
             selectedSpecification.setFingerprintSensor(fingerprintSensor);
             selectedSpecification.setNote(note);
-            MainApplication.getSpecificationDAO().addOrUpdate(specificationExists);
+            MainApplication.getSpecificationDAO().addOrUpdate(selectedSpecification);
         }
 
         show();
         resetFields();
     }
-
+    /**
+     * The validation for when something wants to be saved
+     *
+     * @return
+     */
     private boolean validation() {
         StringBuilder errorStringBuilder = new StringBuilder();
 
@@ -317,10 +292,10 @@ public class SpecificationController extends Controller {
             boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
             String noteField = specificationView.getTextAreaNote().getText();
 
-            Smartphone master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
+            master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
 
             Specification specification = new Specification(
-                    inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField, master
+                    master, inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField
             );
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -331,8 +306,10 @@ public class SpecificationController extends Controller {
         }
     }
 
+    /**
+     * reset the fields
+     */
     private void resetFields() {
-        //reset fields
         specificationView.getTextFieldInch().setText("");
         specificationView.getTextFieldHeight().setText("");
         specificationView.getTextFieldWidth().setText("");
@@ -340,14 +317,23 @@ public class SpecificationController extends Controller {
         specificationView.getCheckBoxFingerprintSensor().setSelected(false);
         specificationView.getComboBoxOperatingSystem().getSelectionModel().clearSelection();
         specificationView.getTextAreaNote().setText("");
+        // set the selected smartphone to default again
         selectedSpecification = null;
     }
 
+    /**
+     * Show the information in an obersableList by using the getAll function
+     */
     private void show() {
         ObservableList<Specification> specList = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(selectedSmartphone));
         specificationView.getListView().setItems(specList);
     }
 
+    /**
+     * Edit the specification
+     *
+     * @param newSpecification
+     */
     private void edit(Specification newSpecification) {
         selectedSpecification = specificationView.getListView().getSelectionModel().getSelectedItem();
 
@@ -399,6 +385,9 @@ public class SpecificationController extends Controller {
         }
     }
 
+    /**
+     * Delete the created specification
+     */
     public void delete() {
         selectedSpecification = specificationView.getListView().getSelectionModel().getSelectedItem();
 
@@ -411,6 +400,7 @@ public class SpecificationController extends Controller {
         alert.showAndWait();
 
         if (alert.getResult() == YES) {
+            // delete the specification
             specificationDAO.remove(selectedSpecification);
             Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is deleted");
             succes.show();
@@ -425,10 +415,16 @@ public class SpecificationController extends Controller {
         resetFields();
     }
 
+    /**
+     * Switch to the second screen
+     */
     public void switchToSmartphone() {
         MainApplication.switchController(new SmartphoneController());
     }
 
+    /**
+     * Sort ascending by inch
+     */
     private void sortAscTypeOne() {
         ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
         detailComparator = new DetailComparator(false);
@@ -436,6 +432,9 @@ public class SpecificationController extends Controller {
         specificationView.getListView().setItems(specificationObservableList);
     }
 
+    /**
+     * Sort descending by inch
+     */
     private void sortDescTypeOne() {
         ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
         detailComparator = new DetailComparator(true);
@@ -443,6 +442,10 @@ public class SpecificationController extends Controller {
         specificationView.getListView().setItems(specificationObservableList);
     }
 
+    /**
+     * Sort ascending by inch
+     * But if two or more are the same amount of inches, get the height to ascend on
+     */
     private void sortAscTypeTwo() {
         ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
         detailComparator = new DetailComparator(false);
@@ -450,6 +453,10 @@ public class SpecificationController extends Controller {
         specificationView.getListView().setItems(specificationObservableList);
     }
 
+    /**
+     * Sort descending by inch
+     * But if two or more are the same amount of inches, get the height to descend on
+     */
     private void sortDescTypeTwo() {
         ObservableList<Specification> specificationObservableList = specificationView.getListView().getItems();
         detailComparator = new DetailComparator(true);
@@ -458,7 +465,9 @@ public class SpecificationController extends Controller {
     }
 
 
-    // enable and disable the buttons
+    /**
+     * Enable and disable the buttons
+     */
     private void enableSaveButton() {
         specificationView.getButtonSave().setDisable(false);
     }
@@ -499,6 +508,11 @@ public class SpecificationController extends Controller {
         specificationView.getButtonSwitch().setDisable(true);
     }
 
+    /**
+     * Get the view of the detail
+     *
+     * @return
+     */
     @Override
     public View getView() {
         return specificationView;
