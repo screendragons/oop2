@@ -289,9 +289,9 @@ public class SmartphoneController extends Controller {
             alert.setHeaderText(errorStringBuilder.toString());
             // blocks the performance of the code
             alert.showAndWait();
-            // else show information
             return false;
 
+            // else show information
         } else {
             Smartphone smartphone = new Smartphone(
                     smartphoneName, serie, version, releaseDate
@@ -367,11 +367,6 @@ public class SmartphoneController extends Controller {
             }
 
             smartphoneView.getReleaseDate().setValue(selectedSmartphone.getReleaseDate());
-
-            if (smartphoneView.getButtonEdit().isPressed()) {
-                disableDeleteButton();
-                disableSwitchButton();
-            }
         }
     }
 
@@ -442,7 +437,6 @@ public class SmartphoneController extends Controller {
         FXCollections.sort(smartphoneObservableList, masterComparator);
         smartphoneView.getListView().setItems(smartphoneObservableList);
     }
-
 
     /**
      * Enable and disable the buttons

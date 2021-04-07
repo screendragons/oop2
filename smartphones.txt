@@ -1,4 +1,0 @@
-test phone,Samsung A series,3,2021-04-16
-4,Samsung A series,4,2021-04-10
-2,Samsung A series,2,2021-04-06
-9,Samsung A series,49,2021-04-02

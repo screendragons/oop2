@@ -1,1 +1,5 @@
-0,4.0,4.0,4.0,4.0,true,Android, 
+1,11.0,1.0,2.0,1.0,true,Android, 
+1,2.0,2.0,2.0,2.0,true,iOS, 
+1,4.0,4.0,4.0,4.0,true,Android,dit is een beschrijving 
+1,11.0,2.0,1.0,1.0,true,Android, 
+0,3.0,3.0,3.0,3.0,true,iOS,dit is een test 

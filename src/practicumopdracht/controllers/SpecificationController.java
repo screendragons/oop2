@@ -43,6 +43,7 @@ public class SpecificationController extends Controller {
         ObservableList masterData = FXCollections.observableArrayList(MainApplication.getSmartphoneDAO().getAll());
         specificationView.getComboBoxMaster().setItems(masterData);
         specificationView.getComboBoxMaster().setValue(smartphone);
+        // to switch to another master item in the combobox with the details
         specificationView.getComboBoxMaster().getSelectionModel().selectedItemProperty().addListener(
                 ((observableValue, oldSmartphone, newSmartphone) -> {
                     selectedSmartphone = newSmartphone;
@@ -64,7 +65,7 @@ public class SpecificationController extends Controller {
         specificationView.getButtonSave().setOnAction(event -> validationSaveBtn());
 
         // new button
-        specificationView.getButtonNew().setOnAction(event -> resetFields());
+        specificationView.getButtonNew().setOnAction(event -> newSpec());
 
         // edit button
         specificationView.getButtonEdit().setOnAction(event -> edit(selectedSpecification));
@@ -112,7 +113,6 @@ public class SpecificationController extends Controller {
     private void validationSaveBtn() {
         if (validation()) {
             // save specification
-            // TODO alert after the save function, not before
             save();
         }
     }
@@ -124,65 +124,78 @@ public class SpecificationController extends Controller {
         // get the selected item of the master combobox
         master = specificationView.getComboBoxMaster().getSelectionModel().getSelectedItem();
 
-        // inch
-        double inch = 0;
-        // height
-        double height = 0;
-        // width
-        double width = 0;
-        // thickness
-        double thickness = 0;
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Do you want to save this data?", YES, NO);
+        alert.showAndWait();
 
-        try {
+        if (alert.getResult() == YES) {
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "The data is saved");
+            succes.show();
             // inch
-            inch = Double.parseDouble(specificationView.getTextFieldInch().getText().trim());
+            double inch = 0;
             // height
-            height = Double.parseDouble(specificationView.getTextFieldHeight().getText().trim());
+            double height = 0;
             // width
-            width = Double.parseDouble(specificationView.getTextFieldWidth().getText().trim());
+            double width = 0;
             // thickness
-            thickness = Double.parseDouble(specificationView.getTextFieldThickness().getText().trim());
-        } catch (Exception e) {
+            double thickness = 0;
 
+            try {
+                // inch
+                inch = Double.parseDouble(specificationView.getTextFieldInch().getText().trim());
+                // height
+                height = Double.parseDouble(specificationView.getTextFieldHeight().getText().trim());
+                // width
+                width = Double.parseDouble(specificationView.getTextFieldWidth().getText().trim());
+                // thickness
+                thickness = Double.parseDouble(specificationView.getTextFieldThickness().getText().trim());
+            } catch (Exception e) {
+
+            }
+
+            // finger print sensor
+            boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
+
+            // operating system
+            Object operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
+
+            // note
+            String note = specificationView.getTextAreaNote().getText();
+
+            // if the selected smartphone is equal to null, add or update
+            if (selectedSpecification == null) {
+                Specification specification = new Specification(
+                        master,
+                        inch,
+                        height,
+                        width,
+                        thickness,
+                        fingerprintSensor,
+                        operatingSystem,
+                        note
+                );
+                MainApplication.getSpecificationDAO().addOrUpdate(specification);
+
+            }
+            // else update the existing specification
+            else {
+                selectedSpecification.setInch(inch);
+                selectedSpecification.setHeight(height);
+                selectedSpecification.setWidth(width);
+                selectedSpecification.setThickness(thickness);
+                selectedSpecification.setFingerprintSensor(fingerprintSensor);
+                selectedSpecification.setNote(note);
+                MainApplication.getSpecificationDAO().addOrUpdate(selectedSpecification);
+            }
+            show();
+            resetFields();
         }
 
-        // finger print sensor
-        boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
-
-        // operating system
-        Object operatingSystem = specificationView.getComboBoxOperatingSystem().getValue();
-
-        // note
-        String note = specificationView.getTextAreaNote().getText();
-
-        // if the selected smartphone is equal to null, add or update
-        if (selectedSpecification == null) {
-            Specification specification = new Specification(
-                    master,
-                    inch,
-                    height,
-                    width,
-                    thickness,
-                    fingerprintSensor,
-                    operatingSystem,
-                    note
-            );
-            MainApplication.getSpecificationDAO().addOrUpdate(specification);
-
-        }
-        // else update the existing specification
-        else {
-            selectedSpecification.setInch(inch);
-            selectedSpecification.setHeight(height);
-            selectedSpecification.setWidth(width);
-            selectedSpecification.setThickness(thickness);
-            selectedSpecification.setFingerprintSensor(fingerprintSensor);
-            selectedSpecification.setNote(note);
-            MainApplication.getSpecificationDAO().addOrUpdate(selectedSpecification);
+        if (alert.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "The data is not saved");
+            fail.show();
         }
 
         show();
-        resetFields();
     }
 
     /**
@@ -286,8 +299,8 @@ public class SpecificationController extends Controller {
             // blocks the performance of the code
             alert.showAndWait();
             return false;
-            // else show information
 
+            // else show information
         } else {
             boolean fingerprintSensor = specificationView.getCheckBoxFingerprintSensor().isSelected();
             String noteField = specificationView.getTextAreaNote().getText();
@@ -298,7 +311,7 @@ public class SpecificationController extends Controller {
                     master, inch, height, width, thickness, fingerprintSensor, operatingSystem, noteField
             );
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setHeaderText(specification.toString());
             alert.showAndWait();
 
@@ -317,7 +330,7 @@ public class SpecificationController extends Controller {
         specificationView.getCheckBoxFingerprintSensor().setSelected(false);
         specificationView.getComboBoxOperatingSystem().getSelectionModel().clearSelection();
         specificationView.getTextAreaNote().setText("");
-        // set the selected smartphone to default again
+        // set the selected specification to default again
         selectedSpecification = null;
     }
 
@@ -327,6 +340,23 @@ public class SpecificationController extends Controller {
     private void show() {
         ObservableList<Specification> specList = FXCollections.observableArrayList(MainApplication.getSpecificationDAO().getAllFor(selectedSmartphone));
         specificationView.getListView().setItems(specList);
+    }
+
+    private void newSpec() {
+        Alert newSpec = new Alert(Alert.AlertType.INFORMATION, "Do you want to create a new specification?", YES, NO);
+        newSpec.showAndWait();
+
+        if (newSpec.getResult() == YES) {
+            Alert succes = new Alert(Alert.AlertType.CONFIRMATION, "You can now create a new specification");
+            succes.show();
+        }
+
+        if (newSpec.getResult() == NO) {
+            Alert fail = new Alert(Alert.AlertType.WARNING, "Nothing will be created.");
+            fail.show();
+        }
+
+        resetFields();
     }
 
     /**
@@ -375,13 +405,6 @@ public class SpecificationController extends Controller {
             );
 
             specificationView.getTextAreaNote().setText(selectedSpecification.getNote());
-
-            // TODO dit werkt niet
-            if (specificationView.getButtonEdit().isPressed()) {
-                System.out.println("Hij komt hier");
-                disableDeleteButton();
-                disableSwitchButton();
-            }
         }
     }
 

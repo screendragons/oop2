@@ -38,10 +38,10 @@ public class MainApplication extends Application {
 
         // detail
         // textDAO
-//        specificationDAO = new TextSpecificationDAO();
+        specificationDAO = new TextSpecificationDAO();
 
         //fakeDAO
-        specificationDAO = new FakeSpecificationDAO();
+//        specificationDAO = new FakeSpecificationDAO();
 
         // objectDAO
 //        specificationDAO = new ObjectSpecificationDAO();
